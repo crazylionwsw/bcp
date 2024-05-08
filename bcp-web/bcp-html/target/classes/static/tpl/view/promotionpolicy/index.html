@@ -1,0 +1,186 @@
+
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                名称
+                            </th>
+                            <th>
+                                开始日期
+                            </th>
+                            <th>
+                                截止日期
+                            </th>
+                            <th>
+                                状态
+                            </th>
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="promotionpolicy in promotionpolicys|filter:query" ng-class="{true:'danger'}[promotionpolicy.dataStatus == 9]">
+                                <td>{{promotionpolicy.name}}</td>
+                                <td>{{promotionpolicy.startDate|date:'yyyy-MM-dd'}}</td>
+                                <td>{{promotionpolicy.endDate|date:'yyyy-MM-dd'}}</td>
+                                <td>{{promotionpolicy.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <!--<div class="hidden-sm hidden-xs action-buttons">-->
+                                        <!--<a class="green" role="button" data-toggle="modal" ng-click="edit(promotionpolicy)" ng-show="promotionpolicy.dataStatus != 9 && promotionpolicy.id != null">-->
+                                            <!--<i class="ace-icon fa fa-pencil bigger-130"></i>-->
+                                        <!--</a>-->
+                                        <!--&lt;!&ndash;启用&ndash;&gt;-->
+                                        <!--<a ng-if="promotionpolicy.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(promotionpolicy, $index)" tooltip="启用" ng-show="promotionpolicy.dataStatus == 9 && promotionpolicy.id != null">-->
+                                            <!--<i class="ace-icon fa fa-undo bigger-130"></i>-->
+                                        <!--</a>-->
+                                        <!--<a class="red" href ng-click="delete(promotionpolicy,$index)">-->
+                                            <!--<i class="ace-icon fa fa-trash-o bigger-130"></i>-->
+                                        <!--</a>-->
+                                    <!--</div>-->
+
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(promotionpolicy)" ng-show="promotionpolicy.dataStatus != 9 && promotionpolicy.id != null">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-if="promotionpolicy.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(promotionpolicy, $index)" tooltip="启用" ng-show="promotionpolicy.dataStatus == 9 && promotionpolicy.id != null">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(promotionpolicy,$index)" ng-show="promotionpolicy.dataStatus != 9 && promotionpolicy.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(promotionpolicy,$index)" ng-show="promotionpolicy.dataStatus == 9 && promotionpolicy.id != null ">
+                                                    删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="promotionPolicyModal.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="promotionpolicy.id">
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>编码</label>
+                        <input class="form-control"
+                               placeholder="如:BJ(代表北京)_20170808"
+                               name="code" ng-model="promotionpolicy.code" ng-model-options="{updateOn: 'blur'}"
+                               ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                               ng-pattern="/^[A-Z0-9_]+$/"
+                               required type="text">
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">编码是必须的!</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">编码不能重复！</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">编码必须为地区(大写首字母)_开始日期！</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>名称</label>
+                        <input class="form-control"
+                               placeholder="请输入名称"
+                               name="name" required ng-model="promotionpolicy.name" ng-model-options="{updateOn: 'blur'}"
+                               ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                               type="text">
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">名称是必须的!</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">名称不能重复！</span>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>开始日期</label>
+                        <div class="input-group" moment-picker="promotionpolicy.startDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control" ng-model="promotionpolicy.startDate" name="startDate"/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>截止日期</label>
+                        <div class="input-group" moment-picker="promotionpolicy.endDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control"
+                                   ui-validate="{enddateInvalid:'checkEndDate($value)'}"
+                                   ui-validate-watch="'promotionpolicy.startDate'"
+                                   name="endDate"
+                                   ng-model-options="{ updateOn: 'blur' }"
+                                   ng-model="promotionpolicy.endDate" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                        </div>
+                        <span ng-show="userForm.endDate.$error.enddateInvalid" class="help-block text-danger">截止日期必须大于开始日期!</span>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>规则公式</label>
+                    <textarea class="form-control" rows="6" placeholder="请输入规则公式" ng-model="promotionpolicy.formula"></textarea>
+                </div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label>促销政策说明</label>
+                        <textarea class="form-control " rows="6" placeholder="请输入说明信息"
+                                  ng-model="promotionpolicy.comment" name="name" ng-readonly="onlyread" required/>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">说明信息是必须的!</span>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="submit" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

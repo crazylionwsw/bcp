@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>bcp-server</artifactId>
+        <groupId>com.fuze.bcp</groupId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>bcp-creditcar</artifactId>
+    <packaging>jar</packaging>
+
+    <name>bcp-creditcar</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>bcp-base</artifactId>
+            <version>${bcp.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>bcp-api-creditcar</artifactId>
+            <version>${bcp.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+            <version>9.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>pdf-renderer</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.chaboshi</groupId>
+            <artifactId>chaboshi</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fuze.bcp</groupId>
+            <artifactId>bcp-common</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>bcp-creditcar</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>exec</classifier>
+                </configuration>
+                <!--<configuration>&lt;!&ndash; 指定该Main Class为全局的唯一入口 &ndash;&gt;-->
+                    <!--<mainClass>com.fuze.bcp.creditcar.starter.CreditcarBootStarter</mainClass>-->
+                    <!--<layout>ZIP</layout>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>repackage</goal>&lt;!&ndash;可以把依赖的包都打包到生成的Jar包中&ndash;&gt;-->
+                        <!--</goals>-->
+                        <!--&lt;!&ndash;可以生成不含依赖包的不可执行Jar包&ndash;&gt;-->
+                        <!--&lt;!&ndash; configuration>-->
+                          <!--<classifier>exec</classifier>-->
+                        <!--</configuration> &ndash;&gt;-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

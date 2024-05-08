@@ -1,0 +1,35 @@
+<div class="sign-info-list">
+    <div class="m-b text-md">审核信息</div>
+    <div class="clearfix m-b-lg">
+        <a class="pull-left thumb-sm avatar"><img src="img/a6.jpg" alt="..."></a>
+        <div class="m-l-xxl">
+            <form class="m-b-none ng-pristine ng-valid">
+                <div class="input-group">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="m-b b-l b-info m-l-md streamline">
+        <div ng-repeat="signinfo in signInfos|orderBy: 'ts': true">
+            <a class="pull-left thumb-sm avatar m-l-n-md">
+                <employee-avatar ng-if="signinfo.employeeId !== undefined" id="signinfo.employeeId"></employee-avatar>
+            </a>
+            <div class="m-l-lg panel b-a">
+                <div class="panel-heading pos-rlt b-b b-light">
+                    <span class="arrow left"></span>
+                    <span class="text-xs"><employee-info ng-if="signinfo.employeeId !== undefined" id="signinfo.employeeId"></employee-info></span>
+                    <!--<label class="label m-l-xs" ng-class="{2: 'bg-success', 8: 'bg-primary', 9: 'bg-danger'}[signinfo.result]" ng-if="!signinfo.fromSalesman && signinfo.flag == 2">{{signinfo.result|signStatusFilter}}</label>-->
+                    <label class="label m-l-xs" ng-class="{2: 'bg-success',9: 'bg-danger',3: 'bg-primary',4: 'bg-light', 1: 'bg-info'}[signinfo.result]" ng-if="signinfo.result !== undefined">{{signinfo.result |chargefellplanFilter}}</label>
+                </div>
+                <div class="panel-body">
+                    <div class="text-xs" style="word-break: break-all;word-wrap: break-word;">{{signinfo.comment}}</div>
+                    <div class="m-t-sm">
+                        <span class="text-muted m-l-sm pull-right text-xs">
+                            {{signinfo.ts |momentDate:'YYYY-MM-DD HH:mm:ss'}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

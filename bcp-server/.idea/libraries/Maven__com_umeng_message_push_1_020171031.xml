@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.umeng.message:push:1.020171031">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../maven/repository/com/umeng/message/push/1.020171031/push-1.020171031.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../maven/repository/com/umeng/message/push/1.020171031/push-1.020171031-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../maven/repository/com/umeng/message/push/1.020171031/push-1.020171031-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

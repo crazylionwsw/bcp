@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="A022" name="A022" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <userTask id="SUBMIT_CARDEALER" name="提交渠道信息" activiti:candidateGroups="G_SUBMIT"></userTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="SUBMIT_CARDEALER"></sequenceFlow>
+    <sequenceFlow id="flow3" name="通过" sourceRef="APPROVAL_CARDEALER" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approveStatus=='2'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow4" name="驳回" sourceRef="APPROVAL_CARDEALER" targetRef="SUBMIT_CARDEALER">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approveStatus=='8'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="APPROVAL_CARDEALER" name="渠道审核" activiti:candidateGroups="G_MANAGER"></userTask>
+    <sequenceFlow id="flow5" name="通过" sourceRef="SUBMIT_CARDEALER" targetRef="APPROVAL_CARDEALER">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approveStatus=='2'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_A022">
+    <bpmndi:BPMNPlane bpmnElement="A022" id="BPMNPlane_A022">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="630.0" y="49.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="630.0" y="490.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SUBMIT_CARDEALER" id="BPMNShape_SUBMIT_CARDEALER">
+        <omgdc:Bounds height="55.0" width="105.0" x="595.0" y="170.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="APPROVAL_CARDEALER" id="BPMNShape_APPROVAL_CARDEALER">
+        <omgdc:Bounds height="55.0" width="105.0" x="595.0" y="322.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="647.0" y="84.0"></omgdi:waypoint>
+        <omgdi:waypoint x="647.0" y="170.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="647.0" y="377.0"></omgdi:waypoint>
+        <omgdi:waypoint x="647.0" y="490.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="660.0" y="431.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="700.0" y="349.0"></omgdi:waypoint>
+        <omgdi:waypoint x="773.0" y="349.0"></omgdi:waypoint>
+        <omgdi:waypoint x="773.0" y="197.0"></omgdi:waypoint>
+        <omgdi:waypoint x="700.0" y="197.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="779.0" y="272.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="647.0" y="225.0"></omgdi:waypoint>
+        <omgdi:waypoint x="647.0" y="322.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="660.0" y="271.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

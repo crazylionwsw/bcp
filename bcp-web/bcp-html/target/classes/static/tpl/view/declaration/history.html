@@ -1,0 +1,22 @@
+<table class="table table-striped b-t b-light m-b-none">
+    <thead>
+        <tr>
+            <th>发送人</th>
+            <th>发送时间</th>
+            <th>邮件是否发送成功</th>
+            <th>银行反馈结果</th>
+            <th>银行批付额度(元)</th>
+            <th>银行反馈时间</th>
+        </tr>
+    </thead>
+    <tbody >
+        <tr ng-repeat="record in historyRecords">
+            <td><loginuser-employee-info ng-if="record.loginUserId != null" id="record.loginUserId"></loginuser-employee-info></td>
+            <td>{{record.emailTime}}</td>
+            <td>{{record.emailSuccess|yesno}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i ng-if="record.reason" class="fa fa-exclamation-circle" tooltip="{{record.reason}}"></i></td>
+            <td>{{record.declarationResult.result |DeclarationResultFilter}}</td>
+            <td>{{record.declarationResult.approvedCreditAmount ||0 | currency:'￥'}}</td>
+            <td>{{record.declarationResult.ts | momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+        </tr>
+    </tbody>
+</table>

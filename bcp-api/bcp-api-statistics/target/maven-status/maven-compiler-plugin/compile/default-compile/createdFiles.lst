@@ -1,0 +1,11 @@
+com/fuze/bcp/api/statistics/bean/BalanceAccountDetailBean.class
+com/fuze/bcp/api/statistics/bean/BalanceAccountExport.class
+com/fuze/bcp/api/statistics/bean/ChargeFeePlanDetailBean.class
+com/fuze/bcp/api/statistics/bean/BalaceAccountBean.class
+com/fuze/bcp/api/statistics/service/IBalanceAccountBizService.class
+com/fuze/bcp/api/statistics/bean/ChargeFeePlanErrorExport.class
+com/fuze/bcp/api/statistics/bean/QueryFilter.class
+com/fuze/bcp/api/statistics/SerializationOptimizerImpl.class
+com/fuze/bcp/api/statistics/bean/ChargeFeePlanBean.class
+com/fuze/bcp/api/statistics/service/IChargeFeePlanBizService.class
+com/fuze/bcp/api/statistics/service/IDailyReportBizService.class

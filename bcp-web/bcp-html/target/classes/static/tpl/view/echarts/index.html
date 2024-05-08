@@ -1,0 +1,147 @@
+<div class="app-content ng-scope m-n">
+    <div class="app-content-body app-content-full h-full fade-in-up ng-scope" style="top:0;">
+        <div class="hbox hbox-auto-xs ng-scope">
+            <div class="col lter b-l">
+                <div class="vbox">
+                    <div class="row-row">
+                        <div class="cell"  style="background-color: #F1F1F1">
+                            <div class="cell-inner">
+
+                                <div class="panel-body">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-6">
+                                            <!--当前业务分期经理 -->
+                                            <a href="" class="thumb avatar pull-left m-r">
+                                                <employee-avatar ng-if="employee.id !== undefined" id="employee.id"></employee-avatar>
+                                                <i class="on b-white bottom"></i>
+                                            </a>
+                                            <div class="clear">
+                                                <employee-info ng-if="employee.id !== undefined" id="employee.id"></employee-info>
+                                                <br/><br/>
+                                                <small class="block text-muted text-xs">当前业务分期经理</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <!--渠道经理展示-->
+                                            <select ng-model="selectedOrg" ng-show="mode == 2"
+                                                    ng-options="orginfo.name for orginfo in orginfos track by orginfo.id" ng-change="changeOrg()"
+                                                    class="form-control text-danger">
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="input-group" moment-picker="searchDate" format="YYYY-MM"
+                                                 locale="zh-cn" selectable="true">
+                                                <input type="text" class="col-sm-4 form-control text-danger"
+                                                       ng-model="searchDate"
+                                                       ng-model-options="{ updateOn: 'blur' }"/>
+                                                <span class="input-group-btn">
+                                                     <button  ng-click="changeDate()" type="button" class="btn btn-default">
+                                                         <i class="glyphicon glyphicon-calendar text-danger"></i>
+                                                     </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-b-xs ">
+                                            <h1 class="m-n font-thin h4 text-danger">&nbsp;&nbsp;&nbsp;&nbsp;当月业务统计</h1>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <div class="col-sm-3">
+                                            <p class="text-center">资质</p>
+                                            <echarts-info ng-if=" demandArr.length > 0  && demandArrNum.length >0"
+                                                          id="cardemand" legend-data="demandArr" series-data="demandArrNum" etitle="资质"></echarts-info>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p class="text-center">签约</p>
+                                            <echarts-info ng-if=" orderArr.length > 0 && orderArrNum.length > 0"
+                                                          id="order" legend-data="orderArr" series-data="orderArrNum" etitle="签约"></echarts-info>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p class="text-center">垫资</p>
+                                            <echarts-info ng-if=" paymentArr.length >0 && paymentArrNum.length >0"
+                                                          id="payment" legend-data="paymentArr" series-data="paymentArrNum" etitle="垫资"></echarts-info>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p class="text-center">车辆</p>
+                                            <echarts-info ng-if="carArr.length >0 && carArrNum.length >0"
+                                                          id="car" legend-data="carArr" series-data="carArrNum" etitle="车辆"></echarts-info>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-b-xs ">
+                                            <h1 class="m-n font-thin h4 text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当月业务金额统计</h1>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <div class="col-sm-4">
+                                            <p class="text-center " style="  margin-top: 20px">贷款额(万元)</p>
+                                            <echarts-column-info ng-if="amountArr.length >=5 && amountArrNum.length >=5"
+                                                                 id="amount" legend-data="amountArr" series-data="amountArrNum" etitle="贷款额"></echarts-column-info>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <p class="text-center " style="  margin-top: 20px">银行手续费(元)</p>
+                                            <echarts-column-info ng-if="chargeArr.length >=5 && chargeArrNum.length >=5"
+                                                                 id="charge" legend-data="chargeArr" series-data="chargeArrNum" etitle="银行手续费"></echarts-column-info>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <p class="text-center " style=" margin-top: 20px">贷款服务费 (元)</p>
+                                            <echarts-column-info  ng-if="servicefeeArr.length >=5 && servicefeeArrNum.length >= 5"
+                                                                  id="service" legend-data="servicefeeArr" series-data="servicefeeArrNum" etitle="银行手续费"></echarts-column-info>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--渠道数据统计-->
+                                <div class="panel-body" ng-if="mode == 2 || mode == 3">
+                                    <div class="col-sm-12 m-b-xs ">
+                                        <h1 class="m-n font-thin h4 text-danger  color-picker-label">&nbsp;&nbsp;&nbsp;&nbsp;渠道数据统计</h1>
+                                        <br/>
+                                    </div>
+                                    <div class="col-sm-12 m-b-xs ">
+                                        <div class=" m-b-xs " style="width: 240px; float: left" >
+                                            <dl>
+                                                <dt><h1 class="m-n font-thin h5  text-center ">{{cardealerCounts ||0}}笔</h1></dt>
+                                                <dd><h1 class="m-n font-thin h5 text-center ">新增渠道数量</h1></dd>
+                                            </dl>
+                                        </div>
+                                        <!--<div class=" m-b-xs " style="width: 160px; float: left" >
+                                            <dl>
+                                                <dt><h1 class="m-n font-thin h5  text-center ">{{dmvpCounts ||0}}笔</h1></dt>
+                                                <dd><h1 class="m-n font-thin h5  text-center ">渠道订单完成数量</h1></dd>
+                                            </dl>
+                                        </div>
+                                        <div class=" m-b-xs " style="width: 160px; float: left" >
+                                            <dl>
+                                                <dt><h1 class="m-n font-thin h5  text-center ">{{cardealerAmount ||0}}万元</h1></dt>
+                                                <dd><h1 class="m-n font-thin h5  text-center ">渠道订单完成金额</h1></dd>
+                                            </dl>
+                                        </div>-->
+                                        <div class=" m-b-xs " style="width: 240px; float: left">
+                                            <dl>
+                                                <dt><h1 class="m-n font-thin h5  text-center ">{{cardealerCarCount ||0}}笔</h1></dt>
+                                                <dd><h1 class="m-n font-thin h5  text-center ">渠道上牌完成数量</h1></dd>
+                                            </dl>
+                                        </div>
+                                        <div class=" m-b-xs " style="width: 240px; float: left">
+                                            <dl>
+                                                <dt><h1 class="m-n font-thin h5  text-center ">{{totalReceiveAmount ||0}}万元</h1></dt>
+                                                <dd><h1 class="m-n font-thin h5  text-center ">渠道上牌完成金额</h1></dd>
+                                            </dl>
+                                        </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

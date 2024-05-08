@@ -1,0 +1,30 @@
+
+<div class="panel panel-default m-b-none">
+    <div class="panel-heading">
+        <span class="h4">{{modalTitle}}</span>
+    </div>
+    <form name="userForm" class="form-validation">
+        <div class="panel-body">
+            <div class="col-lg-12">
+                <div class="form-group pull-in clearfix">
+                    <label>需要自启卡原因</label>
+                    <ui-select ng-model="bankcard.comment" theme="bootstrap">
+                        <ui-select-match placeholder="请选择需要客户自启卡的原因！" >{{$select.selected.comment}}</ui-select-match>
+                        <ui-select-choices  repeat="reason.comment as reason in reasonList | filter: $select.search">
+                            <div ng-bind-html="reason.comment | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+            </div>
+
+        </div>
+
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" ng-disabled="userForm.$pristine"  ng-click="sure(bankcard)" >需要客户自启卡</button>
+            <button class="btn btn-warning"  ng-click="close()">取消客户自启卡</button>
+        </footer>
+    </form>
+</div>
+
+

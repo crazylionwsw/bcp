@@ -1,0 +1,179 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <!--头部标题-->
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+            <!--过滤处-->
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+                        <!--表单-->
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                模板编码
+                            </th>
+                            <th>
+                                模板名称
+                            </th>
+                            <th>
+                                题目数量
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="customersurveytemplate in customersurveytemplates|filter:query" ng-class="{true:'danger'}[customersurveytemplate.dataStatus == 9]">
+                                <td>{{customersurveytemplate.code}}</td>
+                                <td>{{customersurveytemplate.name}}</td>
+                                <td>{{customersurveytemplate.questionIds.length}}</td>
+                                <td>{{customersurveytemplate.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(customersurveytemplate,$index)" ng-show="customersurveytemplate.dataStatus != 9 && customersurveytemplate.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <!--启用-->
+                                                <a ng-if="customersurveytemplate.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(customersurveytemplate, $index)" ng-show="customersurveytemplate.dataStatus == 9 && customersurveytemplate.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(customersurveytemplate, $index)" ng-show="customersurveytemplate.dataStatus != 9 && customersurveytemplate.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(customersurveytemplate, $index)" ng-show="customersurveytemplate.dataStatus == 9 && customersurveytemplate.id != null ">
+                                                    删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!------输入对话框------>
+<script type="text/ng-template" id="customersurveytemplateModal.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+
+                <input type="hidden" ng-model="customersurveytemplate.id">
+
+                <div class="form-group">
+                    <label class="control-label">编码</label>
+                    <input type="text" class="form-control" placeholder="请输入问卷调查模板编码"
+                           ng-model="customersurveytemplate.code" ng-model-options="{updateOn: 'blur'}"
+                           ui-validate-async="{notUnique:'checkUnique(\'code\',$value)'}"
+                           name="code" required >
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">问卷调查模板编码是必须的!</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">问卷调查模板编码不能重复！</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">名称</label>
+                    <input type="text" class="form-control" placeholder="请输入问卷调查模板名称"
+                           ng-model="customersurveytemplate.name" ng-model-options="{updateOn: 'blur'}"
+                           ui-validate-async="{notUnique:'checkUnique(\'name\',$value)'}"
+                           name="name" required >
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">问卷调查模板名称是必须的!</span>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">问卷调查模板名称不能重复！</span>
+                </div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label class="control-label">问题列表</label>
+                        <ui-select multiple ng-model="customersurveytemplate.questionIds" name="questionIds" theme="bootstrap" ng-disabled="false">
+                            <ui-select-match  placeholder="请选择模板的问题" >{{$item.content}}</ui-select-match>
+                            <ui-select-choices repeat="question.id as question in questions | filter: $select.search">
+                                <div ng-bind-html="question.content"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-4">
+                        <select multiple ng-model="questionCategoryId" name="questionCategoryId"
+                                ng-options="questioncategory.name for questioncategory in questioncategories track by questioncategory.id" ng-click="selectQuestionCategory(id)"
+                                class="form-control">
+                        </select>
+                        <!--<ui-select ng-model="questionCategoryIds" name="questionCategoryIds" theme="bootstrap" ng-disabled="disabled" on-select="selectQuestionCategory($item)">
+                            <ui-select-match  placeholder="请选择问题分类" >{{$select.selected.name}}</ui-select-match>
+                            <ui-select-choices repeat="questioncategory.id as questioncategory in questioncategories | filter: $select.search">
+                                <div ng-bind-html="questioncategory.name"></div>
+                            </ui-select-choices>
+                        </ui-select>-->
+                    </div>
+                    <div class="col-sm-8">
+                        <ui-select multiple ng-model="questionCategory.questionIds" name="cateGoryQuestionIds" theme="bootstrap" ng-disabled="disabled" on-select="selectQuestion($item)">
+                            <ui-select-match  placeholder="请选择问题" >{{$item.content}}</ui-select-match>
+                            <ui-select-choices repeat="question.id as question in categoryquestions | filter: $select.search">
+                                <div ng-bind-html="question.content"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="submit" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

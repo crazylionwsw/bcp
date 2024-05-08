@@ -1,0 +1,34 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">{{formTitle}}</h1>
+</div>
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span class="h4">客户信息</span></div>
+                <div class="panel-body">
+                    <customer-block id="$stateParams.id"></customer-block>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><span class="h4">档案资料</span></div>
+                <div class="panel-body">
+                    <customerimage-collection customerid="$stateParams.id"></customerimage-collection>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><span class="h4">合同资料</span></div>
+                <contract-list customerid="$stateParams.id"></contract-list>
+            </div>
+
+            <footer class="text-right">
+                <button class="btn btn-warning" type="button" ui-sref="app.business.printer">返 回</button>
+            </footer>
+        </div>
+        <div class="col-lg-3">
+            <!-- -->
+        </div>
+    </div>
+</div>

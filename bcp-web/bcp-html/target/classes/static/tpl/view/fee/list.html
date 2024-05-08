@@ -1,0 +1,10 @@
+<div ng-repeat="feeitem in feeitems">
+    <div class="col-sm-3">
+        <label>
+            {{feeitem.name |placeholder}}(元)
+        </label>
+        <p class="form-control-static b-b">
+            {{feeitem.fee || 0 | currency:'￥' }}
+        </p>
+    </div>
+</div>

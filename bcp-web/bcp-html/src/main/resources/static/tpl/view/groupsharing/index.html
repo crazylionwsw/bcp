@@ -1,0 +1,229 @@
+
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <ui-select ng-model="groupId" theme="bootstrap" on-select="chooseGroup($item, $model)">
+                                    <ui-select-match placeholder="经销商集团" >{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices  repeat="group.id as group in groups | filter: $select.search">
+                                        <div ng-bind-html="group.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <div class="input-group" moment-picker="saleMonth" format="YYYY-MM"
+                                     locale="zh-cn" selectable="true">
+                                    <input type="text" class="form-control"
+                                           ng-model="saleMonth"
+                                            placeholder="月份"/>
+                                    <span class="input-group-btn">
+                                         <button type="button" class="btn btn-default btn-sm" ng-click="clearMonth()">重置时间</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-b-xs text-right ">
+                                <a role="button" ladda="calcing" data-spinner-color="#999999" class="btn btn-sm btn-primary"  ng-click="calcSharing()">{{calcLabel}}</a>
+                                <a role="button" data-spinner-color="#999999" class="btn btn-sm btn-success"  ng-click="searchDetail()">查 询</a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none" data-filter="#filter">
+                            <thead>
+                            <tr>
+                                <th>月份</th>
+                                <th>集团名称</th>
+                                <th>分成状态</th>
+                                <th>贷款金额合计</th>
+                                <th>贷款笔数合计</th>
+                                <th>分成金额合计</th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="gs in groupsharings">
+                                <td>{{gs.month}}</td>
+                                <td>{{gs.groupName}}</td>
+                                <td>
+                                    <span ng-show="gs.status == 3">
+                                        <button class="btn btn-primary btn-xs" type="button" ng-click="balanceGroupSharing(gs.id)">结算</button>
+                                    </span>
+                                    <span ng-hide="gs.status == 3">{{gs.status | sharingConfirmStatus}}</span></td>
+                                <td>{{gs.totalCredit | currency:'￥'}}</td>
+                                <td>{{gs.totalCount}}</td>
+                                <td>{{gs.totalSharing | currency:'￥'}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="blue" ng-click="view(gs)" data-toggle="modal">
+                                                    详情
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="blue" ng-click="refreshSharing(gs)" data-toggle="modal">
+                                                    重算
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1800px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">集团分成</h1>
+                    </div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="padder-v row m-n">
+                                <div class="col-lg-12">
+                                    <!--来源渠道-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"  style="text-align: center"><span class="h4"><dealergroup-name ng-if="groupid != null" id="groupid"></dealergroup-name>{{salemonth}}月分成详情表</span></div>
+                                        <div class="panel-body" style="height: 800px;width: 1720px;overflow: scroll">
+                                            <div>
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <th>
+                                                                经销商名称
+                                                            </th>
+                                                            <th>
+                                                                状态
+                                                            </th>
+                                                            <th>
+                                                                <span style="width:230px; display:inline-block;">
+                                                                    客户姓名【身份证号码】
+                                                                </span>
+                                                                <span style="width:100px; display:inline-block;">
+                                                                    贷款金额
+                                                                </span>
+                                                                <span style="width:100px; display:inline-block;">
+                                                                    银行手续费
+                                                                </span>
+                                                                <span style="width:100px; display:inline-block;">
+                                                                    手续费缴纳方式
+                                                                </span>
+                                                                <span style="width:100px; display:inline-block;">
+                                                                    是否贴息
+                                                                </span>
+                                                                <span style="width:100px; display:inline-block;">
+                                                                    贷款服务费
+                                                                </span>
+                                                                <span style="width:170px; display:inline-block;">
+                                                                    分成比例
+                                                                </span>
+                                                                <span style="width:170px; display:inline-block;">
+                                                                    分成金额(元)
+                                                                </span>
+                                                                <span style="width:135px; display:inline-block;">
+                                                                    登记证收取时间
+                                                                </span>
+                                                                <span style="width:100px; display:inline-block;">
+                                                                    核对状态
+                                                                </span>
+                                                                <span style="width: 100px; display:inline-block;">
+                                                                        操作
+                                                                </span>
+                                                            </th>
+
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="key in groupsharingKeys" style="width: 45px">
+                                                                <td style="vertical-align: middle;"><cardealer-name ng-if="key !== null" id="key"></cardealer-name></td>
+                                                                <td style="vertical-align: middle;">{{getStatus(key) | sharingConfirmStatus}}</td>
+                                                                <td>
+                                                                    <div ng-repeat="groupsharing in groupsharingValues[key]" style="height:50px;line-height:50px;vertical-align: middle;">
+                                                                        <div style="width:230px;display:inline-block;vertical-align: middle;"><customer-info ng-if="groupsharing.customerId !== undefined" id="groupsharing.customerId"></customer-info></div>
+                                                                        <div style="width:100px;display:inline-block;vertical-align: middle;">{{groupsharing.creditAmount | currency:'￥'}}</div>
+                                                                        <div style="width:100px;display:inline-block;vertical-align: middle;">{{groupsharing.bankFeeAmount | currency:'￥'}}</div>
+                                                                        <div style="width:100px;display:inline-block;vertical-align: middle;">{{groupsharing.chargePaymentWay | chargePaymentWayFilter}}</div>
+                                                                        <div style="width:100px;display:inline-block;vertical-align: middle;">{{groupsharing.compensatoryFlag | yesno}}</div>
+                                                                        <div style="width:100px;display:inline-block;vertical-align: middle;">{{groupsharing.loanServiceFee | currency:'￥'}}</div>
+                                                                        <div style="width:170px;display:inline-block;">
+                                                                            <div ng-show="groupsharing.status == 0" style="width: auto">
+                                                                                <p class="form-control-static b-b">
+                                                                                    <a href="#" editable-text="groupsharing.sharingRatio" e-label="" e-style="width:80px;" onaftersave="updateSharingRatio(groupsharing)">{{groupsharing.sharingRatio}}</a>
+                                                                                </p>
+                                                                            </div>
+                                                                            <div ng-show="groupsharing.status != 0" style="width: 170px">
+                                                                                {{groupsharing.sharingRatio}}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div style="width:170px;display:inline-block;height:45px;">
+                                                                            <div ng-show="groupsharing.status == 0" style="width: auto;">
+                                                                                <p class="form-control-static b-b">
+                                                                                    <a href="#" editable-text="groupsharing.sharingAmount" e-label="" e-style="width:80px;" onaftersave="updateSharingAmount(groupsharing)">{{groupsharing.sharingAmount ||0 |currency:'￥'}}</a>
+                                                                                </p>
+                                                                            </div>
+                                                                            <div ng-show="groupsharing.status != 0" style="width: 170px;">
+                                                                                {{groupsharing.sharingAmount ||0 |currency:'￥'}}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div style="width:135px;display:inline-block;">{{groupsharing.pledgeDateReceiveTime}}</div>
+                                                                        <div style="width:100px;display:inline-block;">{{groupsharing.status | sharingConfirmStatus}}</div>
+                                                                        <div style="width:100px;display:inline-block;">
+                                                                            <button class="btn btn-primary btn-xs" type="button" ng-click="updateSave(key,groupsharing.id,groupsharing.status,groupsharing.sharingRatio,groupsharing.sharingAmount,groupsharing.mainPartType)" ng-show="groupsharing.status != null && groupsharing.status == 0">修正</button>
+                                                                            <button class="btn btn-primary btn-xs" type="button" ng-click="checkSave(key,groupsharing.id,groupsharing.status,groupsharing.sharingRatio,groupsharing.sharingAmount,groupsharing.mainPartType)" ng-show="groupsharing.status != null && groupsharing.status == 1">核对</button>
+                                                                            <button class="btn btn-primary btn-xs" type="button" ng-click="resetSave(key,groupsharing.id,groupsharing.status,groupsharing.sharingRatio,groupsharing.sharingAmount,groupsharing.mainPartType)" ng-show="groupsharing.status != null && groupsharing.status == 2 ">复核</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-info" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+

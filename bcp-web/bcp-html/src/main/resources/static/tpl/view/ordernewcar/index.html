@@ -1,0 +1,630 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell" style="overflow-x: hidden;overflow-y: auto">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs ">
+                                <select class="form-control" ng-model="searchFilter.statusValue" ng-change="search()">
+                                    <option value="-1">全部</option>
+                                    <option value="100">待处理</option>
+                                    <option value="0">待审核</option>
+                                    <option value="1">审核中</option>
+                                    <option value="2">审核通过</option>
+                                    <option value="8">驳回待提交</option>
+                                    <option value="9">拒绝</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1 text-left">
+                                <select class="form-control" ng-model="pageSize" ng-change="changePageSize()">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="1000">1000</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 m-b-xs text-right">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                            <div class="col-sm-1 m-b-xs text-right"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                序号
+                                            </th>
+                                            <th>
+                                                报单支行
+                                            </th>
+                                            <th>
+                                                客户姓名【身份证号码】
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height:40px" ng-repeat="order in orders" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[order.approveStatus]">
+                                            <td>{{$index+1}}</td>
+                                            <td><transaction-cashsource-info ng-if="order.transaction !== undefined" transaction="order.transaction"></transaction-cashsource-info></td>
+                                            <td><customer-info id="order.customerId"></customer-info></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-7" style="margin-left:-40px;overflow: scroll;overflow-y: hidden;">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                渠道支行
+                                            </th>
+                                            <th>
+                                                业务类型
+                                            </th>
+                                            <th>
+                                                分期经理【手机号码】
+                                            </th>
+                                            <th class="text-right">
+                                                贷款金额【期限-类型】
+                                            </th>
+                                            <th class="text-right">
+                                                银行手续费(元)【缴纳方式】
+                                            </th>
+                                            <th>
+                                                贷款服务费(元)
+                                            </th>
+                                            <th>
+                                                报批状态
+                                            </th>
+                                            <th>
+                                                审核状态
+                                            </th>
+                                            <th>
+                                                当前任务
+                                            </th>
+                                            <th >
+                                                签约时间
+                                            </th>
+                                            <th >
+                                                业务处理时间
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height:40px" ng-repeat="order in orders" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[order.approveStatus]">
+                                            <td><transaction-cardealer-cooperationcashsource-info ng-if="order.transaction !== undefined" transaction="order.transaction"></transaction-cardealer-cooperationcashsource-info></td>
+                                            <td>{{order.businessTypeCode | BusinessTypeFilter}}</td>
+                                            <td><employee-info ng-if="order.employeeId !== undefined" id="order.employeeId"></employee-info></td>
+                                            <td class="text-right"><payment-orderamount id="order.customerTransactionId"></payment-orderamount></td>
+                                            <td class="text-right"><bankfeeorder-info id="order.customerTransactionId"></bankfeeorder-info></td>
+                                            <td class="text-right"><feeitem-loanservice id="order.customerTransactionId"></feeitem-loanservice></td>
+                                            <td><declaration-status ng-if="order.customerTransactionId !== undefined" id="order.customerTransactionId"></declaration-status></td>
+                                            <td><approve-status ng-if="order.approveStatus != null && order.transaction !== undefined" transaction="order.transaction" status="order.approveStatus" billtypecode="order.billTypeCode"></approve-status></td>
+                                            <td><flow-getpresenttaskgroup billtypecode="order.billTypeCode" billid="order.id" ng-if="order.transaction !== undefined" transaction="order.transaction"></flow-getpresenttaskgroup></td>
+                                            <td>{{order.ts | momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                            <td>{{order.approveDate | momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-center">本页合计：</td>
+                                            <td class="text-left">{{totalCreditAmount | currency:"￥"}}</td>
+                                            <td class="text-right">{{totalBankFeeAmount | currency:"￥"}}</td>
+                                            <td class="text-right">{{totalLoanServiceFee | currency:"￥"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-1" style="margin-left:-25px;">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <tr class="bg-white">
+                                            <th>
+                                                我的任务
+                                            </th>
+                                            <th>
+                                                操作
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height:40px" ng-repeat="order in orders" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[order.approveStatus]" class="bg-white">
+                                            <td><flow-info ng-if="order.id !== undefined"  billtypecode="order.billTypeCode" billid="order.id"></flow-info></td>
+                                            <td>
+                                                <div class="btn-group dropdown" dropdown>
+                                                    <button class="btn btn-success btn-xs" dropdown-toggle>操作<span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="blue" ng-click="edit(order, $index)" ng-show="true" href>浏览</a></li>
+                                                        <li><a class="blue" ng-click="goDeclaration(order, $index)" ng-show="true" href>银行报批</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-2 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-9 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+                <div class="col-sm-1 text-right"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<pageslide  ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">客户签约--{{order.businessTypeCode |BusinessTypeFilter}}
+                            <span ng-if="order.transaction.fileNumber">--{{order.transaction.fileNumber||"未生成"}}</span>
+                            <button ng-if="order.transaction.fileNumber == null || order.transaction.fileNumber == undefined" ng-click="createFileNumber(order.transaction.id)">重新生成</button>
+                            <span ng-class="{1:'text-info',2: 'text-success', 8: 'text-warning', 9: 'text-danger'}[order.approveStatus]">({{order.approveStatus | approveStatusFilter}})</span>
+                            <span ng-class="{11:'text-danger',16: 'text-primary'}[order.transaction.status]" ng-if="order.transaction" ng-show="order.transaction.status == 11 || order.transaction.status == 16">---{{order.transaction.status | StatusFilter}}</span>
+                        </h1>
+                    </div>
+                    <div class="col-sm-5 text-left">
+                        <label class="col-sm-4 control-label"><h4>是否为自雇人士: </h4></label>
+                        <div class="col-sm-5">
+                            <ui-select ng-model="order.customer.isSelfEmployed" name="isSelfEmployed" theme="bootstrap" ng-disabled="true" on-select="changeCustomerType(order.customer,$item)">
+                                <ui-select-match  placeholder="请选择是否为自雇人士" >{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices repeat="customertype.code as customertype in customertypes | filter: $select.search">
+                                    <div ng-bind-html="customertype.name"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="padder-v row m-n">
+                                <div class="col-lg-9">
+                                    <!--业务来源-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">来源渠道</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <cardealer-block ng-if="order.customerTransactionId != undefined && order.carDealerId != null" id="order.carDealerId" transactionid="order.customerTransactionId"></cardealer-block>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">签约部门</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-12">
+                                                            <label>部门名称</label>
+                                                            <p class="form-control-static b-b">
+                                                                <superorg-info ng-if="order.transaction.orginfoId != null" id="order.transaction.orginfoId"></superorg-info>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--营销信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="refresh(order.id)">刷新</button>
+                                            <span class="h4">营销支行</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <!--<order-marketing-info ng-if="order.customerTransactionId != undefined" transactionid="order.customerTransactionId"></order-marketing-info>-->
+                                                    <div class="form-group pull-in clearfix" ng-if="order.poundageSettlement">
+                                                        <div class="col-lg-3">
+                                                            <label>代码支行</label>
+                                                            <p class="form-control-static b-b">
+                                                                <cashsource-info ng-if="order.poundageSettlement.settlementCashSourceId !== undefined" id="order.poundageSettlement.settlementCashSourceId"></cashsource-info>
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>报单支行</label>
+                                                            <p class="form-control-static b-b">
+                                                                <cashsource-info ng-if="order.poundageSettlement.declarationCashSourceId !== undefined" id="order.poundageSettlement.declarationCashSourceId"></cashsource-info>
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>渠道支行</label>
+                                                            <p class="form-control-static b-b">
+                                                                <cashsource-info ng-if="order.poundageSettlement.channelCashSourceId !== undefined" id="order.poundageSettlement.channelCashSourceId"></cashsource-info>
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>支行营销代码</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{order.poundageSettlement.marketingCode || order.poundageSettlement.newMarketingCode[0] ||"该订单的代码行没有营销代码"}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix" ng-if="order.poundageSettlement == undefined">
+                                                        <div class="col-lg-12">
+                                                            <p class="form-control-static b-b">
+                                                                对不起，该订单暂未进行手续费分成！
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--贷款人信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款人信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <!--<customer-order ng-if="order.customerId !== undefined" id="order.customerId"></customer-order>-->
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-3">
+                                                            <label>姓名</label>
+                                                            <p class="form-control-static b-b">{{order.customer.name|placeholder}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>性别</label>
+                                                            <p class="form-control-static b-b">{{order.customer.gender|gender|placeholder}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>年龄</label>
+                                                            <p class="form-control-static b-b">{{order.customer.age|placeholder}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>民族</label>
+                                                            <p class="form-control-static b-b">{{order.customer.nationality}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-3">
+                                                            <label>出生日期</label>
+                                                            <p class="form-control-static b-b">{{order.customer.birthday |date:'yyyy-MM-dd'}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3 has-warning">
+                                                            <label>身份证号码</label>
+                                                            <p class="form-control-static b-b">{{order.customer.identifyNo|placeholder}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>身份证住址</label>
+                                                            <p class="form-control-static b-b">{{order.customer.address|placeholder}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>身份证有效期</label>
+                                                            <p class="form-control-static b-b">{{order.customer.identifyValid |IdentifyValidFilter}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-3">
+                                                            <label>签发机关</label>
+                                                            <p class="form-control-static b-b">{{order.customer.authorizeBy|placeholder}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>户籍所在地</label>
+                                                            <p class="form-control-static b-b">{{order.customer.censusRegisterCity|placeholder}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>婚姻状况</label>
+                                                            <p class="form-control-static b-b">{{order.customer.maritalStatus | maritalStatusFilter}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>手机号码</label>
+                                                            <p class="form-control-static b-b" editable-tags-input="order.customer.cells" onaftersave="updateCustomerCells()">{{order.customer.cells|strList|placeholder}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-3">
+                                                            <label>有北京牌照</label>
+                                                            <p class="form-control-static b-b">{{order.customer.isCarBrand|zeroone}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>有北京房产</label>
+                                                            <p class="form-control-static b-b">{{order.customer.isHouseBrand|zeroone}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>有北京社保</label>
+                                                            <p class="form-control-static b-b">{{order.customer.isSocialInsurance|zeroone}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>有北京户籍</label>
+                                                            <p class="form-control-static b-b">{{order.customer.isBJCensusRegister|zeroone}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-3">
+                                                            <label>单位名称</label>
+                                                            <p class="form-control-static b-b">{{order.customer.customerJob.companyName|placeholder}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3" ng-show="order.customer.isSocialInsurance == '1'">
+                                                            <label>社保期限</label>
+                                                            <p class="form-control-static b-b">{{order.customer.socialInsuranceDate | socialInsuranceFilter}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>家庭住址</label>
+                                                            <p class="form-control-static b-b">{{order.customer.contactAddress}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>是否需要打印收入证明</label>
+                                                            <p class="form-control-static b-b">{{order.printNeedEarningProof ||false|yesno}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix">
+                                                        <!--<div class="col-lg-3">-->
+                                                            <!--<label>家庭住址</label>-->
+                                                            <!--<p class="form-control-static b-b">{{order.customer.contactAddress}}</p>-->
+                                                        <!--</div>-->
+                                                        <div class="col-lg-3">
+                                                            <label>是否直客</label>
+                                                            <p class="form-control-static b-b">{{order.isStraight | zeroone}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--贷款人单位信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款人单位信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <customer-company ng-if="order.customerId !== undefined" id="order.customerId"></customer-company>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--配偶信息-->
+                                    <div class="panel panel-default" ng-show="order.cardemand.mateCustomerId != null">
+                                        <div class="panel-heading">
+                                            <span class="h4">配偶信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-relation-block id="order.cardemand.mateCustomerId" proname="1"></customer-relation-block>
+                                        </div>
+                                    </div>
+                                    <!--反担保人信息-->
+                                    <div class="panel panel-default" ng-show="order.counterGuarantorId !== null">
+                                        <div class="panel-heading">
+                                            <span class="h4">反担保人信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <customer-guarantor ng-if="order.counterGuarantorId !== undefined" id="order.counterGuarantorId"></customer-guarantor>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--指标人信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">指标人信息</span></div>
+                                        <div class="panel-body">
+                                            <div>
+                                                <customer-relation-block ng-if="order.cardemand.pledgeCustomerId != undefined" id="order.cardemand.pledgeCustomerId" proname="2" ng-show="order.cardemand.relation != '0' "></customer-relation-block>
+                                                <div class="form-group pull-in clearfix">
+                                                    <div class="col-lg-12">
+                                                        <label>与贷款人关系</label>
+                                                        <p class="form-control-static b-b" ng-class="{1:'text-danger',2: 'text-danger', 3: 'text-danger'}[order.cardemand.relation]">{{order.cardemand.relation |relationFilter}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--指标状态信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">指标状态信息</span></div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-3">
+                                                    <label>指标状态</label>
+                                                    <p class="form-control-static b-b">{{order.indicatorStatus | indicatorStatusFilter}}</p>
+                                                </div>
+                                                <div class="col-sm-3" ng-show="order.indicatorStatus != 1">
+                                                    <label>指标获取时间</label>
+                                                    <p class="form-control-static b-b">{{order.retrieveDate ||""}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>预计提车时间</label>
+                                                    <p class="form-control-static b-b">{{order.pickCarDate  ||""}}</p>
+                                                </div>
+                                                <div class="col-sm-3" ng-show="order.indicatorStatus != 1">
+                                                    <label>{{order.indicatorStatus | moveoutDateFilter}}</label>
+                                                    <p class="form-control-static b-b">{{order.moveOutDate ||""}}</p>
+                                                </div>
+                                                <div class="col-sm-3" ng-show="order.indicatorStatus != 1">
+                                                    <label>情况说明</label>
+                                                    <p class="form-control-static b-b">{{order.indicatorComment || ""}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--购买车辆信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">购买车辆信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-car ng-if="order.customerCarId !== undefined" transactionid="order.customerTransactionId" id="order.customerCarId" billtypecode="order.billTypeCode" businesstypecode="order.businessTypeCode"></customer-car>
+                                        </div>
+                                    </div>
+                                    <!--车辆评估信息-->
+                                    <div class="panel panel-default" ng-show="order.businessTypeCode == 'OC'">
+                                        <div class="panel-heading">
+                                            <span class="h4">车辆评估信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-carvaluation ng-if="order.customerTransactionId !== undefined" id="order.customerTransactionId"></customer-carvaluation>
+                                        </div>
+                                    </div>
+                                    <!--贷款信息-->
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <customer-loan ng-if="order.customerTransactionId !== undefined" transactionid="order.customerTransactionId" billtypecode="order.billTypeCode" businesstypecode="order.businessTypeCode"></customer-loan>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--预计还款信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">预计还款信息</span></div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-3">
+                                                    <label>总还款额(元)</label>
+                                                    <p class="form-control-static b-b">{{order.repaymentAmountSum || 0 |currency:'￥'}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>月还款额(元)</label>
+                                                    <p class="form-control-static b-b">{{order.repaymentAmountMonthly || 0 |currency:'￥'}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>首期还款额(元)</label>
+                                                    <p class="form-control-static b-b">{{order.repaymentAmountFirstMonth || 0 |currency:'￥'}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--档案资料-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">档案资料</span></div>
+                                        <div class="panel-body">
+                                            <customerimage-block ng-if="order !== null" bill="order"  save="save(bill)"></customerimage-block>
+                                        </div>
+                                    </div>
+                                    <!--文档信息-->
+                                    <div class="panel panel-default" ng-if="order.billType.documentIds.length > 0">
+                                        <div class="panel-heading"><span class="h4">文档信息</span></div>
+                                        <business-contract-block ng-if="order !== null" canAudit="true" bill="order"></business-contract-block>
+                                    </div>
+
+                                </div>
+                                <!--右边栏-->
+                                <div class="col-lg-3">
+                                    <div style="position: fixed;" ng-show="checked">
+                                        <div style="height:650px;overflow-y:scroll;">
+                                            <!--当前业务分期经理 -->
+                                            <div class="panel b-success b-light clearfix">
+                                                <div class="panel-body">
+                                                    <a href="" class="thumb avatar pull-left m-r">
+                                                        <employee-avatar ng-if="order.employeeId !== undefined" id="order.employeeId"></employee-avatar>
+                                                        <i class="on b-white bottom"></i>
+                                                    </a>
+                                                    <div class="clear">
+                                                        <employee-info ng-if="order.employeeId !== undefined" id="order.employeeId"></employee-info>
+                                                        <br/><br/>
+                                                        <small class="block text-muted text-xs"><i class="icon-action-redo"></i>当前业务分期经理</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--显示订单的签批信息-->
+                                            <div class="m-b-md clearfix" ng-show="order.id != null">
+                                                <tem-signinfo-list ng-if="order.id !== undefined" id="order.id" billtypecode="order.billTypeCode"></tem-signinfo-list>
+                                            </div>
+
+                                            <!--        显示客户的资质审查的签批信息-->
+                                            <div class="m-b-md clearfix" ng-show="order.cardemand.id != null">
+                                                <button class="btn btn-warning" type="button" ng-click="showCarDemandSignInfos(cardemandSignShow)">显示资质审查的签批信息</button>
+                                                <cardemand-signinfo ng-if="order.cardemand.id !== undefined" id="order.cardemand.id" ng-show="cardemandSignShow == 1"></cardemand-signinfo>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-sm b-t b-light">
+                    <div class="panel-body">
+                        <div class="col-sm-6 text-left">
+                            <button class="btn btn-primary" type="button" ng-click="showSurvey()">客户调查</button>
+                        </div>
+                        <div class="col-sm-6 text-right">
+
+                            <!--<sign-button ng-if="order.id && order.transaction" billid="order.id" billtypecode="order.billTypeCode" transaction="order.transaction"></sign-button>-->
+                            <tem-sign-button ng-if="order.id && order.transaction" billid="order.id" billtypecode="order.billTypeCode" transaction="order.transaction" customer="order.customer" customerloan="order.loan"></tem-sign-button>
+                            <!--<re-audit-button ng-if="order.id && order.approveStatus == 2" bill="order"></re-audit-button>-->
+                            <button class="btn btn-primary" type="button" ng-click="close()">关 闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+<!--             模糊查询模态框           -->
+<script type="text/ng-template" id="query.html">
+    <query-form search="searchFilter" query="queryBill(search)" clear="clearQuery()"></query-form>
+</script>
+<!--             审查、审核页面   -->
+<script type="text/ng-template" id="audit.html">
+    <signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>
+<script type="text/ng-template" id="survey.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group pull-in clearfix">
+                        <div class="col-sm-4" ng-repeat="customerSurveyResult in customerSurveyResults" ng-if="customerSurveyResults !== undefined">
+                            <label>{{customerSurveyResult.question.content ||""}}</label>
+                            <p class="form-control-static b-b" ng-if="customerSurveyResult.question.questionType != 'checklist'">{{customerSurveyResult.answerContents}}</p>
+                            <p class="form-control-static b-b" ng-if="customerSurveyResult.question.questionType == 'checklist'">
+                                <span ng-repeat="answerContent in customerSurveyResult.answerContentList">
+                                    {{answerContent ||""}}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-warning" type="button" ng-click="cancel()">关  闭</button>
+        </footer>
+    </div>
+</script>

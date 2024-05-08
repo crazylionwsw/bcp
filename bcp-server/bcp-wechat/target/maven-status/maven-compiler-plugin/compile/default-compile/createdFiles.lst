@@ -1,0 +1,10 @@
+com\fuze\bcp\wechat\starter\config\DubboConfig.class
+com\fuze\bcp\wechat\business\BizLoanQueryService.class
+com\fuze\bcp\wechat\business\BizOfficialAccountsService.class
+com\fuze\bcp\wechat\domain\LoanQuery.class
+com\fuze\bcp\wechat\repository\LoanQueryRepository.class
+com\fuze\bcp\wechat\starter\config\RedisConfig.class
+com\fuze\bcp\wechat\business\BizWechatService.class
+com\fuze\bcp\wechat\starter\WechatBootStarter.class
+com\fuze\bcp\wechat\service\impl\LoanQueryServiceImpl.class
+com\fuze\bcp\wechat\service\ILoanQueryService.class

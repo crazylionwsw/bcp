@@ -1,0 +1,62 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{modalTitle}}
+    </div>
+    <div class="panel-body">
+        <div class="col-lg-12">
+            <div class="form-group pull-in clearfix">
+                <div class="col-sm-6">
+                    <label>姓名 </label>
+                    <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-pattern"
+                           placeholder="用户姓名" ng-model="customer.name" ng-change="checkName()" required=""
+                           type="text">
+                </div>
+                <div class="col-sm-6">
+                    <label>性别</label>
+                    <div class="form-control">
+                        <label class="checkbox-inline i-checks">
+                            <input value="0" ng-model="customer.gender" type="radio"><i></i>男
+                        </label>
+                        <label class="checkbox-inline i-checks">
+                            <input value="1" ng-model="customer.gender" type="radio"><i></i>女
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group pull-in clearfix">
+                <div class="col-sm-6">
+                    <label>身份证号码</label>
+                    <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required"
+                           ng-model="customer.identifyNo" required="">
+                </div>
+                <div class="col-sm-6">
+                    <label>身份证地址</label>
+                    <input class="form-control ng-pristine ng-untouched ng-valid-validator ng-invalid ng-invalid-required"
+                           required="" ng-model="customer.address" type="text">
+                </div>
+            </div>
+            <div class="form-group pull-in clearfix">
+                <div class="col-sm-6">
+                    <label>联系电话</label>
+                    <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required"
+                           ng-model="customer.identifyNo" required="">
+                </div>
+                <div class="col-sm-6">
+                    <label>客户状态</label>
+                    <input class="form-control ng-pristine ng-untouched ng-valid-validator ng-invalid ng-invalid-required"
+                           required="" ng-model="customer.address" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+        </div>
+    </div>
+
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn btn-success" type="submit" ng-click="queryCustomer()">查  询</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">关  闭</button>
+    </footer>
+
+</div>
+
+

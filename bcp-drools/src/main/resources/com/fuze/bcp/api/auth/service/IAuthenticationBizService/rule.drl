@@ -1,0 +1,27 @@
+package com.fuze.bcp.api.auth.service;
+
+import com.fuze.bcp.api.auth.bean.SysRoleBean;
+
+rule "actSaveSysRole"
+    dialect "java"
+    when
+        $sysRole:SysRoleBean( sysResourceIds contains "1" )
+    then
+         System.out.println("sysResourceIds contains 1");
+end
+
+rule "user"
+    dialect "java"
+    when
+        $sysRole:SysRoleBean( sysResourceIds contains "2" )
+    then
+        System.out.println("sysResourceIds contains 2");
+end
+
+rule "super"
+    dialect "java"
+    when
+        $sysRole:SysRoleBean( sysResourceIds contains "3" )
+    then
+        System.out.println("sysResourceIds contains 3");
+end

@@ -1,0 +1,8 @@
+com\fuze\bcp\transaction\service\ICustomerTransactionService.class
+com\fuze\bcp\transaction\starter\TransactionBootStarter.class
+com\fuze\bcp\transaction\domain\CustomerTransaction.class
+com\fuze\bcp\transaction\starter\config\DubboConfig.class
+com\fuze\bcp\transaction\repository\CustomerTransactionRepository.class
+com\fuze\bcp\transaction\service\impl\CustomerTransactionServiceImpl.class
+com\fuze\bcp\transaction\starter\config\RedisConfig.class
+com\fuze\bcp\transaction\business\BizCustomerTransactionService.class

@@ -1,0 +1,60 @@
+package com.fuze.bcp.server.creditcar.ICustomerDemandBizService;
+
+import com.fuze.bcp.api.drools.bean.DroolsBaseBean;
+import com.fuze.bcp.api.creditcar.bean.DemandSubmissionBean;
+import com.fuze.bcp.api.customer.bean.CustomerBean
+
+rule "NO_PLEDGE_CUSTOMER"
+    dialect "java"
+    lock-on-active true
+    when
+        $droolsBeans:DroolsBaseBean(apiBaseBean != null, message: message);
+        $demandSubmissionBean : DemandSubmissionBean(pledgeCustomer == null) from $droolsBeans.apiBaseBean;
+    then
+        System.out.println("NO_PLEDGE_CUSTOMER");
+        message.add("NO_PLEDGE_CUSTOMER");
+        update($droolsBeans);
+end
+
+
+rule "INCORRECT_RELATIONSHIP"
+    dialect "java"
+    lock-on-active true
+    when
+        $droolsBeans:DroolsBaseBean(apiBaseBean != null, message: message);
+        $demandSubmissionBean : DemandSubmissionBean(relation == "0", pledgeCustomer != null) from $droolsBeans.apiBaseBean;
+        $pledgeCustomer : CustomerBean() from $demandSubmissionBean.pledgeCustomer;
+        $creditMaster : CustomerBean($pledgeCustomer.identifyNo != identifyNo) from $demandSubmissionBean.creditMaster;
+    then
+        System.out.println("INCORRECT_RELATIONSHIP");
+        message.add("NO_PLEDGE_CUSTOMER");
+        update($droolsBeans);
+end
+
+
+rule "SAME_IDENTIFYNO_MATE"
+    dialect "java"
+    lock-on-active true
+    when
+        $droolsBeans:DroolsBaseBean( apiBaseBean != null, message:message );
+        $demandSubmissionBean : DemandSubmissionBean(mateCustomer != null) from $droolsBeans.apiBaseBean;
+        $mateCustomer : CustomerBean() from $demandSubmissionBean.mateCustomer;
+        $creditMaster : CustomerBean($mateCustomer.identifyNo == identifyNo) from $demandSubmissionBean.creditMaster;
+    then
+        System.out.println("SAME_IDENTIFYNO_MATE");
+        message.add("NO_PLEDGE_CUSTOMER");
+        update($droolsBeans);
+end
+
+
+rule "NO_CAR_SELECTED"
+    dialect "java"
+    lock-on-active true
+    when
+        $droolsBeans:DroolsBaseBean( apiBaseBean != null, message:message );
+        $demandSubmissionBean : DemandSubmissionBean(customerCar == null) from $droolsBeans.apiBaseBean;
+    then
+        System.out.println("NO_CAR_SELECTED");
+        message.add("NO_PLEDGE_CUSTOMER");
+        update($droolsBeans);
+end

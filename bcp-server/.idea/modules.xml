@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/bcp-auth/bcp-auth.iml" filepath="$PROJECT_DIR$/bcp-auth/bcp-auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-bd/bcp-bd.iml" filepath="$PROJECT_DIR$/bcp-bd/bcp-bd.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-cardealer/bcp-cardealer.iml" filepath="$PROJECT_DIR$/bcp-cardealer/bcp-cardealer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-common/bcp-common.iml" filepath="$PROJECT_DIR$/bcp-common/bcp-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-creditcar/bcp-creditcar.iml" filepath="$PROJECT_DIR$/bcp-creditcar/bcp-creditcar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-credithome/bcp-credithome.iml" filepath="$PROJECT_DIR$/bcp-credithome/bcp-credithome.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-customer/bcp-customer.iml" filepath="$PROJECT_DIR$/bcp-customer/bcp-customer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-drools/bcp-drools.iml" filepath="$PROJECT_DIR$/bcp-drools/bcp-drools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-dubbo/bcp-dubbo.iml" filepath="$PROJECT_DIR$/bcp-dubbo/bcp-dubbo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-file/bcp-file.iml" filepath="$PROJECT_DIR$/bcp-file/bcp-file.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-message/bcp-message.iml" filepath="$PROJECT_DIR$/bcp-message/bcp-message.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-mq/bcp-mq.iml" filepath="$PROJECT_DIR$/bcp-mq/bcp-mq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-mq-receiver/bcp-mq-receiver.iml" filepath="$PROJECT_DIR$/bcp-mq-receiver/bcp-mq-receiver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-push/bcp-push.iml" filepath="$PROJECT_DIR$/bcp-push/bcp-push.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-server.iml" filepath="$PROJECT_DIR$/bcp-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-statistics/bcp-statistics.iml" filepath="$PROJECT_DIR$/bcp-statistics/bcp-statistics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-system/bcp-system.iml" filepath="$PROJECT_DIR$/bcp-system/bcp-system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-timertask/bcp-timertask.iml" filepath="$PROJECT_DIR$/bcp-timertask/bcp-timertask.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-transaction/bcp-transaction.iml" filepath="$PROJECT_DIR$/bcp-transaction/bcp-transaction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-wechat/bcp-wechat.iml" filepath="$PROJECT_DIR$/bcp-wechat/bcp-wechat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bcp-workflow/bcp-workflow.iml" filepath="$PROJECT_DIR$/bcp-workflow/bcp-workflow.iml" />
+    </modules>
+  </component>
+</project>

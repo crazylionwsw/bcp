@@ -1,0 +1,44 @@
+<div class="panel panel-default m-b-none">
+	<div class="panel-heading">
+		<button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+		<span class="h4">领卡人</span>
+	</div>
+	<div class="panel-body">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="col-lg-12">
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-4">
+							<div class="checkbox">
+								<label class="i-checks">
+									<input type="checkbox" ng-model="sumType" ng-change="changeType()" value="1"><i></i>员工领卡
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-8" ng-show="cusShow">
+							<div class="form-group">
+								<label>领卡人</label>
+								<input type="text" class="form-control" ng-model="bankcard.receiveCardName"/>
+							</div>
+						</div>
+						<div class="col-sm-8" ng-show="!cusShow">
+							<div class="form-group">
+								<label>领卡人</label>
+								<ui-select sortable="true" ng-model="bankcard.receiveCardName" theme="bootstrap">
+									<ui-select-match placeholder="请选择员工领卡人" >{{$select.selected.username}}</ui-select-match>
+									<ui-select-choices  repeat="businessName.username as businessName in businessNames | filter: $select.search">
+										<div ng-bind-html="businessName.username | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer class="panel-footer text-right bg-light lter">
+			<button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+			<button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+		</footer>
+	</div>
+</div>

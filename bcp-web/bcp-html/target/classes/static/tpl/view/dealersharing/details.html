@@ -1,0 +1,92 @@
+
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">
+                    <cardealer-name ng-if="dealersharing" id="dealersharing.carDealerId"></cardealer-name> - {{dealersharing.month}}月的分成详情
+
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-sm btn-success btn-addon" type="button" ng-click="exportDetails(dealersharing)">
+                            <i class="fa fa-file-excel-o"></i>
+                            导出
+                        </button>
+                        <button class="btn btn-sm btn-primary " type="button" ui-sref="app.business.dealersharing">
+                            返回
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-12 m-b-xs">
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-md-3">
+                                        <label>渠道经理</label>
+                                        <p class="form-control-static b-b">
+                                            <employee-info ng-if="dealersharing" id="dealersharing.channelId"></employee-info>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>贷款合计</label>
+                                        <p class="form-control-static b-b">
+                                            {{dealersharing.totalCredit | currency:'￥'}}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>贷款笔数</label>
+                                        <p class="form-control-static b-b">
+                                            {{dealersharing.totalCount}}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>分成合计</label>
+                                        <p class="form-control-static b-b">
+                                            {{dealersharing.totalSharing | currency:'￥'}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none" data-filter="#filter" >
+                            <thead>
+                            <tr>
+                                <th>客户姓名</th>
+                                <th>贷款金额</th>
+                                <th>贷款期限(月)</th>
+                                <th>分成比例</th>
+                                <th>分成金额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="ds in dealersharingDetails">
+                                <td><customer-info id="ds.customerId"></customer-info></td>
+                                <td>{{ds.creditAmount | currency:'￥'}}</td>
+                                <td>{{ds.months}}</td>
+                                <td>{{ds.sharingRatio}}</td>
+                                <td>{{ds.sharingAmount | currency:'￥'}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                </div>
+                <div class="col-sm-8 text-right">
+                    <button class="btn btn-primary" type="button" ui-sref="app.business.dealersharing">
+                        返回
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

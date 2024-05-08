@@ -1,0 +1,83 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">编辑账户信息</h1>
+</div>
+<div class="wrapper-md">
+    <div> <!--ng-controller="FormCtrl"-->
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="forma" ng-submit="save()" class="form-horizontal form-validation">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>编辑账户信息</strong>
+                        </div>
+
+                        <input type="hidden" ng-model="customer.id">
+
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">账户号码</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="输入账户号码"
+                                           ng-model="account.accountNumber" required>
+                                </div>
+                            </div>
+
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">开户银行</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="输入开户银行"
+                                           ng-model="account.bankName" required>
+                                </div>
+                            </div>
+
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">开户地址</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="输入账户开户地址"
+                                           ng-model="account.bankAddress" required>
+                                </div>
+                            </div>
+
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">账户类型</label>
+                                <div class="col-sm-9">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="account.accountType" ng-model="account.accountType"
+                                               value="0" checked>个人账户
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="optionsRadiosinline" ng-model="account.accountType"
+                                               value="1">公司账户
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">账户用途</label>
+                                <div class="col-sm-9">
+                                    <label>
+                                        <select class="form-control" ng-model="account.accountWay">
+                                            <option value="">-- 请选择 --</option>
+                                            <option value="0">收付款账户</option>
+                                            <option value="1">收款账户</option>
+                                            <option value="2">付款账户</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <footer class="panel-footer text-right bg-light lter">
+                            <button class="btn btn-primary" type="submit">OK</button>
+                            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

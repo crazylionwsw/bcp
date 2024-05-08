@@ -1,0 +1,86 @@
+<div class="bg-light lter b-b wrapper-md">
+	<h1 class="m-n font-thin h3">{{formTitle}}--{{pickupcar.businessType.name}}</h1>
+</div>
+<div class="wrapper-md">
+
+	<div class="row">
+		<div class="col-lg-9">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<span class="h4">客户来源</span>
+				</div>
+				<div class="panel-body">
+					<cardealer-block ng-if="pickupcar.carDealerId != undefined" id="pickupcar.carDealerId"></cardealer-block>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading"><span class="h4">客户信息</span></div>
+				<div class="panel-body">
+					<customer-block id="pickupcar.customerId"></customer-block>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading"><span class="h4">提车信息</span></div>
+				<div class="panel-body">
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-3">
+							<label>提车经销商名称</label>
+							<p class="form-control-static b-b">{{pickupcar.pickCarDealer}}</p>
+						</div>
+					</div>
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-3">
+							<label>提车时间</label>
+							<p class="form-control-static b-b">{{pickupcar.pickDate|date: 'yyyy-MM-dd HH:mm'}}</p>
+						</div>
+						<div class="col-sm-3">
+							<label>支付时间</label>
+							<p class="form-control-static b-b">{{pickupcar.payTime|date: 'yyyy-MM-dd HH:mm'}}</p>
+						</div>
+						<div class="col-sm-3">
+							<label>垫资金额（元）</label>
+							<p class="form-control-static b-b">{{pickupcar.loanAmount|currency:'￥'}}</p>
+						</div>
+						<div class="col-sm-3">
+							<label>上牌日期</label>
+							<p class="form-control-static b-b">{{pickupcar.registryDate|date: 'yyyy-MM-dd HH:mm'}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading"><span class="h4">档案资料</span></div>
+				<div class="panel-body">
+					<customerimage-block bill="pickupcar" save="save(bill)"></customerimage-block>
+				</div>
+			</div>
+			<footer class="text-right">
+				<!--<button class="btn btn-primary" type="button" can-audit="pickupcar" ng-click="audit()">审 核</button>-->
+				<button class="btn btn-warning" type="button" ui-sref="app.business.pickupcar">返 回</button>
+			</footer>
+		</div>
+		<div class="col-lg-3">
+
+			<!--当前业务分期经理 -->
+			<div class="m-b-md clearfix">
+				<div class="m-b text-md">当前业务分期经理</div>
+				<div class="panel b-a">
+					<div class="panel-heading pos-rlt bg-info">
+						<span class="arrow top pull-left arrow-info"></span>
+						<employee-info ng-if="pickupcar.employeeId !== undefined" id="pickupcar.employeeId"></employee-info>
+					</div>
+				</div>
+			</div>
+
+			<!--显示订单的签批信息
+			<div class="m-b-md clearfix" ng-show="pickupcar.signInfos != null">
+				<signinfo-list signinfos="pickupcar.signInfos"></signinfo-list>
+			</div>-->
+
+		</div>
+
+	</div>
+	</div>
+	<script type="text/ng-template" id="audit.html">
+		<signinfo_block sign="sign(signinfo)"></signinfo_block>
+	</script>

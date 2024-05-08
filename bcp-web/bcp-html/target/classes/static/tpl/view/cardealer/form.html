@@ -1,0 +1,585 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">渠道信息</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner padder">
+                        <form name="userForm" class="form-horizontal form-validation">
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">经销商</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" placeholder="请输入经销商名称" required ng-model="cardealer.name"  ng-readonly="statuss" name="name">
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">经销商名称是必须的!</span>
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">经销商名称不能重复！</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">地址</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" placeholder="请输入地址"
+                                               ng-model="cardealer.address" ng-readonly="status" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">负责人姓名</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" placeholder="请输入负责人姓名"
+                                               ng-model="cardealer.manager" ng-readonly="status" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">联系电话</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" placeholder="请输入联系电话"
+                                               ng-model="cardealer.cell" ng-readonly="status" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">合作状态</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" placeholder="status" ng-model="cardealer.status"
+                                                ng-readonly="{{status}}" required>
+                                            <option value="0">合同签署阶段</option>
+                                            <option value="1">正常合作中</option>
+                                            <option value="9">中止合作</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">经销商级别</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" placeholder="status" ng-model="cardealer.level"
+                                                ng-readonly="{{statu}}" required>
+                                            <option value="1">一级经销商</option>
+                                            <option value="2">二级经销商</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">生效日期</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group" moment-picker="cardealer.startDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                                            <input type="text" class="form-control" ng-model="cardealer.startDate" name="startDate"/>
+                                        <span class="input-group-btn">
+                                             <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">垫支支付周期</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group bootstrap-touchspin">
+                                            <input type="number" class="form-control" data-step="1" data-decimals="0" data-postfix="%" style="..." ng-model="cardealer.payPeriod" ng-readonly="status" required>
+                                            <span class="input-group-addon bootstrap-touchspin-postfix">天</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">所属部门</label>
+                                    <div class="col-sm-8 form-control-static b-b">
+                                        <org-info ng-if="cardealer.orginfoId !== undefined" id="cardealer.orginfoId"></org-info>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">经营业务</label>
+                                    <div class="col-sm-8">
+                                        <ui-select multiple ng-model="cardealer.businessTypeCodes" theme="bootstrap" on-select="selectBusinessType($item, $model)" on-remove="removeBusinessType($item, $model)">
+                                            <ui-select-match placeholder="请选择经营业务" >{{$item.name}}</ui-select-match>
+                                            <ui-select-choices  repeat="businessType.code as businessType in businessTypes | filter: $select.search">
+                                                <small>
+                                                    <span>{{businessType.name}}（{{businessType.code}}）</span>
+                                                </small>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">渠道经理</label>
+                                    <div class="col-sm-8">
+                                        <ui-select  ng-model="cardealer.employeeId" theme="bootstrap" on-select="selectChannel($item, $model)">
+                                            <ui-select-match placeholder="请选择渠道经理" >{{$select.selected.username}}</ui-select-match>
+                                            <ui-select-choices  repeat="employee.id as employee in employees | filter: $select.search">
+                                                <div ng-bind-html="employee.username | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">分期经理</label>
+                                    <div class="col-sm-8">
+                                        <ui-select multiple ng-model="cardealer.businessManIds" theme="bootstrap">
+                                            <ui-select-match placeholder="请选择分期经理" >{{$item.username}}</ui-select-match>
+                                            <ui-select-choices  repeat="employee.id as employee in employees">
+                                                <div ng-bind-html="employee.username | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">经销商来源</label>
+                                    <div class="col-sm-8">
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="1" ng-model="cardealer.sourceDeals" name="sourceDeals" type="radio" required ><i></i>自我开发
+                                        </label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="2"  ng-model="cardealer.sourceDeals" name="sourceDeals" type="radio" required ><i></i>银行推荐
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">限售地区</label>
+                                    <div class="col-sm-8">
+                                        <ui-select multiple ng-model="cardealer.provinceIds" theme="bootstrap">
+                                            <ui-select-match placeholder="请选择地区" >{{$item.name}}</ui-select-match>
+                                            <ui-select-choices  repeat="region.id as region in regions | filter: $select.search">
+                                                <small>
+                                                    <span style="padding-left:{{region.depth*10}}px" ng-bind-html="region.name"></span>
+                                                </small>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group pull-in clearfix" ng-show="cardealer.sourceDeals>1">
+
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">合作支行</label>
+                                    <div class="col-sm-8">
+                                        <ui-select ng-model="cardealer.cooperationCashSourceId" theme="bootstrap" ng-disabled="false">
+                                            <ui-select-match placeholder="请选择合作支行" >{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices  repeat="cashSource.id as cashSource in cashSources">
+                                                <div style="padding-left:{{cashSource.depth*10}}px" ng-bind-html="cashSource.name"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">报单支行</label>
+                                    <div class="col-sm-8">
+                                        <ui-select ng-model="cardealer.cashSourceId" theme="bootstrap" ng-disabled="false">
+                                            <ui-select-match placeholder="请选择报单支行" >{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices  repeat="cashSource.id as cashSource in cashSources">
+                                                <div style="padding-left:{{cashSource.depth*10}}px" ng-bind-html="cashSource.name"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">动力类型</label>
+                                    <div class="col-sm-8">
+                                        <ui-select multiple ng-model="cardealer.motiveType" theme="bootstrap" ng-disabled="disabled">
+                                            <ui-select-match placeholder="请选择动力类型">{{$item.name}}</ui-select-match>
+                                            <ui-select-choices repeat="motivetype.id as motivetype in motiveTypes">
+                                                <div ng-bind-html="motivetype.name "></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">月成交量</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group bootstrap-touchspin">
+                                            <input type="text" class="form-control" placeholder="请输入月成交量"
+                                                   ng-model="cardealer.turnover" ng-readonly="status">
+                                            <span class="input-group-addon bootstrap-touchspin-postfix">辆</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">贷款客户数</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group bootstrap-touchspin">
+                                            <input type="text" class="form-control" placeholder="请输入贷款客户数"
+                                                   ng-model="cardealer.customerNumber" ng-readonly="status">
+                                            <span class="input-group-addon bootstrap-touchspin-postfix">人/次</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">贷款总额</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group bootstrap-touchspin">
+                                            <input type="text" class="form-control" placeholder="请输入贷款总额"
+                                                   ng-model="cardealer.sumLoan" ng-readonly="status">
+                                            <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">经销商贴息占比</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group bootstrap-touchspin">
+                                            <input type="text" class="form-control" placeholder="请输入经销商贴息占比"
+                                                   ng-model="cardealer.compensatoryRatio" ng-readonly="status">
+                                            <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">座机</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" placeholder="请输入座机号码"
+                                               ng-model="cardealer.telephone" ng-readonly="status">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">是否限定品牌</label>
+                                    <div class="col-sm-8">
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="0" ng-model="cardealer.brandIsLimit" name="brandIsLimit" type="radio" required ><i></i>是
+                                        </label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="1"  ng-model="cardealer.brandIsLimit" name="brandIsLimit" type="radio" required ><i></i>否
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">销售品牌</label>
+                                    <div class="col-sm-8">
+                                        <ui-select multiple ng-model="cardealer.carBrandIds" theme="bootstrap" ng-disabled="disabled">
+                                            <ui-select-match placeholder="请选择销售品牌">{{$item.name}}</ui-select-match>
+                                            <ui-select-choices repeat="carbrand.id as carbrand in carbrands | filter: $select.search">
+                                                <div ng-bind-html="carbrand.name "></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">支付方式</label>
+                                    <div class="col-sm-8">
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="0" ng-model="cardealer.paymentMethod" name="paymentMethod" type="radio" required ><i></i>全额支付
+                                        </label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="1"  ng-model="cardealer.paymentMethod" name="paymentMethod" type="radio" required ><i></i>差额支付
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">新车垫资时间</label>
+                                    <div class="col-sm-8">
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="0" ng-model="cardealer.paymentNewTime" name="paymentNewTime" type="radio" required ><i></i>开票前
+                                        </label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="1"  ng-model="cardealer.paymentNewTime" name="paymentNewTime" type="radio" required ><i></i>开票后
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-4 control-label">二手车垫资时间</label>
+                                    <div class="col-sm-8">
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="0" ng-model="cardealer.paymentOldTime" name="paymentOldTime" type="radio" required ><i></i>初交易
+                                        </label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input value="1"  ng-model="cardealer.paymentOldTime" name="paymentOldTime" type="radio" required ><i></i>登记后
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-6">
+                                <label class="col-sm-4 control-label">备注信息</label>
+                                    <div class="col-sm-8">
+                                        <textarea class="form-control" rows="5" placeholder="请输入备注信息" ng-model="cardealer.commentInfo"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="row padder-v m-n">
+                            <tabset justified="true" class="tab-container" tabContentTransclude="openme()">
+                                <tab heading="银行账户">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped b-t b-light m-b-none">
+                                            <thead>
+                                            <tr>
+
+                                                <th>
+                                                    开户名称
+                                                </th>
+                                                <th>
+                                                    开户银行
+                                                </th>
+                                                <th>
+                                                    银行账户
+                                                </th>
+                                                <th >
+                                                    默认账户
+                                                </th>
+                                                <th>
+                                                    收付款账户
+                                                </th>
+                                                <th style="width:60px;">
+                                                    操作
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody >
+                                            <tr ng-repeat="payAccount in cardealer.payAccounts">
+                                                <td>{{payAccount.accountName}}</td>
+                                                <td>{{payAccount.bankName}}</td>
+                                                <td>{{payAccount.accountNumber}}</td>
+                                                <td>{{payAccount.defaultAccount|yesno}}</td>
+                                                <td>{{payAccount.accountWay|accountWayFilter}}</td>
+                                                <td>
+                                                    <div class="hidden-sm hidden-xs action-buttons">
+                                                        <a class="red" href ng-click="deletePayAccount(payAccount,$index)">
+                                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="row wrapper">
+                                            <div class="col-sm-6 text-left" >
+                                                <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="addPayAccount('')"><i class="fa fa-plus"></i>添加</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab heading="渠道利率" >
+                                    <div class="form-group">
+                                        <tabset justified="true" class="tab-container nav-tabs-alt no-borders m-b-none">
+                                            <tab ng-repeat="bt in cardealer.businessTypes" heading="{{bt.name}}">
+                                                <tabset justified="true" class="tab-container nav-tabs-alt no-borders m-b-none">
+                                                    <tab ng-repeat="sr in bt.sourceRates" heading="{{sr.name}}">
+                                                        <form name="rateForm{{bt.id}}_{{sr.id}}" editable-form>
+                                                            <div class="row wrapper-xs text-right">
+                                                                <button type="button" class="btn btn-sm btn-default" ng-show="!rateForm{{bt.id}}_{{sr.id}}.$visible" ng-click="rateForm{{bt.id}}_{{sr.id}}.$show()"><i class="fa fa-pencil text"></i></button>
+                                                                <button type="submit" ng-show="rateForm{{bt.id}}_{{sr.id}}.$visible" ng-disabled="rateForm{{bt.id}}_{{sr.id}}.$waiting" class="btn btn-primary btn-sm"><i class="fa fa-save text"></i></button>
+                                                                <button type="button" ng-show="rateForm{{bt.id}}_{{sr.id}}.$visible" ng-disabled="rateForm{{bt.id}}_{{sr.id}}.$waiting" ng-click="rateForm{{bt.id}}_{{sr.id}}.$cancel()" class="btn btn-default btn-sm"><i class="fa fa-close text"></i></button>
+                                                            </div>
+                                                            <!-- table -->
+                                                            <div class="row">
+                                                                <table class="table table-bordered table-hover table-condensed">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>期数(月)</th>
+                                                                        <th>利率</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr ng-repeat="ratetype in cardealer.dealerRates[bt.code][sr.id]">
+                                                                        <td>
+                                                                            {{ratetype.months}}
+                                                                        </td>
+                                                                        <td>
+                                                                <span editable-text="ratetype.ratio" e-form="rateForm{{bt.id}}_{{sr.id}}">
+                                                                    {{ratetype.ratio}}
+                                                                </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </form>
+                                                    </tab>
+                                                </tabset>
+                                            </tab>
+                                        </tabset>
+                                    </div>
+                                </tab>
+                                <tab heading="渠道员工" >
+                                    <div class="hbox hbox-auto-xs bg-light">
+
+                                        <div class="col lter b-l" style="height: 1000px">
+                                            <div class="vbox">
+                                                <div class="wrapper b-b b-light">
+                                                    <div class="font-thin h4">{{tableTitle}}</div>
+                                                </div>
+
+                                                <div class="row-row">
+                                                    <div class="cell">
+                                                        <div class="cell-inner">
+
+                                                            <div class="row padder-v m-n lt">
+                                                                <div class="col-sm-4 m-b-xs">
+                                                                    <input type="text" class="input-sm form-control" placeholder="过滤:请输入员工名称" ng-model="query">
+                                                                </div>
+                                                                <div class="col-sm-8 m-b-xs text-right ">
+                                                                    <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="editDealerEmployee('')" ng-show="!isReferenceDialog"> 添加员工 </a>
+                                                                </div>
+                                                            </div>
+
+                                                            <table class="table table-striped b-t b-light m-b-none">
+                                                                <thead>
+                                                                <th data-toggle="true">
+                                                                    员工编号
+                                                                </th>
+                                                                </th>
+                                                                <th>
+                                                                    姓名
+                                                                </th>
+                                                                <th>
+                                                                    性别
+                                                                </th>
+                                                                <th>
+                                                                    生日
+                                                                </th>
+                                                                <th>
+                                                                    邮箱
+                                                                </th>
+                                                                <th>
+                                                                    手机号
+                                                                </th>
+                                                                <th>
+                                                                    数据状态
+                                                                </th>
+                                                                </thead>
+                                                                <tbody >
+                                                                <tr ng-repeat="dealeremployee in dealeremployees|filter:query" ng-class="{true:'danger'}[dealeremployee.dataStatus == 9]" >
+                                                                    <td>{{dealeremployee.employeeNo}}</td>
+                                                                    <td>{{dealeremployee.username}}</td>
+                                                                    <td>{{dealeremployee.gender|gender}}</td>
+                                                                    <td>{{dealeremployee.birthday | date:'yyyy-MM-dd'}}</td>
+                                                                    <td>{{dealeremployee.email}}</td>
+                                                                    <td>{{dealeremployee.cell}}</td>
+                                                                    <td>{{dealeremployee.dataStatus|dataStatusFilter}}</td>
+                                                                    <td ng-show="!isReferenceDialog">
+                                                                        <div class="hidden-sm hidden-xs action-buttons">
+                                                                            <a class="green" role="button" data-toggle="modal"
+                                                                               ng-click="editDealerEmployee(dealeremployee)">
+                                                                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                                            </a>
+                                                                            <a class="red" href ng-click="deleteDealerEmployee(dealeremployee,$index)">
+                                                                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                                            </a>
+                                                                        </div>
+
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="m-n b-t b-light row lt">
+                                                    <div class="col-sm-4 text-left">
+                                                        <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                                                    </div>
+                                                    <div class="col-sm-8 text-right">
+                                                        <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </tab>
+                            </tabset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wrapper-sm b-t b-light text-right lt">
+                <button class="btn btn-primary" type="button" ng-click="saveform('')">保存</button>
+                <button class="btn btn-warning" type="button" ui-sref="app.business.cardealer">返 回</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="payaccountForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{title}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation" >
+                <input type="hidden" ng-model="payAccount.id">
+                <div class="form-group">
+                    <label class="control-label">开户名称</label>
+                    <input type="text" class="form-control" placeholder="请输入开户名称" ng-model="payAccount.accountName" required >
+                </div>
+                <div class="form-group">
+                    <label class="control-label">开户银行</label>
+                    <input type="text" class="form-control" placeholder="请输入开户银行" ng-model="payAccount.bankName" required >
+                </div>
+                <div class="form-group">
+                    <label class="control-label">银行账户</label>
+                    <input type="text" name="payAccount.accountNumber" class="form-control" placeholder="请输入银行账户(只能为数字)" ng-model="payAccount.accountNumber"
+                           onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                           ui-validata="{accountlist: 'notaccountListed($value)'}" required>
+                    <span ng-show="userForm.payAccount.accountNumber.$dirty && userForm.payAccount.accountNumber.$error.accountlist">This accountNumber is already exist!</span>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label class="control-label">账户类型</label>
+                        <select class="form-control" ng-model="payAccount.accountType">
+                            <option value="0">个人账户</option>
+                            <option value="1">公司账户</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label class="control-label">收付款方向</label>
+                        <select class="form-control" ng-model="payAccount.accountWay">
+                            <option value="0">收付款账户</option>
+                            <option value="1">付款账户</option>
+                            <option value="2">收款账户</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">默认账户？</label>
+                    <div class="checkbox">
+                        <label class="i-checks">
+                            <input class="form-control-static" ng-model="payAccount.defaultAccount" class="ng-pristine ng-untouched" type="checkbox"><i></i> 是
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-click="save()" >保存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">关闭</button>
+        </footer>
+    </div>
+</script>

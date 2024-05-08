@@ -1,0 +1,17 @@
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/bean/PadLoginBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/service/ILoginTokenBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/jwt/JwtUser.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/bean/UserBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/SerializationOptimizerImpl.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/jwt/JwtUserFactory.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/service/ILoginCacheService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/bean/LogManagementBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/bean/RegistUserBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/bean/SysResourceBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/bean/SysRoleBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/bean/LoginUserBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/jwt/JwtMD5PasswordEncoder.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/jwt/JwtTokenUtil.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/bean/LoginBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/bean/RegistBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-auth/src/main/java/com/fuze/bcp/api/auth/service/IAuthenticationBizService.java

@@ -1,0 +1,10 @@
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/bean/WechatLoginResult.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/SerializationOptimizerImpl.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/service/IWechatBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/bean/AccessToken.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/bean/LoanQueryBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/bean/WechatUserResult2.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/service/ILoanQueryBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/service/IOfficialAccountsService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/bean/WechatUserResult.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-wechat/src/main/java/com/fuze/bcp/api/wechat/bean/JsApiTicket.java

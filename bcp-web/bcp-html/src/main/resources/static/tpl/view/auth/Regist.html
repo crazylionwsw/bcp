@@ -1,0 +1,25 @@
+<div class="container w-xxl w-auto-xs" ng-controller="authController" ng-init="app.settings.container=false;">
+    <form name="form" class="form-validation">
+        <h1>注册用户页面</h1>
+        <div class="list-group list-group-sm">
+            <div class="list-group-item">
+                用户名：<input  placeholder="输入您要注册的用户名" class="form-control no-border" ng-model="user.username" required>
+            </div>
+            <div class="list-group-item">
+                密码：<input type="password" placeholder="请输入您要注册的密码" class="form-control no-border" ng-model="user.password" required>
+            </div>
+            <div class="list-group-item">
+              确认密码：  <input type="password" placeholder="请确定您要注册的密码" class="form-control no-border" ng-model="user.repassword" required>
+                <span style="color:red" ng-show="myForm.user.repassword.$dirty && myForm.user.repassword.$invalid">
+                <span ng-show="myForm.user.repassword.$error.required">请再次确认您输入的密码。</span><br>
+                <span ng-show="myForm.user.repassword.$user.repassword!=user.password">两次密码输入不一致。</span></span>
+
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="reg()" ng-disabled='form.$invalid' >注册账号</button></a>
+        <!--<div class="text-center m-t m-b"><a ui-sref="auth.forgotpwd">忘记密码?</a></div>-->
+
+    </form>
+</div>

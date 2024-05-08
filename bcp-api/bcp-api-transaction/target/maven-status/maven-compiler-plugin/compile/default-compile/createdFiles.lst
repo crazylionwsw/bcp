@@ -1,0 +1,6 @@
+com/fuze/bcp/api/transaction/bean/PadCustomerTransactionBean.class
+com/fuze/bcp/api/transaction/bean/TransactionStageBean.class
+com/fuze/bcp/api/transaction/bean/TransactionSummaryBean.class
+com/fuze/bcp/api/transaction/bean/CustomerTransactionBean.class
+com/fuze/bcp/api/transaction/service/ICustomerTransactionBizService.class
+com/fuze/bcp/api/transaction/SerializationOptimizerImpl.class

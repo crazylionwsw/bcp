@@ -1,0 +1,203 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">
+        <span>渠道管理</span>
+    </h1>
+</div>
+
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="form" class="form-horizontal form-validation">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>组织机构信息编辑</strong>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-4">
+                                <label class="col-sm-4 control-label">组织机构编码</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" placeholder="请输入组织机构编码"
+                                           ng-model="orginfo.code" ng-readonly="statu" >
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label class="col-sm-4 control-label">部门名称</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" placeholder="请输入部门名称"
+                                           ng-model="orginfo.name" ng-readonly="statu" >
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label class="col-sm-4 control-label">是否虚拟组织</label>
+                                <div class="col-sm-5">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input type="checkbox" name="isVirtual" ng-model="orginfo.isVirtual" checked/>是
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-4">
+                                <label class="col-sm-4 control-label">组织类型</label>
+                                <div class="col-sm-5">
+                                    <select ng-model="orginfo.orginfoType"
+                                            ng-options="orginfotype.label  for orginfotype in  orginfos track by orginfotype.id" class="form-control" >
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="col-sm-4 control-label">部门领导</label>
+                                <div class="col-sm-5">
+                                    <select ng-model="orginfo.leader"
+                                            ng-options=" leader.username for leader in empleaders track by leader.id" class="form-control" >
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="col-sm-4 control-label">部门所属地区</label>
+                                <div class="col-sm-5">
+                                    <select ng-model="orginfo.province"
+                                            ng-options=" province.name for province in provinces track by province.id" class="form-control" >
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="row">
+                            <tabset justified="true" class="tab-container" tabContentTransclude="openme()">
+                                <tab heading="分期产品">
+                                    <div class="table-responsive">
+                                        <product-list ng-if="orginfo.creditProductIds !== undefined" object="cardealer" ids="orginfo.creditProductIds" save="saveCreditProducts(ids)"></product-list>
+                                        <div class="row wrapper">
+                                            <div class="col-sm-6 text-left" >
+                                                <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="addCreditProduct('')"><i class="fa fa-plus"></i>添加</button>
+                                                <!-- <button class="btn m-b-xs btn-sm btn-danger btn-addon"><i class="fa fa-minus"></i>删除</button>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tab>
+                            </tabset>
+                        </div>
+
+                    </div>
+                    <footer class="panel-footer text-right bg-light lter">
+                        <button class="btn btn-primary" type="button" ng-click="saveform('')">保存</button>
+                        <button class="btn btn-warning" type="button" ui-sref="app.systems.orginfo">返 回</button>
+                    </footer>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="payaccountForm.html">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="h4">{{title}}</span>
+        </div>
+        <div class="panel-body">
+            <input type="hidden" ng-model="payAccount.id">
+            <div class="form-group">
+                <label class="control-label">银行账户</label>
+                <input type="text" class="form-control" placeholder="输入银行账户" ng-model="payAccount.accountNumber" required >
+            </div>
+            <div class="form-group">
+                <label class="control-label">开户行名称</label>
+                <input type="text" class="form-control" placeholder="输入开户行名称" ng-model="payAccount.bankName" required >
+            </div>
+            <div class="form-group">
+                <label class="control-label">开户行地址</label>
+                <input type="text" class="form-control" placeholder="输入开户行地址" ng-model="payAccount.bankAddress" required >
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label class="control-label">账户类型</label>
+                    <select class="form-control" ng-model="payAccount.accountType">
+                        <option value="0">个人账户</option>
+                        <option value="1">公司账户</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">默认账户</label>
+                <div class="form-control">
+                    <input type="checkbox" name="defaultAccount" ng-model="payAccount.defaultAccount"   checked>默认账户</input>
+                </div>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-click="save()" >保存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">关闭</button>
+        </footer>
+    </div>
+</script>
+
+<script type="text/ng-template" id="carTypeForm.html">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <div class="panel-body">
+                <input type="hidden" ng-model="cartype.id">
+                <div class="form-group">
+                    <label class="control-label">品牌</label>
+                    <select ng-model="cartype.carBrand"
+                            ng-options=" carbrand.code+'---'+carbrand.name  for carbrand in carbrands track by carbrand.id"
+                            class="form-control">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class=" control-label">名称</label>
+                    <div>
+                        <input type="text" class="form-control" placeholder="输入车型名称"
+                               ng-model="cartype.typename" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">型号</label>
+                    <div>
+                        <input type="text" class="form-control" placeholder="输入车的型号"
+                               ng-model="cartype.model" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">排量</label>
+                    <div>
+                        <input type="text" class="form-control" placeholder="输入车的排量()"
+                               ng-model="cartype.ml" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">颜色</label>
+                    <div>
+                        <input type="text" class="form-control" placeholder="输入车的颜色"
+                               ng-model="cartype.color" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">官方定价（单位：元）</label>
+                    <div>
+                        <input type="text" class="form-control" placeholder="输入车的价格"
+                               ng-model="cartype.price" required>
+                    </div>
+                </div>
+
+            </div>
+            <footer class="panel-footer text-right bg-light lter">
+                <button class="btn btn-primary" type="submit" ng-click="save()">保 存</button>
+                <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+            </footer>
+
+        </div>
+    </div>
+</script>

@@ -1,0 +1,35 @@
+<div class="form-group pull-in clearfix">
+    <div class="col-lg-3">
+        <label>付款账户</label>
+        <p class="form-control-static b-b">{{fee.payAccount.accountNumber |placeholder}}</p>
+    </div>
+    <div class="col-lg-3">
+        <label>付款人</label>
+        <p class="form-control-static b-b">{{fee.payAccount.accountName |placeholder}}</p>
+    </div>
+    <div class="col-lg-3">
+        <label>收款账户</label>
+        <p class="form-control-static b-b">{{fee.receiveAccount.accountNumber |placeholder}}</p>
+    </div>
+    <div class="col-lg-3">
+        <label>收款人</label>
+        <p class="form-control-static b-b">{{fee.receiveAccount.accountName |placeholder}}</p>
+    </div>
+</div>
+<div class="form-group pull-in clearfix">
+    <div class="col-lg-3">
+        <label>收款银行</label>
+        <p class="form-control-static b-b">{{fee.receiveAccount.bankName |placeholder}}</p>
+    </div>
+    <div class="col-lg-3">
+        <label>付款时间</label>
+        <p class="form-control-static b-b">{{fee.paymentDate| date: "yyyy-mm-dd HH:mm"}}</p>
+    </div>
+    <div class="col-lg-3">
+        <label>缴费金额(元)</label>
+        <p class="form-control-static b-b">{{fee.totalFee || 0 |currency:'￥'}}</p>
+    </div>
+
+        <feeitem-list ng-if="fee.feeItemList !== null" feeitemlist="fee.feeItemList"></feeitem-list>
+
+</div>

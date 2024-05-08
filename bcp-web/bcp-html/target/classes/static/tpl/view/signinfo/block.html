@@ -1,0 +1,20 @@
+<div class="panel panel-default m-b-none" dw-loading="signInfo" dw-loading-options="{text: ''}">
+    <div class="panel-heading">
+        <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+        <span class="h4">{{modalTitle}}</span>
+    </div>
+    <form name="userForm">
+        <div class="panel-body">
+            <div class="form-group">
+                <label>审批说明 </label>
+                <textarea class="form-control" rows="6" data-ng-model="signinfo.comment" placeholder="输入审批备注，驳回或拒绝的请输入理由！" name="comment"></textarea>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-click="pass()" >通  过</button>
+            <button class="btn btn-primary" type="button" ng-click="reapply()">驳  回</button>
+            <button class="btn btn-danger" type="button" ng-click="reject()">拒  绝</button>
+            <button class="btn btn-warning" type="button" ng-click="close()">关  闭</button>
+        </footer>
+    </form>
+</div>

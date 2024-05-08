@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule">
+    <kbase name="IAuthenticationBizService" packages="com.fuze.bcp.api.auth.service.IAuthenticationBizService"/>
+    <kbase name="ILoginTokenBizService" packages="com.fuze.bcp.api.auth.service.ILoginTokenBizService"/>
+
+    <kbase name="IBaseDataBizService" packages="com.fuze.bcp.api.bd.service.IBaseDataBizService"/>
+    <kbase name="ICarTypeBizService" packages="com.fuze.bcp.api.bd.service.ICarTypeBizService"/>
+    <kbase name="ICarDealerBizService" packages="com.fuze.bcp.api.bd.service.ICarDealerBizService"/>
+    <kbase name="ICashSourceBizService" packages="com.fuze.bcp.api.bd.service.ICashSourceBizService"/>
+    <kbase name="ICustomerImageTypeBizService" packages="com.fuze.bcp.api.bd.service.ICustomerImageTypeBizService"/>
+    <kbase name="IOrgBizService" packages="com.fuze.bcp.api.bd.service.IOrgBizService"/>
+    <kbase name="IUserProfileBizService" packages="com.fuze.bcp.api.bd.service.IUserProfileBizService"/>
+    <kbase name="IProductBizService" packages="com.fuze.bcp.api.bd.service.IProductBizService"/>
+
+    <kbase name="ICreditPhotographBizService" packages="com.fuze.bcp.api.creditcar.service.ICreditPhotographBizService"/>
+    <kbase name="ICreditReportQueryBizService" packages="com.fuze.bcp.api.creditcar.service.ICreditReportQueryBizService"/>
+    <kbase name="ICustomerDemandBizService" packages="com.fuze.bcp.api.creditcar.service.ICustomerDemandBizService"/>
+
+    <kbase name="ICustomerImageFileBizService" packages="com.fuze.bcp.api.customer.service.ICustomerImageFileBizService"/>
+    <kbase name="ICustomerBizService" packages="com.fuze.bcp.api.customer.service.ICustomerBizService"/>
+
+    <kbase name="IFileBizService" packages="com.fuze.bcp.api.file.service.IFileBizService"/>
+
+    <kbase name="IMessageBizService" packages="com.fuze.bcp.api.msg.service.IMessageBizService"/>
+    <kbase name="ISubscribeBizService" packages="com.fuze.bcp.api.msg.service.ISubscribeBizService"/>
+
+    <kbase name="IAmqpBizService" packages="com.fuze.bcp.api.mq.service.IAmqpBizService"/>
+
+    <kbase name="IAPKBizService" packages="com.fuze.bcp.api.sys.service.IAPKBizService"/>
+    <kbase name="IDeviceBizService" packages="com.fuze.bcp.api.sys.service.IDeviceBizService"/>
+    <kbase name="ILogBizService" packages="com.fuze.bcp.api.sys.service.ILogBizService"/>
+    <kbase name="IParamBizService" packages="com.fuze.bcp.api.sys.service.IParamBizService"/>
+
+    <kbase name="IScheduleBizService" packages="com.fuze.bcp.api.timertask.service.IScheduleBizService"/>
+
+    <kbase name="IWorkflowBizService" packages="com.fuze.bcp.api.workflow.service.IWorkflowBizService"/>
+
+    <kbase name="IDealerRepaymentBizService" packages="com.fuze.bcp.api.creditcar.service.IDealerRepaymentService"/>
+    <kbase name="ISwipingCardBizService" packages="com.fuze.bcp.api.creditcar.service.ISwipingCardService"/>
+    <kbase name="IOrderBizService" packages="com.fuze.bcp.api.creditcar.service.IOrderBizService"/>
+    <kbase name="ICarTransferBizService" packages="com.fuze.bcp.api.creditcar.service.ICarTransferBizService"/>
+    <kbase name="ICarRegistryBizService" packages="com.fuze.bcp.api.creditcar.service.ICarRegistryBizService"/>
+    <kbase name="IAppointSwipingCardBizService" packages="com.fuze.bcp.api.creditcar.service.IAppointSwipingCardService"/>
+    <kbase name="IAppointPaymentBizService" packages="com.fuze.bcp.api.creditcar.service.IAppointPaymentService"/>
+
+    <kbase name="actSubmitCustomerDemand" packages="com.fuze.bcp.server.creditcar.ICustomerDemandBizService.actSubmitCustomerDemand"/>
+
+</kmodule>

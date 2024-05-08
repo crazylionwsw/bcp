@@ -1,0 +1,72 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <span class="h4">{{cashsource.name}}</span>
+        <button class="pull-right" type="button" ng-click="package()" tooltip="打包选中的档案"><i class="fa fa-file-zip-o"></i></button>
+    </div>
+    <div class="panel-body">
+
+        <div class="form-group pull-in clearfix">
+            <!--显示本单据所有的档案类型-->
+            <div class="col-md-3 col-xs-6"  ng-repeat="imageType in imagetypes">
+                <div class="thumbnail" tooltip="{{imageType.name}}">
+                    <!--如果该档案类型已经上传过图片-->
+                    <div ng-show="imageType.customerImage != null && imageType.customerImage.fileIds != null && imageType.customerImage.fileIds.length > 0">
+                        <!--显示审核意见的个数-->
+                        <span class="pos-abt pull-right-xs"
+                              ng-show="imageType.customerImage">
+                            <label class="i-checks m-b-none">
+                                <input type="checkbox" ng-model="imageType.selected"/><i></i>
+                            </label>
+                        </span>
+
+                        <!--只显示第一张图片做为封面-->
+                        <!--其它图片用lightbox打开，进行轮播-->
+                        <element ng-if="isVideo(imageType)">
+                            <video style="width:100%;height:160px;" controls="controls" src="{{imageType.customerImage.coverFileId|imgsrc}}"/>
+                        </element>
+
+                        <element ng-if="isPDF(imageType)">
+                            <a ng-click="viewPDF(imageType.customerImage.coverFileId)">
+                                <img ng-src="img/pdf.png" class="img-responsive" style="height:160px;" />
+                            </a>
+                        </element>
+
+                        <a ng-click="openViewer(imageType)" ng-if="!isVideo(imageType) && !isPDF(imageType)">
+                            <img ng-src="{{imageType.customerImage.coverFileId|imgsrc}}" class="img-responsive" style="height:160px;" />
+                        </a>
+                    </div>
+                    <!--如果该档案类型没有上传过图片，显示默认图片-->
+                    <div ng-show="imageType.customerImage == null || imageType.customerImage.fileIds == null || imageType.customerImage.fileIds.length ==0">
+                        <!--加载该档案类型下的所有图片-->
+                        <!--只显示第一张图片做为封面-->
+                        <!--其它图片用lightbox打开，进行轮播-->
+                        <a><img ng-src="img/p0.jpg" class="img-responsive" style="height:160px;"/></a>
+                    </div>
+                    <div class="caption bg-white-opacity text-center text-ellipsis">
+                        <!--显示档案类型的名称-->
+                        {{imageType.name}}
+                    </div>
+                    <div class="btn-group btn-group-justified" role="group">
+                        <!--如果该档案类型没有上传过图片，则显示上传按钮-->
+                        <a class="btn btn-default btn-xs" ladda="uploading==imageType" data-spinner-color="#999999" ng-click="chooseFiles(imageType)" ng-show="imageType.customerImage == null || imageType.customerImage.fileIds == null || imageType.customerImage.fileIds.length ==0">上传</a>
+                        <!--删除档案-->
+                        <a class="btn btn-default btn-xs" ng-show="imageType.customerImage != null && imageType.customerImage.fileIds != null && imageType.customerImage.fileIds.length > 0 && imageType.customerImage.canDelete" ng-click="delete(imageType.customerImage)">删除</a>
+                    </div>
+                </div>
+            </div>
+            <input type="file" id="fileUploader" name="file" nv-file-select="" class="hidden" multiple uploader="fileUploader"/>
+        </div>
+
+    </div>
+</div>
+
+<div class="hidden" id="customerImages">
+    <element ng-repeat="fileId in type.customerImage.fileIds">
+        <img data-original="{{fileId|imgsrc}}" ng-src="{{fileId|imgsrc}}" alt="{{type.name}}"/>
+    </element>
+    <img ng-src="img/p0.jpg" class="img-responsive img-placeholder"/>
+</div>
+
+<footer class="text-right">
+    <button class="btn btn-warning" type="button" ui-sref="app.business.package">返 回</button>
+</footer>

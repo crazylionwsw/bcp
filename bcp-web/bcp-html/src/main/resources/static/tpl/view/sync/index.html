@@ -1,0 +1,168 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="syncCarbrands('')">
+                                    同步车型</a></div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                同步数据类型
+                            </th>
+                            <th>
+                                本地数据量
+                            </th>
+                            <th>
+                                远程数据量
+                            </th>
+                            <th>
+                                同步结果
+                            </th>
+                            <th>
+                                同步失败的ID
+                            </th>
+                            <th>
+                                同步时间
+                            </th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="sync in syncs|filter:query">
+                                <td>{{sync.dataType}}</td>
+                                <td>{{sync.localCount}}</td>
+                                <td>{{sync.remoteCount}}</td>
+                                <td>{{sync.result}}</td>
+                                <td>{{failedID | strList}}</td>
+                                <td>{{sync.ts}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---->
+<!--<div class="bg-light lter b-b wrapper-md">-->
+    <!--<h1 class="m-n font-thin h3">{{title}}</h1>-->
+<!--</div>-->
+<!--<div class="wrapper-md">-->
+    <!--<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>-->
+    <!--<div class="panel panel-default">-->
+        <!--<div class="panel-heading">-->
+            <!--{{tableTitle}}-->
+        <!--</div>-->
+        <!--<div class="row wrapper">-->
+            <!--<div class="col-sm-4 m-b-xs">-->
+                <!--<input type="text" class="input-sm form-control" placeholder="过滤" ng-model="query">-->
+            <!--</div>-->
+            <!--<div class="col-sm-8 m-b-xs text-right ">-->
+                <!--<a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="syncCarbrands('')">-->
+                    <!--同步车型</a></div>-->
+        <!--</div>-->
+        <!--<div class="table-responsive">-->
+            <!--<table class="table table-striped b-t b-light m-b-none">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th>-->
+                        <!--同步数据类型-->
+                    <!--</th>-->
+                    <!--<th>-->
+                        <!--本地数据量-->
+                    <!--</th>-->
+                    <!--<th>-->
+                        <!--远程数据量-->
+                    <!--</th>-->
+                    <!--<th>-->
+                        <!--同步结果-->
+                    <!--</th>-->
+                    <!--<th>-->
+                        <!--同步失败的ID-->
+                    <!--</th>-->
+                    <!--<th>-->
+                        <!--同步时间-->
+                    <!--</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody >-->
+                <!--<tr ng-repeat="sync in syncs|filter:query">-->
+                    <!--<td>{{sync.dataType}}</td>-->
+                    <!--<td>{{sync.localCount}}</td>-->
+                    <!--<td>{{sync.remoteCount}}</td>-->
+                    <!--<td>{{sync.result}}</td>-->
+                    <!--<td>{{failedID | strList}}</td>-->
+                    <!--<td>{{sync.ts}}</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
+        <!--<footer class="panel-footer">-->
+            <!--<div class="row">-->
+                <!--<div class="col-sm-4 text-left">-->
+                    <!--<ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>-->
+                <!--</div>-->
+                <!--<div class="col-sm-8 text-right">-->
+                    <!--<pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</footer>-->
+    <!--</div>-->
+<!--</div>-->
+
+
+<!--对话框-->
+<script type="text/ng-template" id="carbrandsForm.html">
+    <div class="panel panel-default m-b-none" dw-loading="syncCar" dw-loading-options="{text: ''}">
+        <div class="panel-heading">
+            <span class="h4">同步</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <div class="form-group">
+                    <label class="control-label">选择要同步的品牌</label>
+                    <div >
+                        <ui-select ng-model="carBrand.id" ng-disabled="disabled">
+                            <ui-select-match placeholder="请选择">{{$select.selected.name}}</ui-select-match>
+                            <ui-select-choices  repeat="carBrand.id as carBrand in carBrands | filter: $select.search">
+                                <div ng-bind-html="carBrand.name | highlight: $select.search" ></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid" ng-click="syncCarType(carBrand.id)" >确认同步</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取  消</button>
+        </footer>
+    </div>
+</script>
+
+
+
+

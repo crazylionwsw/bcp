@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-auth" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-bd" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-bd/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-blockchain" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-blockchain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-cardealer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-cardealer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-creditcar" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-creditcar/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-credithome" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-credithome/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-customer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-customer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-drools" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-drools/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-dubbo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-dubbo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-file" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-file/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-message" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-message/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-mq" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-mq/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-ocr" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-ocr/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-push" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-push/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-statistics" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-statistics/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-system" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-task" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-task/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-timertask" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-timertask/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-transaction" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-transaction/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-wechat" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-wechat/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-workflow" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-api-workflow/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-base" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-base/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

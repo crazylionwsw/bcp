@@ -1,0 +1,10 @@
+com/fuze/bcp/api/wechat/service/ILoanQueryBizService.class
+com/fuze/bcp/api/wechat/bean/WechatLoginResult.class
+com/fuze/bcp/api/wechat/service/IWechatBizService.class
+com/fuze/bcp/api/wechat/bean/JsApiTicket.class
+com/fuze/bcp/api/wechat/bean/LoanQueryBean.class
+com/fuze/bcp/api/wechat/service/IOfficialAccountsService.class
+com/fuze/bcp/api/wechat/SerializationOptimizerImpl.class
+com/fuze/bcp/api/wechat/bean/WechatUserResult2.class
+com/fuze/bcp/api/wechat/bean/AccessToken.class
+com/fuze/bcp/api/wechat/bean/WechatUserResult.class

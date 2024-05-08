@@ -1,0 +1,139 @@
+<div class="col-lg-12">
+    <div class="form-group pull-in clearfix">
+        <div class="col-sm-3">
+            <label>分期申请车价(元)</label>
+            <p class="form-control-static b-b text-danger">
+                {{businessexchange.loan.applyAmount || 0 |currency:'￥'}}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.applyAmountProname != null && billtypecode == 'A030'" proname="businessexchange.loan.applyAmountProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>官方指导价（元）</label>
+            <p class="form-control-static b-b">
+                {{businessexchange.car.guidePrice || 0 |currency:'￥'}}
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>车辆开票价（元）</label>
+            <p class="form-control-static b-b text-danger">
+                {{businessexchange.loan.receiptPrice || 0 |currency:'￥'}}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.receiptPriceProname != null && billtypecode == 'A030'" proname="businessexchange.loan.receiptPriceProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>车辆成交价（元）</label>
+            <p class="form-control-static b-b">
+                {{businessexchange.loan.realPrice || 0 |currency:'￥'}}
+            </p>
+        </div>
+        <div class="col-sm-3" ng-show="businesstypecode == 'OC'">
+            <label>评估价格（元）</label>
+            <p class="form-control-static b-b">
+                <vin-price ng-if="businessexchange.car.vin !== undefined" vin="businessexchange.car.vin"></vin-price>
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.car.vinProname != null && billtypecode == 'A030'" proname="businessexchange.car.Proname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>贷款金额(元)</label>
+            <p class="form-control-static b-b text-danger">
+                {{businessexchange.loan.creditAmount || 0 |currency:'￥'}}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.creditAmountProname != null && billtypecode == 'A030'" proname="businessexchange.loan.creditAmountProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>贷款比例(%)</label>
+            <p class="form-control-static b-b text-danger">
+                {{businessexchange.loan.creditRatio || 0 }}%
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.creditRatioProname != null && billtypecode == 'A030'" proname="businessexchange.loan.creditRatioProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>贷款期数(期)</label>
+            <p class="form-control-static b-b text-danger">
+                {{businessexchange.loan.rateType.months || 0 }}期
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.monthsProname != null && billtypecode == 'A030'" proname="businessexchange.loan.monthsProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>银行手续费率(%)</label>
+            <p class="form-control-static b-b text-danger">
+                {{businessexchange.loan.rateType.ratio || 0 | percentage:2:"%" }}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.ratioProname != null && billtypecode == 'A030'" proname="businessexchange.loan.ratioProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>首付金额(元)</label>
+            <p class="form-control-static b-b">
+                {{businessexchange.loan.downPayment || 0 |currency:'￥'}}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.downPaymentProname != null && billtypecode == 'A030'" proname="businessexchange.loan.downPaymentProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>首付比例(%)</label>
+            <p class="form-control-static b-b">
+                {{businessexchange.loan.downPaymentRatio || 0 }}%
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.downPaymentRatioProname != null && billtypecode == 'A030'" proname="businessexchange.loan.downPaymentRatioProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>银行手续费(元)</label>
+            <p class="form-control-static b-b">
+                {{businessexchange.loan.bankFeeAmount || 0 |currency:'￥' }}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.bankFeeAmountProname != null && billtypecode == 'A030'" proname="businessexchange.loan.bankFeeAmountProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>贷款服务费(元)</label>
+            <p class="form-control-static b-b">
+                {{businessexchange.loan.loanServiceFee || 0 |currency:'￥' }}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.loanServiceFeeProname != null && billtypecode == 'A030'" proname="businessexchange.loan.loanServiceFeeProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>手续费缴纳方式</label>
+            <p class="form-control-static b-b text-danger">
+                {{businessexchange.loan.chargePaymentWay |chargePaymentWayFilter }}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.chargePaymentWayProname != null && billtypecode == 'A030'" proname="businessexchange.loan.chargePaymentWayProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3" ng-show="billtypecode == 'A030' && businesstypecode == 'NC'">
+            <label>是否贴息</label>
+            <p class="form-control-static b-b">
+                {{businessexchange.loan.compensatoryInterest||false |yesno}}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.compensatoryInterestProname != null && billtypecode == 'A030'" proname="businessexchange.loan.compensatoryInterestProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3" ng-show="businesstypecode == 'NC'">
+            <label>贴息金额(元)</label>
+            <p class="form-control-static b-b">
+                {{businessexchange.loan.compensatoryAmount ||0 |currency:'￥'}}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.compensatoryAmountProname != null && billtypecode == 'A030'" proname="businessexchange.loan.compensatoryAmountProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div class="col-sm-3" ng-if="billtypecode != 'A030'">
+            <label>银行批复额度(元)</label>
+            <p class="form-control-static b-b">
+                <a href="#" editable-text="businessexchange.loan.approvedCreditAmount" e-label="" onaftersave="updateApprovedAmount(loan)">{{businessexchange.loan.approvedCreditAmount || 0 |currency:'￥' }}</a>
+            </p>
+        </div>
+        <div class="col-sm-3" ng-if="billtypecode == 'A030'">
+            <label>银行批复额度(元)</label>
+            <p class="form-control-static b-b">
+                {{businessexchange.loan.approvedCreditAmount ||0 |currency:'￥'}}
+                <compare-exchange-data ng-if="transactionid != null && businessexchange.loan.approvedCreditAmountProname != null && billtypecode == 'A030'" proname="businessexchange.loan.approvedCreditAmountProname" transactionid="transactionid" bid="bid"></compare-exchange-data>
+            </p>
+        </div>
+        <div ng-repeat="feeitem in businessexchange.feeItemList" ng-if="businessexchange.feeItemList !== undefined">
+            <div class="col-sm-3">
+                <label>
+                    <!--{{feeitem.id |placeholder}}(元)-->
+                    <feeitem-info id="feeitem.id"></feeitem-info>
+                </label>
+                <p class="form-control-static b-b">
+                    {{feeitem.fee || 0 | currency:'￥' }}
+                    <compare-exchange-data ng-if="transactionid != null && feeitem != null && billtypecode == 'A030'" proname="feeitem.code" transactionid="transactionid" bid="bid"></compare-exchange-data>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

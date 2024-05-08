@@ -1,0 +1,13 @@
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/service/IParamBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/service/IAPKBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/service/IDeviceBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/bean/TerminalBindBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/bean/APKUpgradeLogBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/service/ICalculateBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/bean/DeviceUsageBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/SerializationOptimizerImpl.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/service/ILogBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/bean/APKReleaseBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/bean/TerminalDeviceBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/bean/LoginLogBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-system/src/main/java/com/fuze/bcp/api/sys/bean/SysParamBean.java

@@ -1,0 +1,294 @@
+<div class="bg-light lter b-b wrapper-md">
+	<h1 class="m-n font-thin h3">{{formTitle}}--{{payment.businessType.name}}</h1>
+</div>
+<div class="wrapper-md">
+
+	<div class="row">
+		<div class="col-lg-9">
+			<div class="panel panel-default">
+				<div class="panel-heading"><span class="h4">客户信息</span></div>
+				<div class="panel-body">
+					<customer-block id="payment.customerId"></customer-block>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<span class="h4">客户来源</span>
+				</div>
+				<div class="panel-body">
+					<cardealer-block ng-if="payment.carDealerId != undefined" id="payment.carDealerId"></cardealer-block>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<span class="h4">借款信息</span>
+				</div>
+				<div class="panel-body bg-info">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group pull-in clearfix">
+								<div class="col-lg-4">
+									<label>首付金额（元）</label>
+									<p class="form-control-static b-b">
+										{{payment.purchaseCarOrder.salePrice.downPayment|currency:'￥'}}
+									</p>
+								</div>
+								<div class="col-lg-4">
+									<label>借款金额（元）</label>
+									<p class="form-control-static b-b">
+										{{payment.purchaseCarOrder.salePrice.limitAmount|currency:'￥'}}
+									</p>
+								</div>
+								<div class="col-lg-4">
+									<label>借款期限（月）</label>
+									<p class="form-control-static b-b">
+										{{payment.purchaseCarOrder.salePrice.creditMonths}}个月
+									</p>
+								</div>
+							</div>
+
+							<div class="form-group pull-in clearfix">
+								<div class="col-lg-4">
+									<label>借款利率（%）</label>
+									<p class="form-control-static b-b">
+										{{payment.purchaseCarOrder.salePrice.fuzeChargeRatio}}%
+									</p>
+								</div>
+								<div class="col-lg-4">
+									<label>银行手续费（元）</label>
+									<p class="form-control-static b-b">
+										{{payment.purchaseCarOrder.salePrice.charge|currency:'￥'}}
+									</p>
+								</div>
+								<div class="col-lg-4">
+									<label>是否贴息</label>
+									<p class="form-control-static b-b">
+										{{payment.purchaseCarOrder.salePrice.compensatoryInterest|yesno}}
+									</p>
+								</div>
+							</div>
+							<div class="form-group pull-in clearfix">
+								<div class="col-lg-4">
+									<label>贴息金额（元）</label>
+									<p class="form-control-static b-b">
+										{{payment.purchaseCarOrder.salePrice.compensatoryAmount|currency:'￥'}}
+									</p>
+								</div>
+								<div class="col-lg-4">
+									<label>担保服务费（元）</label>
+									<p class="form-control-static b-b">
+										{{payment.purchaseCarOrder.salePrice.serviceFee|currency:'￥'}}
+									</p>
+								</div>
+								<div class="col-lg-4">
+									<label>风险押金（元）</label>
+									<p class="form-control-static b-b">
+										{{payment.purchaseCarOrder.salePrice.riskDeposit|currency:'￥'}}
+									</p>
+								</div>
+							</div>
+							<div class="form-group pull-in clearfix">
+								<div class="col-lg-4">
+									<label>担保方式</label>
+									<p class="form-control-static b-b">{{payment.purchaseCarOrder.guaranteeWay.name}}</p>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<span class="h4">车辆信息</span>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group pull-in clearfix">
+								<div class="col-sm-3">
+									<label>车辆开票价（元）</label>
+									<p class="form-control-static b-b">{{payment.purchaseCarOrder.receiptPrice|currency:'￥'}}</p>
+								</div>
+								<div class="col-lg-3">
+									<label>实际成交价（元）</label>
+									<p class="form-control-static b-b">{{payment.purchaseCarOrder.realPrice|currency:'￥'}}</p>
+								</div>
+								<div class="col-sm-3">
+									<label>现有车辆数（辆）</label>
+									<p class="form-control-static b-b">{{payment.purchaseCarOrder.carNumber}}辆</p>
+								</div>
+								<div class="col-lg-3">
+									<label>贷款购车次数（次）</label>
+									<p class="form-control-static b-b">{{payment.purchaseCarOrder.buyCarNumber}}次</p>
+								</div>
+							</div>
+
+							<cartype-block ng-if="payment.purchaseCarOrder.selectCar !== undefined" selectcar="payment.purchaseCarOrder.selectCar"></cartype-block>
+						</div>
+					</div>
+					<!-- -->
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading"><span class="h4">垫资支付</span></div>
+				<div class="panel-body">
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-4">
+							<label>申请时间</label>
+							<p class="form-control-static b-b">{{payment.ts | date: "yyyy-mm-dd HH:mm"}}</p>
+						</div>
+						<div class="col-sm-4">
+							<label>预计提车日期</label>
+							<p class="form-control-static b-b">{{payment.pickupCar.pickDate | date: "yyyy-mm-dd HH:mm"}}</p>
+						</div>
+						<div class="col-sm-4">
+							<label>预约支付日期</label>
+							<p class="form-control-static b-b">{{payment.pickupCar.payTime| date: "yyyy-mm-dd HH:mm"}}</p>
+						</div>
+					</div>
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-4">
+							<label>预约上牌时间</label>
+							<p class="form-control-static b-b">{{payment.pickupCar.registryDate | date: "yyyy-mm-dd HH:mm"}}</p>
+						</div>
+						<div class="col-sm-4">
+							<label>垫资支付周期（天）</label>
+							<p class="form-control-static b-b">{{payment.carDealer.payPeriod}}天</p>
+						</div>
+						<div class="col-sm-4">
+							<label>贷款金额（元）</label>
+							<p class="form-control-static b-b">{{payment.purchaseCarOrder.salePrice.limitAmount|currency:'￥'}}</p>
+						</div>
+					</div>
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-4">
+							<label>贷款期数（月）</label>
+							<p class="form-control-static b-b">{{payment.purchaseCarOrder.salePrice.creditMonths}}月</p>
+						</div>
+						<div class="col-sm-4">
+							<label>银行手续费（元）</label>
+							<p class="form-control-static b-b">{{payment.purchaseCarOrder.salePrice.charge | currency:'￥'}}</p>
+						</div>
+						<div class="col-sm-4">
+							<label>实收手续费（元）</label>
+							<p class="form-control-static b-b">{{payment.realCharge | currency:'￥'}}</p>
+						</div>
+					</div>
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-4">
+							<label>是否贴息</label>
+							<p class="form-control-static b-b">
+								{{payment.purchaseCarOrder.salePrice.compensatoryInterest|yesno}}
+							</p>
+						</div>
+						<div class="col-sm-4">
+							<label>贴息金额（元）</label>
+							<p class="form-control-static b-b">
+								{{payment.purchaseCarOrder.salePrice.compensatoryAmount|currency:'￥'}}
+							</p>
+						</div>
+						<div class="col-sm-4">
+							<label>支付金额（元）</label>
+							<p class="form-control-static b-b">{{payment.payAmount | currency:'￥'}}</p>
+						</div>
+					</div>
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-4">
+							<label>支付方式</label>
+							<p class="form-control-static b-b">{{payment.chargeParty|chargePartyFilter}}</p>
+						</div>
+						<div class="col-sm-4">
+							<label>开票前支付？</label>
+							<p class="form-control-static b-b">{{payment.advancedPay|yesno}}</p>
+						</div>
+				    </div>
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-6">
+							<h3 class="b-b line-dashed m-b padder-v">渠道信息</h3>
+							<p>
+								经销商名称：{{payment.carDealer.name}}<br/>
+								<!--{{appointpayment.carDealer.address}}-->
+							</p>
+							<p>
+								负责人：{{payment.carDealer.manager}}<br/>
+								联系方式：{{payment.carDealer.cell}}
+							</p>
+						</div>
+
+						<div class="col-sm-6">
+							<h3 class="b-b line-dashed m-b padder-v">收款帐户</h3>
+							<p>
+								开户名称：{{payment.receiveAccount.accountName}}<br/>
+								开户银行：{{payment.receiveAccount.bankName}}<br/>
+								银行账号：{{payment.receiveAccount.accountNumber}}<a class="btn btn-default btn-xs" ng-click="changeAccount(payment,$index)">更换</a><br/>
+								账户类型：{{payment.receiveAccount.accountType| accountTypeFilter}}<br/>
+								默认账户：{{payment.receiveAccount.defaultAccount|yesno}}<br/>
+						</div>
+					</div>
+
+					<div class="line b-b line-lg"></div>
+
+					<div class="form-group pull-in clearfix">
+
+						<div class="col-sm-4">
+							<label>支付时间</label>
+							<div class="input-group" moment-picker="payment.payDate" format="YYYY-MM-DD HH:mm"
+								 locale="zh-cn" selectable="true">
+								<input type="text" class="form-control" ng-model="payment.payDate" am-reset-field/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading"><span class="h4">档案资料</span></div>
+				<div class="panel-body">
+					<customerimage-block bill="payment" save="save(bill)"></customerimage-block>
+				</div>
+			</div>
+			<div class="panel panel-default" ng-if="payment.billType.documentIds.length > 0">
+				<div class="panel-heading">
+					<span class="h4">文档信息</span>
+				</div>
+
+				<business-contract-block ng-if="payment !== null" bill="payment"></business-contract-block>
+
+			</div>
+			<!--<footer class="text-right">
+				<button class="btn btn-primary" type="button" can-audit="appointpayment" ng-click="audit()">审 核</button>
+				<button class="btn btn-warning" type="button" ui-sref="app.business.appointpayment">返 回</button>
+			</footer>-->
+			<footer class="text-right">
+				<!--<button class="btn btn-primary" type="button" can-audit="appointpayment" ng-click="audit()">审 核</button>-->
+				<button class="btn btn-primary" type="button" can-audit="payment" ng-click="audit()">
+					{{buttonTitle}}
+				</button>
+				<button class="btn btn-warning" type="button" ui-sref="app.business.payment">返 回</button>
+			</footer>
+		</div>
+		<div class="col-lg-3">
+
+			<!--当前业务分期经理 -->
+			<div class="m-b-md clearfix">
+				<div class="m-b text-md">当前业务分期经理</div>
+				<div class="panel b-a">
+					<div class="panel-heading pos-rlt bg-info">
+						<span class="arrow top pull-left arrow-info"></span>
+						<employee-info ng-if="payment.employeeId !== undefined" id="payment.employeeId"></employee-info>
+					</div>
+				</div>
+			</div>
+
+			<!--显示订单的签批信息-->
+			<div class="m-b-md clearfix" ng-show="payment.signInfos != null">
+				<signinfo-list signinfos="payment.signInfos"></signinfo-list>
+			</div>
+
+		</div>
+	</div>
+</div>
+<script type="text/ng-template" id="audit.html">
+	<signinfo_block sign="sign(signinfo)"></signinfo_block>
+</script>
+

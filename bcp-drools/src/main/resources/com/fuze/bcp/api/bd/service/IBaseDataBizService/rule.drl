@@ -1,0 +1,10 @@
+package com.fuze.bcp.api.bd.service;
+
+import com.fuze.bcp.api.bd.bean.*;
+
+rule "actSaveGuaranteeWay"
+when
+
+    then
+        throw new Exception("这是一个测试异常");
+end

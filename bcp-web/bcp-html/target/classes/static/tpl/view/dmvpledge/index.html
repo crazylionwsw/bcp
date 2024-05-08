@@ -1,0 +1,327 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <select ng-model="selectedStatus"
+                                        ng-options="st.name for st in statusList track by st.id" ng-change="changeStatus()"
+                                        class="form-control">
+                                </select>
+                            </div>
+                            <div class="col-sm-1 text-left">
+                                <select class="form-control" ng-model="pageSize" ng-change="changePageSize()">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="1000">1000</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-7 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                        <table class="table table-striped b-t b-light m-b-none" data-filter="#filter" >
+                            <thead>
+                            <tr>
+                                <th>
+                                    序号
+                                </th>
+                                <th>
+                                    报单支行
+                                </th>
+                                <th>
+                                    渠道支行
+                                </th>
+                                <th>
+                                    业务类型
+                                </th>
+                                <th>
+                                    客户姓名【身份证号码】
+                                </th>
+                                <th>
+                                    抵押人姓名【身份证号码】
+                                </th>
+                                <th>
+                                    分期经理【手机号码】
+                                </th>
+                                <th>
+                                    业务状态
+                                </th>
+                                <th>
+                                    业务发生时间
+                                </th>
+                                <th>
+                                    资料签收时间
+                                </th>
+                                <th>
+                                    抵押
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="dmvpledge in dmvpledges |filter:query">
+                                <td>{{$index+1}}</td>
+                                <td><transaction-cashsource-info ng-if="dmvpledge.transaction !== undefined" transaction="dmvpledge.transaction"></transaction-cashsource-info></td>
+                                <td><transaction-cardealer-cooperationcashsource-info ng-if="dmvpledge.transaction !== undefined" transaction="dmvpledge.transaction"></transaction-cardealer-cooperationcashsource-info></td>
+                                <td>{{dmvpledge.businessTypeCode | BusinessTypeFilter}}</td>
+                                <td><customer-info ng-if="dmvpledge.customerId !== undefined" id="dmvpledge.customerId"></customer-info></td>
+                                <td><pledge-customer-info ng-if="dmvpledge.customerTransactionId !== undefined" transactionid="dmvpledge.customerTransactionId"></pledge-customer-info></td>
+                                <td><employee-info ng-if="dmvpledge.employeeId !== undefined" id="dmvpledge.employeeId"></employee-info></td>
+                                <td><approve-status ng-if="dmvpledge.status != null && dmvpledge.transaction != undefined" transaction="dmvpledge.transaction" status="dmvpledge.status" billtypecode="dmvpledge.billTypeCode"></approve-status></td>
+                                <td>{{dmvpledge.ts | momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                <td>{{dmvpledge.pledgeDateReceiveTime}}</td>
+                                <td>
+                                    <!--需要判断该上牌是否已经完成车管所抵押-->
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn-xs btn btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="blue" ng-click="edit(dmvpledge,$index)"  tooltip="车管所抵押" ng-show="true" href>
+                                                  浏览
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-2 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-10 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+    <!--弹出层页面-->
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">{{title}}--{{dmvpledge.businessTypeCode |BusinessTypeFilter}}
+                            <span>({{dmvpledge.status | DmvpStatusFilter}})</span>
+                        </h1>
+                    </div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="padder-v row m-n">
+                                <div class="col-lg-9">
+                                    <!--来源渠道-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">来源渠道</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <cardealer-block ng-if="dmvpledge.carDealerId != undefined" id="dmvpledge.carDealerId"></cardealer-block>
+                                        </div>
+                                    </div>
+                                    <!--贷款人身份证信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款人身份证信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-base id="dmvpledge.customerId"></customer-base>
+                                        </div>
+                                    </div>
+                                    <!--购买车辆信息-->
+                                    <div class="panel panel-default" ng-show="dmvpledge.customerTransactionId">
+                                        <div class="panel-heading">
+                                            <span class="h4">购买车辆信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-6">
+                                                            <label>车辆开票价（元）</label>
+                                                            <p class="form-control-static b-b">{{order.loan.receiptPrice ||0 |currency:'￥'}}</p>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label>车辆成交价（元）</label>
+                                                            <p class="form-control-static b-b">{{order.loan.realPrice ||0|currency:'￥'}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <customer-car ng-if="order.customerCarId !== undefined" id="order.customerCarId" billtypecode="dmvpledge.billTypeCode" businesstypecode="dmvpledge.businessTypeCode" ></customer-car>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--车管所抵押-->
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span class="h4">车管所抵押</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-6">
+                                                    <label>客户抵押资料签收时间</label>
+                                                    <div class="input-group" moment-picker="dmvpledge.pledgeDateReceiveTime" format="YYYY-MM-DD HH:mm"
+                                                         locale="zh-cn" selectable="true">
+                                                        <input type="text" class="form-control" ng-model="dmvpledge.pledgeDateReceiveTime" name="pledgeDateReceiveTime"/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label>银行抵押合同打印时间</label>
+                                                    <div class="input-group" moment-picker="dmvpledge.contractStartTime" format="YYYY-MM-DD HH:mm"
+                                                         locale="zh-cn" selectable="true">
+                                                        <input type="text" class="form-control" ng-model="dmvpledge.contractStartTime" name="contractStartTime"/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-6">
+                                                    <label>银行抵押合同盖章时间</label>
+                                                    <div class="input-group" moment-picker="dmvpledge.takeContractTime" format="YYYY-MM-DD HH:mm"
+                                                         locale="zh-cn" selectable="true">
+                                                        <input type="text" class="form-control" ng-model="dmvpledge.takeContractTime" name="takeContractTime"/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label>车管所抵押开始时间</label>
+                                                    <div class="input-group" moment-picker="dmvpledge.pledgeStartTime" format="YYYY-MM-DD HH:mm"
+                                                         locale="zh-cn" selectable="true">
+                                                        <input type="text" class="form-control" ng-model="dmvpledge.pledgeStartTime" name="pledgeStartTime"/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-6">
+                                                    <label>抵押完成时间</label>
+                                                    <div class="input-group" moment-picker="dmvpledge.pledgeEndTime" format="YYYY-MM-DD HH:mm"
+                                                         locale="zh-cn" selectable="true">
+                                                        <input type="text" class="form-control" ng-model="dmvpledge.pledgeEndTime"
+                                                               ui-validate="{endtimeInvalid:'checkDmvPledgeEndTime($value)'}"
+                                                               ui-validate-watch="'dmvpledge.pledgeStartTime'"
+                                                               ng-model-options="{ updateOn: 'blur' }"
+                                                               name="pledgeEndTime"/>
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                                </span>
+                                                    </div>
+                                                    <span ng-show="userForm.pledgeEndTime.$error.endtimeInvalid" class="help-block text-danger">完成时间必须大于开始时间!</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--档案资料-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">档案资料</span></div>
+                                        <div class="panel-body">
+                                            <customerimage-block ng-if="dmvpledge != null" bill="dmvpledge" save="save(bill)"></customerimage-block>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default" ng-if="dmvpledge.billType.documentIds.length > 0">
+                                        <div class="panel-heading"><span class="h4">文档信息</span></div>
+                                        <business-contract-block ng-if="dmvpledge !== null" canAudit="true" bill="dmvpledge"></business-contract-block>
+                                    </div>
+                                </div>
+                                <!--流程走向-->
+                                <div class="col-lg-3">
+                                    <div style="position: fixed;" ng-show="checked">
+                                        <ul class="timeline">
+                                            <li class="tl-header">
+                                                <div class="btn btn-info"></div>
+                                            </li>
+                                        </ul>
+                                        <ul class="timeline" >
+                                            <li class="tl-item" ng-repeat="tasklist in dmvpledge.actionRecords">
+                                                <div class="tl-wrap b-info" ng-if="tasklist.action != null">
+                                                    <span class="tl-date">{{tasklist.action}}</span>
+                                                    <div class="tl-content">
+                                                        {{tasklist.ts| date : 'yyyy-MM-dd HH:mm'}}【{{tasklist.actionName}}】
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul class="timeline">
+                                            <li class="tl-header">
+                                                <div class="btn btn-info"></div>
+                                            </li>
+                                        </ul>
+                                        <ul class="timeline">
+                                            <li class="tl-item" ng-if="currentTask != null">
+                                                <div class="tl-wrap b-success">
+                                                    <span class="tl-date">{{currentTask}}</span>
+                                                    <div class="tl-content">
+                                                        {{}}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="tl-header">
+                                                <button class="btn btn-sm btn-default btn-rounded" ng-click="process(0)" ng-if="currentTask != null" ng-disabled="syncing">完成</button>
+                                            </li>
+                                        </ul>
+                                        <ul class="timeline" ng-if="currentTaskButton != null">
+                                            <li class="tl-item" ng-if="currentTaskButton != null">
+                                                <div class="tl-wrap b-success">
+                                                    <span class="tl-date">{{currentTaskButton}}</span>
+                                                    <div class="tl-content">
+                                                        {{}}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="tl-header">
+                                                <button class="btn btn-sm btn-default btn-rounded" ng-click="process(1)" ng-if="currentTaskButton != null" ng-disabled="syncing">确认</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-warning" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+<!------查询输入框-->
+<script type="text/ng-template" id="query.html">
+    <query-form search="searchFilter" query="queryBill(search)" clear="clearQuery()"></query-form>
+</script>
+<!------签批对话框------>
+<script type="text/ng-template" id="audit.html">
+    <signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>

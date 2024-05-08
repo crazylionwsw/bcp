@@ -1,0 +1,6 @@
+spring:
+  data:
+    mongodb:
+      database: fzfq-dev
+      uri: mongodb://mongotest:Mongotest2016@139.198.3.138:27901/admin
+

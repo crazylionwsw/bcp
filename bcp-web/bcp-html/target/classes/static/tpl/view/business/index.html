@@ -1,0 +1,225 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                业务编码
+                            </th>
+                            <th>
+                                业务名称
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="business in businesses|filter:query" ng-class="{true:'danger'}[business.dataStatus == 9]">
+                                <td>{{business.code}}</td>
+                                <td>{{business.name}}</td>
+                                <td>{{business.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(business,$index)" ng-show="business.dataStatus != 9 && business.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <!--启用-->
+                                                <a ng-if="business.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(business, $index)" ng-show="business.dataStatus == 9 && business.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(business, $index)" ng-show="business.dataStatus != 9 && business.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(business, $index)" ng-show="business.dataStatus == 9 && business.id != null ">
+                                                    删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="businessForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="business.id">
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class="control-label">业务编码</label>
+                        <input type="text" class="form-control" placeholder="请输入业务编码"
+                               ng-model="business.code" ng-model-options="{updateOn: 'blur'}"
+                               ng-pattern="/^[A-Z]{2,}$/"
+                               ui-validate-async="{notUnique:'checkUnique(\'code\',$value)'}"
+                               name="code" required>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">业务编码是必须的!</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">业务编码不能重复！</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">业务编码必须是为大写字母且最小为2位!</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">业务名称</label>
+                        <input type="text" class="form-control" placeholder="请输入业务名称"
+                               ng-model="business.name" ng-model-options="{updateOn: 'blur'}"
+                               ui-validate-async="{notUnique:'checkUnique(\'name\',$value)'}"
+                               name="name" required>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">业务名称是必须的！</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">业务名称不能重复！</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>所需单据</label>
+                    <ui-select multiple sortable="true" ng-model="business.billTypeCodes" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match placeholder="请选择所需单据" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices  repeat="billtype.code as billtype in billtypes | filter: $select.search">
+                            <div ng-bind-html="billtype.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="form-group">
+                    <label>收费项目</label>
+                    <ui-select multiple sortable="true" ng-model="business.feeItemIds" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match placeholder="请选择收费项" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices  repeat="fee.id as fee in fees | filter: $select.search">
+                            <div ng-bind-html="fee.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="form-group">
+                    <label>档案资料</label>
+                    <ui-select multiple sortable="true" ng-model="business.customerImageTypeCodes" name="requiredImageList" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match  placeholder="请选择资料类型" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">
+                            <div ng-bind-html="customerimagetype.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="form-group">
+                    <label>必须快递的资料列表</label>
+                    <ui-select multiple sortable="true" ng-model="business.requiredExpImageTypeCodes"  theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match  placeholder="请选择资料类型" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">
+                            <div ng-bind-html="customerimagetype.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group">
+                    <label>建议快递的资料列表</label>
+                    <ui-select multiple sortable="true" ng-model="business.suggestedExpImageTypeCodes" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match  placeholder="请选择资料类型" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">
+                            <div ng-bind-html="customerimagetype.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="form-group">
+                    <label>资金机构/利率</label>
+                    <ui-select multiple sortable="true" ng-model="business.sourcerates" name="sourcerates" theme="bootstrap" ng-disabled="disabled" on-select="selectSourceRate($item, $model)">
+                        <ui-select-match  placeholder="请选择资金利率" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="sourcerate in sourcerates | filter: $select.search">
+                            <div ng-bind-html="sourcerate.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </form>
+
+
+            <div class="form-group">
+                <tabset justified="true" class="tab-container nav-tabs-alt no-borders m-b-none">
+                    <tab ng-repeat="sourcerate in business.sourcerates" heading="{{sourcerate.name}}">
+                        <form name="rateForm{{sourcerate.id}}" editable-form>
+                            <div class="row wrapper-xs text-right">
+                                <button type="button" class="btn btn-sm btn-default" ng-show="!rateForm{{sourcerate.id}}.$visible" ng-click="rateForm{{sourcerate.id}}.$show()"><i class="fa fa-pencil text"></i></button>
+                                <button type="submit" ng-show="rateForm{{sourcerate.id}}.$visible" ng-disabled="rateForm{{sourcerate.id}}.$waiting" class="btn btn-primary btn-sm"><i class="fa fa-save text"></i></button>
+                                <button type="button" ng-show="rateForm{{sourcerate.id}}.$visible" ng-disabled="rateForm{{sourcerate.id}}.$waiting" ng-click="rateForm{{sourcerate.id}}.$cancel()" class="btn btn-default btn-sm"><i class="fa fa-close text"></i></button>
+                            </div>
+                            <!-- table -->
+                            <div class="row">
+                                <table class="table table-bordered table-hover table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>期数(月)</th>
+                                        <th>利率(%)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="rate in business.rates[sourcerate.id]">
+                                        <td>{{rate.months}}</td>
+                                        <td>
+                                            <span editable-text="rate.ratio" e-form="rateForm{{sourcerate.id}}">
+                                                {{rate.ratio |  percentage:2:"%"}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button" ng-disabled="!userForm.$valid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

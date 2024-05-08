@@ -1,0 +1,300 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs ">
+                                <select class="form-control" ng-model="approveStatus" ng-change="search()">
+                                    <option value="-1">全部</option>
+                                    <option value="1">待确认</option>
+                                    <option value="2">已确认</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table  table-striped b-t b-light m-b-none" data-filter="#filter" >
+                                <thead>
+                                <tr>
+                                    <th>
+                                        序号
+                                    </th>
+                                    <th>
+                                        所属渠道
+                                    </th>
+                                    <th>
+                                        分期经理【手机号码】
+                                    </th>
+                                    <th>
+                                        车辆品牌
+                                    </th>
+                                    <th>
+                                        车架号
+                                    </th>
+                                    <th>
+                                        车牌号码
+                                    </th>
+                                    <th>
+                                        评估价(元)
+                                    </th>
+                                    <th>
+                                        业务状态
+                                    </th>
+                                    <th>
+                                        提交时间
+                                    </th>
+                                    <th>
+                                        数据状态
+                                    </th>
+                                    <th>
+                                        操作
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="carvaluation in carvaluations" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[carvaluation.approveStatus]">
+                                    <td>{{$index+1}}</td>
+                                    <td><cardealer-name ng-if="carvaluation.carDealerId !== null" id="carvaluation.carDealerId"></cardealer-name></td>
+                                    <td><loginuser-employee-infos ng-if="carvaluation.loginUserId !== null" id="carvaluation.loginUserId"></loginuser-employee-infos></td>
+                                    <td>{{carvaluation.carType}}</td>
+                                    <td>{{carvaluation.vin}}</td>
+                                    <td>{{carvaluation.licenceNumber}}</td>
+                                    <td>{{carvaluation.price}}</td>
+                                    <td>{{carvaluation.approveStatus | carvaluationFilter}}</td>
+                                    <td>{{carvaluation.ts}}</td>
+                                    <td>{{carvaluation.dataStatus | dataStatusFilter}}</td>
+                                    <td>
+                                        <div class="btn-group dropdown" dropdown>
+                                            <button class="btn btn-success btn-xs" dropdown-toggle >操作<span class="caret"></span></button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="green" role="button" data-toggle="modal" ng-click="edit(carvaluation,$index)" ng-show="carvaluation.dataStatus != 9 && carvaluation.id != null ">
+                                                           浏览
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="red" role="button" data-toggle="modal" ng-click="delete(carvaluation,$index)" ng-show="carvaluation.approveStatus != 2 && carvaluation.id != null && carvaluation.dataStatus !=9 ">
+                                                            作废
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="green" role="button" data-toggle="modal" ng-click="delete(carvaluation,$index)" ng-show="carvaluation.approveStatus != 2 && carvaluation.id != null && carvaluation.dataStatus ==9 ">
+                                                            删除
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">{{title}}
+                            <span ng-class="{1:'text-info',2: 'text-success', 8: 'text-warning', 9: 'text-danger'}[carvaluation.approveStatus]">({{carvaluation.approveStatus | carvaluationFilter}})-----{{finishOrder | carvaluationOrderFilter}}</span>
+                        </h1>
+                        </h1>
+                    </div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="padder-v row m-n">
+                                <div class="col-lg-11">
+                                    <!--来源渠道-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">渠道来源</span></div>
+                                        <div class="panel-body">
+                                            <cardealer-block ng-if="carvaluation.carDealerId != undefined" id="carvaluation.carDealerId"></cardealer-block>
+                                        </div>
+                                    </div>
+                                    <!--购买车辆信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">拟购车辆信息</span></div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-6">
+                                                    <label>车辆品牌</label>
+                                                    <p class="form-control-static b-b">{{carvaluation.carType}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--提车上牌-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">拟购车辆评估信息</span></div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-6">
+                                                    <label class="col-sm-3 control-label">车牌号码</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" placeholder="请输入车牌号码"
+                                                               required ng-model="carvaluation.licenceNumber"  ng-readonly="statuss" name="licenceNumber">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="col-sm-3 control-label">车架号</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" placeholder="请输入车架号"
+                                                               ng-model="carvaluation.vin" ng-readonly="status" name="vin" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-6">
+                                                    <label class="col-sm-3 control-label">车辆型号</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" placeholder="请输入车辆型号"
+                                                               required ng-model="carvaluation.carModelNumber"  ng-readonly="statuss" name="carModelNumber">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="col-sm-3 control-label">首次登记日期</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" placeholder="请输入首次登记日期"
+                                                               ng-model="carvaluation.firstRegistryDate" ng-readonly="status" name="firstRegistryDate" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-6">
+                                                    <label class="col-sm-3 control-label">行驶里程</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group bootstrap-touchspin">
+                                                        <input type="text" class="form-control" placeholder="请输入行驶里程"
+                                                               required ng-model="carvaluation.mileage"  ng-readonly="statuss" name="mileage">
+                                                        <span class="input-group-addon bootstrap-touchspin-postfix">公里</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="col-sm-3 control-label">最后维保里程</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group bootstrap-touchspin">
+                                                        <input type="text" class="form-control" placeholder="请输入最后维保里程"
+                                                               ng-model="carvaluation.maintenanceMileage" ng-readonly="status" name="maintenanceMileage" required>
+                                                        <span class="input-group-addon bootstrap-touchspin-postfix">公里</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-6">
+                                                    <label class="col-sm-3 control-label">评估来源</label>
+                                                    <div class="col-sm-9">
+                                                        <ui-select  ng-model="carvaluation.offlineEvaluateSourceCode" theme="bootstrap">
+                                                            <ui-select-match placeholder="请选择评估来源" >{{$select.selected.name}}</ui-select-match>
+                                                            <ui-select-choices  repeat="va.code as va in valuations | filter: $select.search">
+                                                                <div ng-bind-html="va.name"></div>
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="col-sm-3 control-label">初步评估价</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group bootstrap-touchspin">
+                                                        <input type="text" class="form-control" placeholder="请输入初步评估价"
+                                                               ng-model="carvaluation.initialValuationPrice" ng-readonly="status" name="initialValuationPrice" required>
+                                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-6">
+                                                    <label class="col-sm-3 control-label">评估价</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group bootstrap-touchspin">
+                                                        <input type="text" class="form-control" placeholder="请输入评估来源"
+                                                               required ng-model="carvaluation.price"  ng-readonly="statuss" name="price">
+                                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--档案资料-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">档案资料</span></div>
+                                        <div class="panel-body">
+                                            <carvaluationimage-block ng-if="carvaluation !== undefined" canAudit="true" bill="carvaluation" save="save(bill)"></carvaluationimage-block>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-success" type="button" ng-click="saveInfo(carvaluation)" ng-show="finishOrder != true && carvaluation.id != null ">保存</button>
+                    <!--<button class="btn btn-primary" type="button" ng-click="carValuationEdit(carvaluation)" ng-show="carvaluation.approveStatus != 2 && carvaluation.id != null ">车辆评估</button>-->
+                    <button class="btn btn-primary" type="button" ng-click="confirmSave(carvaluation)" ng-show="carvaluation.approveStatus != 2 && carvaluation.id != null ">评估确认</button>
+                    <button class="btn btn-primary" type="button" ng-click="cancelSave(carvaluation)" ng-show="carvaluation.approveStatus == 2 && carvaluation.id != null ">取消确认</button>
+                    <button class="btn btn-info" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+<script type="text/ng-template" id="query.html">
+    <carvaluation-query-form carvaluation="carValuationFilter" query="queryBill(carvaluation)" clear="clearQuery()"></carvaluation-query-form>
+</script>
+
+<script type="text/ng-template" id="signForm.html">
+    <div class="panel panel-default m-b-none" dw-loading="signInfo" dw-loading-options="{text: ''}">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form name="userForm">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label><h3>温馨提示:请核对相关数据确认后再做操作!!!</h3></label>
+                </div>
+            </div>
+            <footer class="panel-footer text-right bg-light lter">
+                <button class="btn btn-primary" type="button" ng-click="confirmSave(carvaluation)" ng-show="carvaluation.id != null ">评估确认</button>
+                <button class="btn btn-primary" type="button" ng-click="cancelSave(carvaluation)" ng-show="carvaluation.id != null ">取消确认</button>
+                <button class="btn btn-warning" type="button" ng-click="cancel()">关  闭</button>
+            </footer>
+        </form>
+    </div>
+</script>
+

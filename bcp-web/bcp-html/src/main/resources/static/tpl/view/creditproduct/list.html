@@ -1,0 +1,44 @@
+<table class="table table-striped b-t b-light m-b-none">
+    <thead>
+    <tr>
+        <th>
+            名称（编码）
+        </th>
+        <th>
+            首付比例/贷款比例
+        </th>
+        <th >
+            贷款限额
+        </th>
+        <th >
+            贷款月数
+        </th>
+        <th >
+            手续费/费率
+        </th>
+        <th >
+            是否贴息
+        </th>
+        <th>
+            操作
+        </th>
+    </tr>
+    </thead>
+    <tbody >
+    <tr ng-repeat="creditproduct in creditProducts">
+        <td>{{creditproduct.name}}({{creditproduct.code}})</td>
+        <td>{{creditproduct.salePrice.downPaymentRatio}}/{{creditproduct.salePrice.creditRatio}}</td>
+        <td>{{creditproduct.salePrice.limitAmount}}</td>
+        <td>{{creditproduct.salePrice.creditMonths}}</td>
+        <td>{{creditproduct.salePrice.charge}}/{{creditproduct.salePrice.chargeRatio}}</td>
+        <td>{{creditproduct.compensatoryInterest|yesno}}</td>
+        <td>
+            <div class="hidden-sm hidden-xs action-buttons">
+                <a class="red" href ng-click="delete($index)">
+                    <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                </a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>

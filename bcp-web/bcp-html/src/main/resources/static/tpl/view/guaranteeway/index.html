@@ -1,0 +1,170 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                编码
+                            </th>
+                            <th>
+                                名称
+                            </th>
+                            <th>
+                                是否需要担保函
+                            </th>
+                            <th>
+                                是否需要抵押资料
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="guaranteeway in guaranteeways|filter:query|orderBy:'code':false" ng-class="{true:'danger'}[guaranteeway.dataStatus == 9]">
+                                <td>{{guaranteeway.code}}</td>
+                                <td>{{guaranteeway.name}}</td>
+                                <td>
+                                    <element ng-show="guaranteeway.requiredGuaranteeLetter"><i class="fa fa-check text-success"></i></element>
+                                    <element ng-hide="guaranteeway.requiredGuaranteeLetter"><i class="fa fa-times text-danger text"></i></element>
+                                </td>
+                                <td>
+                                    <element ng-show="guaranteeway.requiredPledgeFile"><i class="fa fa-check text-success"></i></element>
+                                    <element ng-hide="guaranteeway.requiredPledgeFile"><i class="fa fa-times text-danger text"></i></element>
+                                </td>
+                                <td>{{guaranteeway.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(guaranteeway, $index)" ng-show="guaranteeway.dataStatus != 9 && guaranteeway.id != null">
+                                                   编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <!--启用-->
+                                                <a ng-if="guaranteeway.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(guaranteeway, $index)" ng-show="guaranteeway.dataStatus == 9 && guaranteeway.id != null">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(guaranteeway, $index)" ng-show="guaranteeway.dataStatus != 9 && guaranteeway.id != null">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(guaranteeway, $index)" ng-show="guaranteeway.dataStatus == 9 && guaranteeway.id != null">
+                                                    删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!------输入对话框------>
+<script type="text/ng-template" id="guaranteewayModal.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+
+                <input type="hidden" ng-model="guaranteeway.id">
+
+                <div class="form-group">
+                    <label class="control-label">编码</label>
+                    <input type="text" class="form-control" name="code"
+                           ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                           placeholder="请输入担保方式编码" ng-model="guaranteeway.code" ng-model-options="{updateOn: 'blur'}"
+                           ng-pattern="/^[a-zA-Z0-9]{5,}$/"
+                           required>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">担保方式编码是必须的!</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">担保方式编码不能重复！</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">担保方式编码为数字或字母且最小为5位，如00001！</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">名称</label>
+                    <input type="text" class="form-control" name="name" placeholder="请输入担保方式名称"
+                           ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                           ng-model="guaranteeway.name" ng-model-options="{updateOn: 'blur'}"
+                            required>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">担保方式名称为必填！</span>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">担保方式名称不能重复！</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline i-checks">
+                        <input ng-model="guaranteeway.requiredGuaranteeLetter" type="checkbox" ><i></i>需要担保函
+                    </label>
+                    <label class="checkbox-inline i-checks">
+                    </label>
+                    <label class="checkbox-inline i-checks">
+                        <input ng-model="guaranteeway.requiredPledgeFile" type="checkbox"><i></i>需要抵押资料
+                        <span ng-show="!guaranteeway.requiredPledgeFile && guaranteeway.customerImageTypeIds" class="help-block text-danger">请取消您的抵押资料！</span>
+                    </label>
+                </div>
+
+                <div class="form-group" ng-show="guaranteeway.requiredPledgeFile">
+                    <label class="control-label">抵押资料</label>
+                  <span ng-show="userForm.customerImageTypeIds.$dirty && userForm.customerImageTypeIds.$error.required" class="help-block text-danger">抵押资料是必须的！</span>
+                    <ui-select multiple ng-model="guaranteeway.customerImageTypeIds" theme="bootstrap" name="customerImageTypeIds" required>
+                        <ui-select-match placeholder="请选择抵押资料" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="imagetype.id as imagetype in imagetypes ">
+                            <div>
+                                {{imagetype.name}} <{{imagetype.code}}>
+                            </div>
+                        </ui-select-choices>
+                    </ui-select>
+
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+               <button class="btn btn-primary" ng-show="!guaranteeway.requiredPledgeFile" type="button" ng-disabled="!userForm.code.$valid || !userForm.name.$valid ||!userForm.customerImageTypeIds.$invalid" ng-click="save()">保 存</button>
+               <button class="btn btn-primary" ng-show="guaranteeway.requiredPledgeFile" type="button" ng-disabled="!userForm.$valid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

@@ -1,0 +1,8 @@
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-mq/src/main/java/com/fuze/bcp/api/mq/bean/TaskDescribeLookupBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-mq/src/main/java/com/fuze/bcp/api/mq/bean/TaskRecordBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-mq/src/main/java/com/fuze/bcp/api/mq/service/IAmqpBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-mq/src/main/java/com/fuze/bcp/api/mq/bean/DynamicDescribeBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-mq/src/main/java/com/fuze/bcp/api/mq/SerializationOptimizerImpl.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-mq/src/main/java/com/fuze/bcp/api/mq/bean/BusinessLogBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-mq/src/main/java/com/fuze/bcp/api/mq/bean/MsgRecordBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-mq/src/main/java/com/fuze/bcp/api/mq/bean/TaskDescribeBean.java

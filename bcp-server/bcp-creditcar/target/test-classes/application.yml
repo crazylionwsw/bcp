@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      database: fzfq-dev
+      uri: mongodb://mongodev:FuzefenqiDev11@192.168.0.20:27017/admin
+
+

@@ -1,0 +1,56 @@
+spring:
+  logging:
+    config: @logbackpath@
+  application:
+    name: FUZE App Application
+  profiles:
+    active: @profileActive@
+  swagger2:
+    title: FUZE API
+    description: FUZE API
+    version: 1.1
+    base-package: com.fuze.bcp.app.controller
+  http:
+      encoding:
+        charset: UTF-8
+        enabled: true
+        force: true
+      multipart:
+        enabled: true
+        max-file-size: 200MB
+        max-request-size: 200MB
+  rabbitmq:
+    host: @rabbitmq.host@
+    port: @rabbitmq.port@
+    username: @rabbitmq.username@
+    password: @rabbitmq.password@
+    exchange: @rabbitmq.exchange@
+    routingKey-b: @rabbitmq.routingKey-b@
+    routingKey-l: @rabbitmq.routingKey-l@
+    routingKey-m: @rabbitmq.routingKey-m@
+
+dubbo:
+  zookeeper:
+    registry:
+      address: @fuze.bcp.dubbo.zookeeper.registry.address@
+      protocol: @fuze.bcp.dubbo.zookeeper.registry.protocol@
+
+banner:
+  charset: UTF-8
+
+server:
+  port: 8081
+  tomcat:
+    uri-encoding: UTF-8
+
+#shiro:
+#  realm: com.fuze.bcp.web.realm.AuthLoginRealm
+#  loginUrl: /json/login
+ # filters:
+ #   statelessAuthc: com.fuze.bcp.web.filter.StatelessAuthcFilter
+ # filterChainDefinitions:
+ #   logout: /logout
+  #  anon: /json/login/*
+   # statelessAuthc: /json/**
+  #successUrl:
+  #unauthorizedUrl:

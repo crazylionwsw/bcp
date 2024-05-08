@@ -1,0 +1,45 @@
+package com.fuze.bcp.server.creditcar.ICarTransferBizService;
+
+import com.fuze.bcp.api.drools.bean.DroolsBaseBean;
+import com.fuze.bcp.api.creditcar.bean.cartransfer.CarTransferSubmissionBean;
+import com.fuze.bcp.api.customer.bean.CustomerBean
+
+rule "actSaveCarTransfer"
+       dialect "java"
+       lock-on-active true
+when
+    $droolsBeans:DroolsBaseBean(apiBaseBean != null, message: message);
+    $carTransferSubmissionBean : CarTransferSubmissionBean() from $droolsBeans.apiBaseBean;
+then
+     //检查转移过户日期
+    if($carTransferSubmissionBean.getTransferDate() == null || "".equals($carTransferSubmissionBean.getTransferDate())){
+        System.out.println("MSG_NO_TRANSFERDATE");
+        message.add("MSG_NO_TRANSFERDATE");
+    }
+    //检查车辆登记证编号
+    if($carTransferSubmissionBean.getRegistryNumber() ==null || "".equals($carTransferSubmissionBean.getRegistryNumber())){
+        System.out.println("MSG_NO_REGISTRYNUMBER");
+        message.add("MSG_NO_REGISTRYNUMBER");
+    }
+    //检查车辆VIN码
+    if($carTransferSubmissionBean.getVin() == null || "".equals($carTransferSubmissionBean.getVin())){
+        System.out.println("MSG_NO_VIN");
+        message.add("MSG_NO_VIN");
+    }
+    //检查发动机号
+    if($carTransferSubmissionBean.getMotorNumber() == null || "".equals($carTransferSubmissionBean.getMotorNumber())){
+        System.out.println("MSG_NO_MOTORNUMBER");
+        message.add("MSG_NO_MOTORNUMBER");
+     }
+     //检查国标型号
+     if($carTransferSubmissionBean.getCarModelNumber() == null || "".equals($carTransferSubmissionBean.getCarModelNumber())){
+         System.out.println("MSG_NO_CARMODELNUMBER");
+         message.add("MSG_NO_CARMODELNUMBER");
+     }
+     //检查车牌号码
+     if($carTransferSubmissionBean.getLicenseNumber() == null || "".equals($carTransferSubmissionBean.getLicenseNumber())){
+          System.out.println("MSG_NO_LICENSENUMBER");
+          message.add("MSG_NO_LICENSENUMBER");
+     }
+    update($droolsBeans);
+end

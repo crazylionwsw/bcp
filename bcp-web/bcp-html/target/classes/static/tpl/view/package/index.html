@@ -1,0 +1,225 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped b-t b-light m-b-none" data-filter="#filter" >
+                                <thead>
+                                <th data-toggle="true">
+                                    支行
+                                </th>
+                                <th>
+                                    客户姓名[身份证]
+                                </th>
+                                <th>操作</th>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="order in orders|filter:query">
+                                    <td><cardealer-cashsource-info ng-if="order.carDealerId !== undefined" id="order.carDealerId"></cardealer-cashsource-info></td>
+                                    <td><customer-info id="order.customerId"></customer-info></td>
+                                    <td>
+                                        <div class="hidden-sm hidden-xs action-buttons">
+                                            <a class="green" role="button" data-toggle="modal" ng-click="edit(order)">
+                                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="wrapper row m-n">
+                                <div class="col-lg-9">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">客户来源</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <cardealer-block ng-if="cardemand.carDealerId != undefined" id="cardemand.carDealerId"></cardealer-block>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <button class="btn btn-primary btn-xs pull-right" ng-show="cardemand.creditMasterId" type="button" ng-click="customercredit(cardemand.creditMasterId)">征信拍照</button>
+                                            <span class="h4">贷款主体</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-block id="cardemand.creditMasterId"></customer-block>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-lg-12">
+                                                    <label>与指标人关系</label>
+                                                    <p class="form-control-static b-b">{{cardemand.relation |relationFilter}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default" ng-show="cardemand.mateCustomerId != null">
+                                        <div class="panel-heading">
+                                            <span class="h4">配偶信息</span>
+                                            <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="customercredit(cardemand.mateCustomerId)">征信拍照</button>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-relation-block id="cardemand.mateCustomerId" proname="1"></customer-relation-block>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default" ng-show="cardemand.relation != 0">
+                                        <div class="panel-heading"><span class="h4">指标人</span></div>
+                                        <div class="panel-body">
+                                            <customer-relation-block ng-if="cardemand.pledgeCustomerId != undefined" id="cardemand.pledgeCustomerId" proname="2"></customer-relation-block>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">指标状态信息</span></div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-3">
+                                                    <label>指标状态</label>
+                                                    <p class="form-control-static b-b">{{cardemand.indicatorStatus | indicatorStatusFilter}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>预约提车日期</label>
+                                                    <p class="form-control-static b-b">{{cardemand.pickCarDate  ||""}}</p>
+                                                </div>
+                                                <div class="col-sm-3" ng-show="cardemand.indicatorStatus != 1">
+                                                    <label>{{cardemand.indicatorStatus | moveoutDateFilter}}</label>
+                                                    <p class="form-control-static b-b">{{cardemand.moveoutDate | date: 'yyyy-MM-dd HH:mm'}}</p>
+                                                </div>
+                                                <div class="col-sm-3" ng-show="cardemand.indicatorStatus != 1">
+                                                    <label>情况说明</label>
+                                                    <p class="form-control-static b-b">{{cardemand.indicatorComment || ""}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">拟购车辆信息</span></div>
+                                        <div class="panel-body">
+                                            <customer-car ng-if="cardemand.customerCarId !== undefined" id="cardemand.customerCarId" businesstypecode="cardemand.businessTypeCode" ></customer-car>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">购车预算</span></div>
+                                        <div class="panel-body">
+                                            <customer-loan ng-if="cardemand.customerLoanId != undefined" id="cardemand.customerLoanId" billtypecode="cardemand.billType.code"></customer-loan>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">档案资料</span></div>
+                                        <div class="panel-body">
+                                            <customerimage-block ng-if="cardemand !== null" canAudit="true" bill="cardemand"></customerimage-block>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default" ng-if="cardemand.billType.documentIds.length > 0">
+                                        <div class="panel-heading">
+                                            <span class="h4">文档信息</span>
+                                        </div>
+                                        <business-contract-block ng-if="cardemand !== null" bill="cardemand"></business-contract-block>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+
+                                    <!--显示特殊情况信息-->
+                                    <div class="m-b-md clearfix" ng-show="cardemand.comment!=null">
+                                        <div class="m-b text-md">特殊情况说明</div>
+                                        <div class="panel b-a">
+                                            <div class="panel-heading pos-rlt">
+                                                <span class="arrow top pull-left"></span>
+                                                {{cardemand.comment}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--当前业务分期经理 -->
+                                    <div class="m-b-md clearfix">
+                                        <div class="m-b text-md">当前业务分期经理</div>
+                                        <div class="panel b-a">
+                                            <div class="panel-heading pos-rlt bg-info">
+                                                <span class="arrow top pull-left arrow-info"></span>
+                                                <employee-info ng-if="cardemand.employeeId !== undefined" id="cardemand.employeeId"></employee-info>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--显示订单的签批信息-->
+                                    <div class="m-b-md clearfix" ng-show="cardemand.id != null">
+                                        <signinfo-list ng-if="cardemand.id !== undefined" id="cardemand.id"></signinfo-list>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-default" ng-click="customerdeclaration()">报批数据</button>
+                    <button class="btn btn-success" type="button" ng-click="customercheck(cardemand)">客户核对</button>
+                    <button class="btn btn-primary" type="button" can-audit="cardemand" ng-click="audit()" ng-show="cardemand.billTypeCode !== undefined && cardemand.id !== undefined ">
+                        <flow-getpresenttaskgroup ng-if="cardemand.billTypeCode !== undefined && cardemand.id !== undefined" billtypecode="cardemand.billTypeCode" billid="cardemand.id"></flow-getpresenttaskgroup>
+                    </button>
+                    <button class="btn btn-primary" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+<!------查询输入框-->
+<script type="text/ng-template" id="query.html">
+    <query-form customer="customerFilter" query="queryBill(customer)" clear="clearQuery()"></query-form>
+</script>
+<!------签批对话框------>
+<script type="text/ng-template" id="audit.html">
+    <signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>
+<!------客户的征信拍照------->
+<script type="text/ng-template" id="creditForm.html">
+    <creditphotographimage-block ng-if="cutomerid !== null" id="cutomerid"></creditphotographimage-block>
+</script>

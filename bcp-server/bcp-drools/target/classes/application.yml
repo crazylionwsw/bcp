@@ -1,0 +1,86 @@
+spring:
+  cache:
+    type: redis
+  logging:
+    config: bcp-dubbo/src/main/resources/logback.xml
+  application:
+    name: FUZE Dubbox Service Provider
+  profiles:
+    active: dev
+  messages:
+    basename: msg
+    cacheSeconds: -1
+    encoding: UTF-8
+  data:
+    mongodb:
+      database: bcp_dev
+      uri: mongodb://mongodev:FuzefenqiDev11@192.168.1.140:27017/admin
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
+    password: 123456
+    pool:
+      max-idle: 16
+      max-total: 32
+      max-wait-millis : 100000
+    timeout: 10000
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    exchange: fuze-exchange
+    routingKey-b: business-routingKey
+    routingKey-l: log-routingKey
+    routingKey-m: message-routingKey
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+  datasource:
+    url: jdbc:mysql://192.168.1.140:3306/bcp_dev?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+    sqlScriptEncoding: utf-8
+    username: root
+    password: fuzefenqi987
+    driver-class-name: com.mysql.jdbc.Driver
+#dubbo服务
+dubbo:
+  zookeeper:
+    registry:
+      address: 127.0.0.1:2181
+      protocol: zookeeper
+  timeout: 75000
+#精真估
+jingzhengu:
+  server: http://guzhiapi.jingzhengu.com
+  key: OGY4Y2MyNDktNjQ4MS00MGRk
+  partnerId: 96
+#邮件系统
+email:
+  host: smtp.exmail.qq.com
+  port: 25
+  username: register@fuzefenqi.com
+  password: 8cv8abkmjqBMMJkz
+  from: register@fuzefenqi.com
+  fromName: 富择金融
+jwt:
+  header: User-Token
+  secret: mySecret
+  expiration: 604800
+umeng:
+  appkey: 58ca67c5c62dca7258000da5
+  appMasterSecret: kdqpc5bjlwrfmnabltzvsykquem2n6ah
+fuze:
+  bcp:
+    wechat:
+      agentid: 1000006
+      secret: SjU04PzhJEkqWBtw_-POUPyiBRs2M_dI-0gOqz_9yWk
+      secretW: UDFucBQyTOL2VhC-l0UAmGupVAEyS1scf0TIJbQjnZs
+      corpid: wwce3beff4c92222e9
+      believeIp: test.fuzefenqi.com
+    filePath: file:/C:/bcp/sourcefile
+    # Web端访问路径,主要用于文档下载中图片的加载功能、身份证合成
+    web:
+      server:
+        url: http://192.168.0.221:8083

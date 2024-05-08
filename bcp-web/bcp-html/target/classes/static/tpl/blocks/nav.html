@@ -1,0 +1,525 @@
+<!-- list -->
+<ul class="nav">
+<!--  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span translate="aside.nav.HEADER">Navigation</span>
+  </li>-->
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
+      <span class="font-bold" translate="aside.nav.DASHBOARD">Dashboard</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span translate="aside.nav.DASHBOARD">Dashboard</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.dashboard-v2">
+          <span>我的工作</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="icon-lock icon"></i>
+      <span class="font-bold">权限管理</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.resource">
+          <span>系统资源</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.sysrole">
+          <span>系统角色</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.loginuser">
+          <span>登录用户</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="icon-settings icon"></i>
+      <span class="font-bold">系统管理</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.device">
+          <span>设备管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.logmanagement">
+          <span>登陆管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.bind">
+          <span>绑定记录</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.log">
+          <span>系统日志</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.apkversion">
+          <span>版本管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.sysparam">
+          <span>系统参数</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="icon-list icon"></i>
+      <span class="font-bold">基础数据</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.cashsource">
+          <span>资金来源</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.repaymentway">
+          <span>还款方式</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.guaranteeway">
+          <span>担保方式</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.billtype">
+          <span>单据类型</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.business">
+          <span>业务类型</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.imagetype">
+          <span>档案类型</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.cartype">
+          <span>品牌车型</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.orginfo">
+          <span>组织机构</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.province">
+          <span>地区管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.fee">
+          <span>收费项</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.salespolicy">
+          <span>销售政策</span>
+        </a>
+      </li>
+     <li ui-sref-active="active">
+        <a ui-sref="app.systems.banksettlementstandard">
+          <span>分成标准</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.questioncategory">
+          <span>问卷调查</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.customersurveytemplate">
+          <span>调查模板</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.feedback">
+          <span>意见反馈</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="icon-layers icon"></i>
+      <span class="font-bold">功能数据</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.businesseventtype">
+          <span>业务事件类型</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.taskdescribes">
+          <span>任务处理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.msgsubscribe">
+          <span>订阅维护</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.emailtemplate">
+          <span>邮件模板</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.pushtemplate">
+          <span>推送模板</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.document">
+          <span>文档模板</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.msgtemplates">
+          <span>消息模版</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.msgtemplatectrl">
+          <span>模版管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.systems.notice">
+          <span>通知管理</span>
+        </a>
+      </li>
+
+    </ul>
+  </li>
+
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-success"></i>
+      <span class="font-bold">产品管理</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.creditproduct">
+          <span>分期产品</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.promotionpolicy">
+          <span>促销管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.compensatorypolicy">
+          <span>贴息管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.compensatorypolicyinfo">
+          <span>贴息公式</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="icon-users icon"></i>
+      <span class="font-bold">渠道管理</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.dealergroup">
+          <span>经销商集团</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.cardealer">
+          <span>渠道管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.groupsharing">
+          <span>集团分成</span>
+        </a>
+      </li>
+
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.dealersharing">
+          <span>渠道分成</span>
+        </a>
+      </li>
+      <!--<li ui-sref-active="active">-->
+        <!--<a ui-sref="app.business.customer">-->
+          <!--<span>客户管理</span>-->
+        <!--</a>-->
+      <!--</li>-->
+
+    </ul>
+  </li>
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="icon-credit-card icon"></i>
+      <span class="font-bold">分期购车</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.customertransaction">
+          <span>客户交易</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.businessbook">
+          <span>业务台账</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.carvaluation">
+          <span>车辆评估</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.cardemand">
+          <span>资质审查</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.ordernewcar">
+          <span>客户签约</span>
+        </a>
+      </li>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.appointswipingcard">
+          <span>预约刷卡</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.swipingcard">
+          <span>渠道刷卡</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.dealerrepayment">
+          <span>渠道还款</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.appointpayment">
+          <span>垫资支付</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.cartransfer">
+          <span>转移过户</span>
+        </a>
+      </li>
+      <!--<li ui-sref-active="active">
+        <a ui-sref="app.business.pickupcar">
+          <span>提车记录</span>
+        </a>
+      </li>-->
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.carregistry">
+          <span>提车上牌</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.fileexpress">
+          <span>资料快递</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.dmvpledge">
+          <span>车辆抵押</span>
+        </a>
+      </li>
+      <!--<li ui-sref-active="active">
+        <a ui-sref="app.business.returninfo">
+          <span>资料归还</span>
+        </a>
+      </li>-->
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.enhancement">
+          <span>资料补全</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.cancelorder">
+          <span>取消业务</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.rejectcustomer">
+          <span>拒绝客户</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.chargefeeplan">
+          <span>收款计划</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.balanceaccount">
+          <span>银行对账</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.businessexchange">
+          <span>业务调整</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.paymentbill">
+          <span>缴费管理</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="icon-link icon"></i>
+      <span class="font-bold">银行对接</span>
+    </a>
+
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.bankcard">
+          <span>卡业务处理</span>
+        </a>
+      </li>
+      <!--<li ui-sref-active="active">
+        <a ui-sref="app.business.package">
+          <span>资料打包</span>
+        </a>
+      </li>-->
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.declaration">
+          <span>银行报批</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.poundagesettlement">
+          <span>支行结算</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-signal"></i>
+      <span class="font-bold">统计报表</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.dailyreport">
+          <span>业务报表</span>
+        </a>
+      </li>
+      <ul class="nav nav-sub dk">
+        <li ui-sref-active="active">
+          <a ui-sref="app.business.bankdailystatement">
+            <span>银行日流水</span>
+          </a>
+        </li>
+    </ul>
+  </li>
+</ul>
+
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="fa fa-archive"></i>
+      <span class="font-bold">贷后管理</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.business.decompress">
+          <span>解押管理</span>
+        </a>
+      </li>
+      <ul class="nav nav-sub dk">
+        <li ui-sref-active="active">
+          <a ui-sref="app.business.overdue">
+            <span>逾期记录</span>
+          </a>
+        </li>
+      </ul>
+      </li>
+    </ul>
+<!-- / list -->

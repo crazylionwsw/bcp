@@ -1,0 +1,188 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤:请输入用户名" ng-model="key">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-success"  ng-click="showQuery()">查询</a>
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                用户名
+                            </th>
+                            <th>
+                                允许登录的终端数量
+                            </th>
+                            <th >
+                                是否系统用户
+                            </th>
+                            <th >
+                                审批流用户ID
+                            </th>
+                            <th >
+                                系统角色
+                            </th>
+                            <th >
+                                审批流角色
+                            </th>
+                            <th>
+                                状态
+                            </th>
+                            <th>
+                                操作
+                            </th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="user in users|filter:{username:key}" ng-class="{true:'danger'}[user.dataStatus == 9]">
+                                <td>{{user.username}}</td>
+                                <td>{{user.deviceNum}}</td>
+                                <td>
+                                    <element ng-show="user.system"><i class="fa fa-check text-success"></i></element>
+                                    <element ng-hide="user.system"><i class="fa fa-times text-danger text"></i></element>
+                                </td>
+                                <td>{{user.activitiUserId}}</td>
+                                <td>
+                                    <sysrole-list ids="user.userRoleIds"></sysrole-list>
+                                </td>
+                                <td>
+                                    <workflow-group-list ui-if="user.activitiUserRoles" ng-if="user.activitiUserId !== null" activitiuserid ="user.activitiUserId"></workflow-group-list>
+                                </td>
+                                <td>
+                                    {{user.dataStatus|dataStatusFilter}}
+                                </td>
+                                <td>
+                                    <div class=" btn-group dropdown" dropdown>
+                                        <button class="btn btn-success btn-xs" dropdown-toggle> 操作 <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" data-toggle="modal" ng-click="edit(user)" ng-show="user.dataStatus != 9 && user.id != null ">
+                                                    <!--<i class="ace-icon fa fa-pencil bigger-130"></i>-->编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-if="user.dataStatus == 9" data-toggle="modal" ng-click="renew(user, $index)" ng-show="user.dataStatus == 9 && user.id != null ">
+                                                   启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(user,$index)" ng-show="user.dataStatus != 9 && user.id != null ">
+                                                    <!--<i class="ace-icon fa fa-trash-o bigger-130"></i>-->作废
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--对话框-->
+<script type="text/ng-template" id="userForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation"  >
+                <div class="form-group">
+                    <label>登录用户名 <em class="text-muted">(允许 'a-zA-Z0-9', 4-11 length)</em></label>
+                    <input class="form-control"
+                           ng-model="user.username" ng-disabled="user.system"
+                           ui-validate-async="{notUnique: 'checkUnique(\'username\', $value)'}"
+                           placeholder="请输入登录用户名" ng-change="updateUsername()" name="username" ng-pattern="/^[a-zA-Z0-9]{4,11}$/" required type="text">
+                    <span ng-show="userForm.username.$dirty && userForm.username.$error.required" class="help-block text-danger">登录用户名是必须的!</span>
+                    <span ng-show="userForm.username.$dirty && userForm.username.$error.notUnique" class="help-block text-danger">登录用户名不能重复！</span>
+                    <span ng-show="userForm.username.$dirty && userForm.username.$error.pattern" class="help-block text-danger">用户名应为4-11位！</span>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>输入密码</label>
+                        <input class="form-control" name="password" ng-model="password" type="password"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>密码确认</label>
+                        <input class="form-control" name="confirm_password" ng-model="confirm_password" type="password" ui-validate=" '$value==password' " ui-validate-watch=" 'password' ">
+                        <span ng-show='userForm.confirm_password.$dirty && userForm.confirm_password.$error.validator'  class="help-block text-danger">两次输入的密码不一样！</span>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>系统角色</label>
+                        <ui-select multiple ng-model="user.userRoleIds" theme="bootstrap" ng-disabled="user.system">
+                            <ui-select-match placeholder="给用户分配系统角色" >{{$item.name}}</ui-select-match>
+                            <ui-select-choices  repeat="sysRole.id as sysRole in sysRoles | filter: $select.search">
+                                <div ng-bind-html="sysRole.name | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-sm-6">
+                    <label>允许登录的终端数量</label>
+                    <input class="form-control" placeholder="请输入允许登录的终端数量" ng-model="user.deviceNum" type="text">
+                        </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>审批角色</label>
+                        <ui-select multiple ng-model="user.activitiUserRoles" theme="bootstrap">
+                            <ui-select-match placeholder="给用户分配审批角色" >{{$item.name}}</ui-select-match>
+                            <ui-select-choices  repeat="activitiSysRole.id as activitiSysRole in activitiSysRoles">
+                               <div  ng-bind-html="activitiSysRole.name"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>审批流用户ID</label>
+                        <input class="form-control" ng-disabled="user.system" placeholder="请输入审批流用户ID" ng-model="user.activitiUserId" type="text">
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="i-checks">
+                        <input ng-model="user.system" ng-disabled="true" type="checkbox"/><i></i> 系统内置用户
+                    </label>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid || saved" ng-click="save()" >保  存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取  消</button>
+        </footer>
+    </div>
+</script>
+
+<script type="text/ng-template" id="query.html">
+    <user-query-form loginuser="loginuserFilter" query="queryBill(loginuser)" clear="clearQuery()" sysroles="sysRoles"></user-query-form>
+</script>

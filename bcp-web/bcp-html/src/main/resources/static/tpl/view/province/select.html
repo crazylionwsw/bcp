@@ -1,0 +1,6 @@
+<ui-select ng-model="selectedProvince" theme="bootstrap" ng-disabled="disabled">
+    <ui-select-match placeholder="请选择地区" >{{$select.selected.name}}</ui-select-match>
+    <ui-select-choices  repeat="province in provinces">
+        <div style="padding-left:{{province.depth*10}}px" ng-bind-html="province.name"></div>
+    </ui-select-choices>
+</ui-select>

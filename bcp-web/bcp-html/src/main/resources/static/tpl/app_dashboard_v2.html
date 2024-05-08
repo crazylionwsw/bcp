@@ -1,0 +1,288 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="
+    app.settings.asideFolded = false; 
+    app.settings.asideDock = false;
+  ">
+  <!-- main -->
+  <div class="col">
+    <!-- main header -->
+    <div class="bg-light lter b-b wrapper-md">
+      <div class="row">
+        <div class="col-sm-6 col-xs-12">
+          <h1 class="m-n font-thin h3 text-black">主面板</h1>
+          <br>
+          <small class="text-muted">欢迎使用富择ERP系统V1.1</small>
+        </div>
+        <div class="col-sm-6 text-right hidden-xs">
+          <div class="inline m-r text-left">
+            <div class="m-b-xs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / main header -->
+    <div class="wrapper-md" >
+      <!-- stats -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row row-sm text-center">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-heading font-bold">业务数量统计</div>
+                <div class="panel-body">
+                  <table class="table m-b-none">
+                    <thead>
+                    <tr>
+                      <th class="text-center">业务阶段</th>
+                      <th class="text-center">业务发生</th>
+                      <th class="text-center">待处理业务【占比%】</th>
+                      <th class="text-center">通过业务【占比%】</th>
+                      <th class="text-center">驳回业务【占比%】</th>
+                      <th class="text-center">拒绝业务【占比%】</th>
+                      <th class="text-center">取消业务【占比%】</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>
+                        资质审核
+                      </td>
+                      <td>{{dailyCarDemand['total']}}</td>
+                      <td><span class="label bg-danger">{{dailyCarDemand['ongoing']}}</span>【{{dailyCarDemand['ongoing']*100/dailyCarDemand['total']|number:2}}%】</td>
+                      <td><span class="label bg-success">{{dailyCarDemand['passed']}}</span>【{{dailyCarDemand['passed']*100/dailyCarDemand['total']|number:2}}%】</td>
+                      <td><span class="label bg-primary">{{dailyCarDemand['reapply']}}</span>【{{dailyCarDemand['reapply']*100/dailyCarDemand['total']|number:2}}%】</td>
+                      <td>{{dailyCarDemand['reject']}}【{{dailyCarDemand['reject']*100/dailyCarDemand['total']|number:2}}%】</td>
+                      <td>{{dailyCarDemand['canceled']}}【{{dailyCarDemand['canceled']*100/dailyCarDemand['total']|number:2}}%】</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        客户签约
+                      </td>
+                      <td>{{dailyOrder['total']}}</td>
+                      <td><span class="label bg-danger">{{dailyOrder['ongoing']}}</span>【{{dailyOrder['ongoing']*100 / dailyOrder['total']| number:2}}%】</td>
+                      <td><span class="label bg-success">{{dailyOrder['passed']}}</span>【{{dailyOrder['passed']*100 / dailyOrder['total']| number:2}}%】</td>
+                      <td><span class="label bg-primary">{{dailyOrder['reapply']}}</span>【{{dailyOrder['reapply']*100 / dailyOrder['total']|number:2}}%】</td>
+                      <td>{{dailyOrder['reject']}}【{{dailyOrder['reject']*100 / dailyOrder['total']|number:2}}%】</td>
+                      <td>{{dailyOrder['canceled']}}【{{dailyOrder['canceled']*100 / dailyOrder['total']|number:2}}%】</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        垫资支付
+                      </td>
+                      <td>{{dailyCarPayment['total']}}</td>
+                      <td><span class="label bg-danger">{{dailyCarPayment['ongoing']}}</span></td>
+                      <td><span class="label bg-success">{{dailyCarPayment['passed']}}</span></td>
+                      <td><span class="label bg-primary">{{dailyCarPayment['reapply']}}</span></td>
+                      <td class="color-picker-label">X</td>
+                      <td class="color-picker-label">X</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        提车上牌
+                      </td>
+                      <td>{{dailyCarRegiarty['total']}}</td>
+                      <td><span class="label bg-danger">{{dailyCarRegiarty['ongoing']}}</span></td>
+                      <td><span class="label bg-success">{{dailyCarRegiarty['passed']}}</span></td>
+                      <td><span class="label bg-primary">{{dailyCarRegiarty['reapply']}}</span></td>
+                      <td class="color-picker-label">X</td>
+                      <td class="color-picker-label">X</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        转移过户
+                      </td>
+                      <td>{{dailyCarTransfer['total']}}</td>
+                      <td><span class="label bg-danger">{{dailyCarTransfer['ongoing']}}</span></td>
+                      <td><span class="label bg-success">{{dailyCarTransfer['passed']}}</span></td>
+                      <td><span class="label bg-primary">{{dailyCarTransfer['reapply']}}</span></td>
+                      <td class="color-picker-label">X</td>
+                      <td class="color-picker-label">X</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <table class="table table-striped m-b-none">
+                    <tbody>
+                    <tr>
+                      <td>登记证待收取</td>
+                      <td>登记证已收取</td>
+                      <td>合同已打印</td>
+                      <td>合同已盖章</td>
+                      <td>开始抵押</td>
+                      <td>抵押完成</td>
+                    </tr>
+                    <tr>
+                      <td>{{dailyDmvpledge['express']}}</td>
+                      <td>{{dailyDmvpledge['receive']}}</td>
+                      <td>{{dailyDmvpledge['contract']}}</td>
+                      <td>{{dailyDmvpledge['taked']}}</td>
+                      <td>{{dailyDmvpledge['start']}}</td>
+                      <td>{{dailyDmvpledge['end']}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <table class="table table-striped m-b-none">
+                    <tbody>
+                    <tr>
+                      <td>待制卡</td>
+                      <td>已制卡</td>
+                      <td>已取卡</td>
+                      <td>已启卡</td>
+                      <td>已调额</td>
+                      <td>已领卡</td>
+                      <td>已刷卡</td>
+                      <td>已销卡</td>
+                    </tr>
+                    <tr>
+                      <td>{{dailyBankcard['init']}}</td>
+                      <td>{{dailyBankcard['made']}}</td>
+                      <td>{{dailyBankcard['taked']}}</td>
+                      <td>{{dailyBankcard['activated']}}</td>
+                      <td>{{dailyBankcard['asjusted']}}</td>
+                      <td>{{dailyBankcard['received']}}</td>
+                      <td>{{dailyBankcard['swing']}}</td>
+                      <td>{{dailyBankcard['cancelCard']}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+
+                  <table class="table " >
+                    <thead>
+                    <tr class="text-center font-bold" >
+                      <td class="text-center" style="vertical-align: middle"  rowspan="2">业务阶段</td>
+                      <td class="text-center" style="vertical-align: middle" rowspan="2">贷款额</td>
+                      <td class="text-center" style="vertical-align: middle" colspan="3">手续费
+                      </td>
+                      <td class="text-center" style="vertical-align: middle" rowspan="2">贷款服务费【贷款占比%】</td>
+                    </tr>
+                    <tr class="text-center font-bold">
+                      <td class="text-center">趸交【合计占比%】
+                      </td>
+                      <td class="text-center">分期【合计占比%】
+                      </td>
+                      <td class="text-center">合计【贷款占比%】
+                      </td>
+                    </tr>
+                    <tr class="text-right">
+                      <td class="text-center font-bold">签约新增</td>
+                      <td>{{dailyOrder['totalAllAmountWHOLE']+dailyOrder['totalAllAmountSTAGES'] == null ? 0.0:dailyOrder['totalAllAmountWHOLE']+dailyOrder['totalAllAmountSTAGES']|currency:'￥' }}</td>
+                      <td>{{dailyOrder['totalAllChargeWHOLE']== null ? 0.0:dailyOrder['totalAllChargeWHOLE']|currency:'￥'}}【{{dailyOrder['totalAllChargeWHOLE']*100/(dailyOrder['totalAllChargeWHOLE']+dailyOrder['totalAllChargeSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalAllChargeSTAGES'] == null? 0.0 :dailyOrder['totalAllChargeSTAGES'] |currency:'￥'}}【{{dailyOrder['totalAllChargeSTAGES']*100/(dailyOrder['totalAllChargeWHOLE']+dailyOrder['totalAllChargeSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalAllChargeWHOLE']+dailyOrder['totalAllChargeSTAGES']  == null? 0.0 :dailyOrder['totalAllChargeWHOLE']+dailyOrder['totalAllChargeSTAGES'] |currency:'￥'}}【{{(dailyOrder['totalAllChargeWHOLE']+dailyOrder['totalAllChargeSTAGES'])*100/(dailyOrder['totalAllAmountWHOLE']+dailyOrder['totalAllAmountSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalAllServiceFeeWHOLE']+dailyOrder['totalAllServiceFeeSTAGES']  == null? 0.0 :dailyOrder['totalAllServiceFeeWHOLE']+dailyOrder['totalAllServiceFeeSTAGES'] |currency:'￥'}}【{{(dailyOrder['totalAllServiceFeeWHOLE']+dailyOrder['totalAllServiceFeeSTAGES'])*100/(dailyOrder['totalAllAmountWHOLE']+dailyOrder['totalAllAmountSTAGES'])|number:2}}%】</td>
+                    </tr>
+                    <tr class="text-right">
+                      <td class="text-center font-bold">签约通过</td>
+                      <td>{{dailyOrder['totalPassAmountWHOLE']+dailyOrder['totalPassAmountSTAGES'] == null ?0.0: dailyOrder['totalPassAmountWHOLE']+dailyOrder['totalPassAmountSTAGES']|currency:'￥'}}</td>
+                      <td>{{dailyOrder['totalPassChargeWHOLE'] == null ?0.0: dailyOrder['totalPassChargeWHOLE']|currency:'￥'}}【{{dailyOrder['totalPassChargeWHOLE']*100/(dailyOrder['totalPassChargeWHOLE']+dailyOrder['totalPassChargeSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalPassChargeSTAGES'] == null ?0.0:dailyOrder['totalPassChargeSTAGES']|currency:'￥'}}【{{dailyOrder['totalPassChargeSTAGES']*100/(dailyOrder['totalPassChargeWHOLE']+dailyOrder['totalPassChargeSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalPassChargeWHOLE']+dailyOrder['totalPassChargeSTAGES'] == null ?0.0: dailyOrder['totalPassChargeWHOLE']+dailyOrder['totalPassChargeSTAGES']|currency:'￥'}}【{{(dailyOrder['totalPassChargeSTAGES']+dailyOrder['totalPassChargeWHOLE'])*100/(dailyOrder['totalPassAmountWHOLE']+dailyOrder['totalPassAmountSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalPassServiceFeeWHOLE']+dailyOrder['totalPassServiceFeeSTAGES'] == null ?0.0:dailyOrder['totalPassServiceFeeWHOLE']+dailyOrder['totalPassServiceFeeSTAGES']|currency:'￥'}}【{{(dailyOrder['totalPassServiceFeeWHOLE']+dailyOrder['totalPassServiceFeeSTAGES'])*100/(dailyOrder['totalPassAmountWHOLE']+dailyOrder['totalPassAmountSTAGES'])|number:2}}%】</td>
+                    </tr>
+                    <tr class="text-right">
+                      <td class="text-center font-bold">放款完成</td>
+                      <td>{{dailyOrder['totalSwingAmountWHOLE']+dailyOrder['totalSwingAmountSTAGES'] == null ?0.0:dailyOrder['totalSwingAmountWHOLE']+dailyOrder['totalSwingAmountSTAGES']|currency:'￥'}}</td>
+                      <td>{{dailyOrder['totalSwingChargeWHOLE'] == null ?0.0:dailyOrder['totalSwingChargeWHOLE']|currency:'￥'}}【{{dailyOrder['totalSwingChargeWHOLE']*100/(dailyOrder['totalSwingChargeWHOLE']+dailyOrder['totalSwingChargeSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalSwingChargeSTAGES'] == null ?0.0:dailyOrder['totalSwingChargeSTAGES']|currency:'￥'}}【{{dailyOrder['totalSwingChargeSTAGES']*100/(dailyOrder['totalSwingChargeWHOLE']+dailyOrder['totalSwingChargeSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalSwingChargeWHOLE']+dailyOrder['totalSwingChargeSTAGES'] == null ?0.0 :dailyOrder['totalSwingChargeWHOLE']+dailyOrder['totalSwingChargeSTAGES'] |currency:'￥'}}【{{(dailyOrder['totalSwingChargeSTAGES']+dailyOrder['totalSwingChargeWHOLE'])*100/(dailyOrder['totalSwingAmountWHOLE']+dailyOrder['totalSwingAmountSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalSwingServiceFeeWHOLE']+dailyOrder['totalSwingServiceFeeSTAGES'] == null ?0.0: dailyOrder['totalSwingServiceFeeWHOLE']+dailyOrder['totalSwingServiceFeeSTAGES']|currency:'￥'}}【{{(dailyOrder['totalSwingServiceFeeWHOLE']+dailyOrder['totalSwingServiceFeeSTAGES'])*100/(dailyOrder['totalSwingAmountWHOLE']+dailyOrder['totalSwingAmountSTAGES'])|number:2}}%】</td>
+                    </tr>
+                    <tr class="text-right">
+                      <td class="text-center font-bold">抵押完成</td>
+                      <td>{{dailyOrder['totalDmvpAmountWHOLE']+dailyOrder['totalDmvpAmountSTAGES'] == null ?0.0:dailyOrder['totalDmvpAmountWHOLE']+dailyOrder['totalDmvpAmountSTAGES']|currency:'￥'}}</td>
+                      <td>{{dailyOrder['totalDmvpChargeWHOLE'] == null ?0.0:dailyOrder['totalDmvpChargeWHOLE']|currency:'￥'}}【{{dailyOrder['totalDmvpChargeWHOLE']*100/(dailyOrder['totalDmvpChargeWHOLE']+dailyOrder['totalDmvpChargeSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalDmvpChargeSTAGES'] == null ?0.0:dailyOrder['totalDmvpChargeSTAGES']|currency:'￥'}}【{{dailyOrder['totalDmvpChargeSTAGES']*100/(dailyOrder['totalDmvpChargeWHOLE']+dailyOrder['totalDmvpChargeSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalDmvpChargeWHOLE']+dailyOrder['totalDmvpChargeSTAGES'] == null ?0.0 :dailyOrder['totalDmvpChargeWHOLE']+dailyOrder['totalDmvpChargeSTAGES'] |currency:'￥'}}【{{(dailyOrder['totalDmvpChargeSTAGES']+dailyOrder['totalDmvpChargeWHOLE'])*100/(dailyOrder['totalDmvpAmountWHOLE']+dailyOrder['totalDmvpAmountSTAGES'])|number:2}}%】</td>
+                      <td>{{dailyOrder['totalDmvpServiceFeeWHOLE']+dailyOrder['totalDmvpServiceFeeSTAGES'] == null ?0.0: dailyOrder['totalDmvpServiceFeeWHOLE']+dailyOrder['totalDmvpServiceFeeSTAGES']|currency:'￥'}}【{{(dailyOrder['totalDmvpServiceFeeWHOLE']+dailyOrder['totalDmvpServiceFeeSTAGES'])*100/(dailyOrder['totalDmvpAmountWHOLE']+dailyOrder['totalDmvpAmountSTAGES'])|number:2}}%】</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center" colspan="3">垫资支付额度：{{dailyCarPayment['totalPaidAmount']== null ? 0.0:dailyCarPayment['totalPaidAmount']|currency:'￥'}}</td>
+                      <!-- <td class="text-center" colspan="3">放款完成额度：{{dailyBankcard['totalAmount']== null ? 0.0:dailyBankcard['totalAmount']|currency:'￥'}}</td>-->
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-heading font-bold">业务提示-资质被驳回分期经理未提交客户清单，总计<span class="label bg-danger">{{dailyCarDemandReapply.length}}</span>个客户</div>
+                <div class="panel-body">
+                  <table class="table m-b-none">
+                    <thead>
+                    <tr>
+                      <th class="text-center">业务类型</th>
+                      <th class="text-center">客户信息</th>
+                      <th class="text-center">分期经理</th>
+                      <th class="text-center">业务日期</th>
+                      <th class="text-center">距离今天</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="customer in dailyCarDemandReapply">
+                      <td>{{customer['businessTypeName'] | BusinessTypeFilter}}</td>
+                      <td>{{customer['customerName']}}</td>
+                      <td>{{customer['employeeName']}}</td>
+                      <td>{{customer['orderTime']}}</td>
+                      <td>{{customer['days']}}（天）</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading font-bold">业务提示-客户签约被驳回分期经理未提交客户清单，总计<span class="label bg-danger">{{dailyOrderReapply.length}}</span>个客户</div>
+                <div class="panel-body">
+                  <table class="table m-b-none">
+                    <thead>
+                    <tr>
+                      <th class="text-center">业务类型</th>
+                      <th class="text-center">客户信息</th>
+                      <th class="text-center">分期经理</th>
+                      <th class="text-center">业务日期</th>
+                      <th class="text-center">距离今天</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="customer in dailyOrderReapply">
+                      <td>{{customer['businessTypeName']  | BusinessTypeFilter}}</td>
+                      <td>{{customer['customerName']}}</td>
+                      <td>{{customer['employeeName']}}</td>
+                      <td>{{customer['orderTime']}}</td>
+                      <td>{{customer['days']}}（天）</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading font-bold">业务提示-垫资支付被驳回分期经理未提交客户清单，总计<span class="label bg-danger">{{dailyCarPaymentReapply.length}}</span>个客户</div>
+                <div class="panel-body">
+                  <table class="table m-b-none">
+                    <thead>
+                    <tr>
+                      <th class="text-center">业务类型</th>
+                      <th class="text-center">客户信息</th>
+                      <th class="text-center">分期经理</th>
+                      <th class="text-center">业务日期</th>
+                      <th class="text-center">距离今天</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="customer in dailyCarPaymentReapply">
+                      <td>{{customer['businessTypeName']  | BusinessTypeFilter}}</td>
+                      <td>{{customer['customerName']}}</td>
+                      <td>{{customer['employeeName']}}</td>
+                      <td>{{customer['orderTime']}}</td>
+                      <td>{{customer['days']}}（天）</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

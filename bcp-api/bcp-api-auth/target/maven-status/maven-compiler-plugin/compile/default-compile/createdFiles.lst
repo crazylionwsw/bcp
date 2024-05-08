@@ -1,0 +1,17 @@
+com/fuze/bcp/api/auth/jwt/JwtMD5PasswordEncoder.class
+com/fuze/bcp/api/auth/bean/RegistUserBean.class
+com/fuze/bcp/api/auth/bean/LoginUserBean.class
+com/fuze/bcp/api/auth/bean/LogManagementBean.class
+com/fuze/bcp/api/auth/jwt/JwtUser.class
+com/fuze/bcp/api/auth/bean/SysResourceBean.class
+com/fuze/bcp/api/auth/SerializationOptimizerImpl.class
+com/fuze/bcp/api/auth/service/ILoginTokenBizService.class
+com/fuze/bcp/api/auth/jwt/JwtUserFactory.class
+com/fuze/bcp/api/auth/bean/LoginBean.class
+com/fuze/bcp/api/auth/service/ILoginCacheService.class
+com/fuze/bcp/api/auth/bean/PadLoginBean.class
+com/fuze/bcp/api/auth/jwt/JwtTokenUtil.class
+com/fuze/bcp/api/auth/service/IAuthenticationBizService.class
+com/fuze/bcp/api/auth/bean/SysRoleBean.class
+com/fuze/bcp/api/auth/bean/UserBean.class
+com/fuze/bcp/api/auth/bean/RegistBean.class

@@ -1,0 +1,221 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                编码
+                            </th>
+                            <th>
+                                模版名称
+                            </th>
+                            <th>
+                                元数据
+                            </th>
+                            <th>
+                                模版文件
+                            </th>
+                            <th>
+                                状态
+                            </th>
+
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="template in templates|filter:query" ng-class="{true:'danger'}[template.dataStatus == 9]">
+                                <td>{{template.code}}</td>
+                                <td>{{template.name}}</td>
+                                <td><div style="width: 300px;text-overflow: ellipsis;overflow: hidden;">{{template.metaDatas}}</div></td>
+                                <td>{{template.fileBean.fileName}}</td>
+                                <td>
+                                    {{template.dataStatus|dataStatusFilter}}
+                                </td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(template)" ng-show="template.dataStatus != 9 && template.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <!--启用-->
+                                                <a ng-if="template.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(template, $index)" ng-show="template.dataStatus == 9 && template.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(template, $index)">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-class="red" target="_blank" href="/json/file/download/{{template.fileBean.id}}" tooltip="预览/下载" ng-show="template.dataStatus != 9 && template.id != null ">
+                                                    预览/下载
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="msgTemplatelForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="billtype.id">
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class="control-label">编码</label>
+                        <input type="text" class="form-control" placeholder="请输入编码"
+                               ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                               ng-model="template.code" ng-model-options="{updateOn: 'blur'}"
+                               name="code" required>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">编码是必须的!</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">编码不能重复！</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">名称</label>
+                        <input type="text" class="form-control" placeholder="请输入模版名称"
+                               ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                               ng-model="template.name" ng-model-options="{updateOn: 'blur'}"
+                               name="name" required>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">模版名称是必须的!</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">模版名称不能重复！</span>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <div class="form-group pull-in clearfix">
+                    <label class="col-sm-12 control-label">元数据</label>
+                    <div class="col-sm-12">
+                        <ui-select multiple ng-model="template.metaDatas" name="metaDatas" theme="bootstrap">
+                            <ui-select-match placeholder="请选择元数据">{{$item.name}}</ui-select-match>
+                            <ui-select-choices repeat="meta.code as meta in metaDatas | filter: $select.search">
+                                <div ng-bind-html="meta.name"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <div class="form-group pull-in clearfix">
+                    <label class="col-sm-12 control-label">需要的档案资料</label>
+                    <div class="col-sm-12">
+                        <ui-select multiple ng-model="template.imageTypeCodes" name="imageTypeCodes" theme="bootstrap">
+                            <ui-select-match placeholder="请选择需要的档案资料">{{$item.name}}</ui-select-match>
+                            <ui-select-choices repeat="imagetype.code as imagetype in imagetypes | filter: $select.search">
+                                <div ng-bind-html="imagetype.name"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>模版文件上传</label>
+                    <div ng-show="showuploader">
+                        <input type="file" name="file" nv-file-select="" uploader="fileUploaderTemplate" ng-model="file"/>
+                        <input type="hidden" ng-model="template.fileId"/>
+                    </div>
+                    <div ng-show="show">已有文件，文件名为:{{template.fileName}}</div>
+                    <button type="button" ng-show="show" ng-click="anew()">重新上传</button>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" ladda="uploading" type="button" ng-click="uploadTemplate(file)">上传模版</button>
+            <button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+
+<script type="text/ng-template" id="seeTemForm.html">
+    <div class="hbox hbox-auto-xs bg-light" style="height:500px;">
+        <div class="col lter" class="modal-dialog" style="width: 500px;height: 500px">
+            <div class="vbox">
+                <div class="wrapper b-b b-light lt">
+                    <div class="font-thin h4">{{modalTitle}}</div>
+                    <div class="font-thin h4">{{formTitle}}</div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="wrapper-md">
+                                <div class="form-group">
+                                    <label>模版内容</label>
+                                    {{template.fileBean.id}}
+                                    <!--<object data="{{template.fileBean.id|imgsrc}}"></object>-->
+                                    <textarea ng-src="{{template.fileBean.id|imgsrc}}" style="height:auto;width:auto;"/>
+                                    <div ng-show="template.fileBean.id"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,233 @@
+<div class="hbox hbox-auto-xs bg-light">
+    <!-- column -->
+    <div class="col w-lg lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+                <!--<small class="text-muted">with fluid height</small>-->
+            </div>
+            <div class="wrapper-xs b-b">
+                <div class="input-group m-b-xxs">
+                            <span class="input-group-addon input-sm no-border no-bg"><i
+                                    class="icon-magnifier text-md m-t-xxs"></i></span>
+                    <input type="text" class="form-control input-sm no-border no-bg text-md"
+                           placeholder="检索：档案名称" ng-model="key">
+                </div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="m-t-n-xxs">
+                            <div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+                                <a ng-repeat="item in imagetypes |  filter:{name:key} | orderBy:'code':false"
+                                   class="list-group-item m-l" ng-class="{'select m-l-none': item.selected }"
+                                   ng-click="selectImageType(item)">
+                                          <span class="block text-ellipsis m-l-n" ng-class="{'m-l-none': item.selected, 'text-danger': item.dataStatus == 9 }">
+                                            ({{item.code}}){{ item.name }}
+                                          </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="text-center pos-abt w-full" style="top:50%;"
+                             ng-hide="(imagetypes | filter:key).length">没有检索到</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-sm b-t b-light text-center">
+                <a role="button" class="btn btn-sm btn-default" data-toggle="modal"
+                   ng-click="add('')">添加档案类型</a>
+            </div>
+        </div>
+    </div>
+    <!-- /column -->
+
+    <div class="col">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{modalTitle}}</div>
+                <!--<small class="text-muted">with fluid height</small>-->
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="wrapper-md">
+                            <form name="userForm" class="form-validation" >
+
+                                <!--禁用表单-->
+                                <fieldset ng-disabled="disForm">
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-4">
+                                        <label>编码</label>
+                                        <input class="form-control"
+                                               placeholder="如:B001"
+                                               ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                                               name="code" ng-model="imagetype.code" ng-model-options="{updateOn: 'blur'}"
+                                               ng-pattern="/^[A-Z0-9]{4,}$/"
+                                               required type="text">
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">档案编码是必须的!</span>
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">档案编码不能重复！</span>
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">档案编码为大写字母或数字且大于等于四位，如B001！</span>
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>档案名称</label>
+                                        <input class="form-control"
+                                               placeholder="请输入档案名称"
+                                               ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                                               name="name" required ng-model="imagetype.name" ng-model-options="{updateOn: 'blur'}"
+                                               type="text">
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">档案名称是必须的!</span>
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">档案名称不能重复！</span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>文件后缀名</label>
+                                        <tags-input ng-model="imagetype.suffixesTags" placeholder="请输入文件后缀名" min-length="1" ng-disabled="onlyread"></tags-input>
+                                    </div>
+                                </div>
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-6">
+                                        <label class="i-checks">
+                                            <input ng-model="imagetype.resolved"  ng-checked="imagetype.resolved"
+                                                   type="checkbox"><i></i> 是否进行解析
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!--<label class="i-checks">-->
+                                        <!--<input type="checkbox" ng-checked ="imagetype.dataStatus==9" ng-readonly="onlyread" ><i></i> 是否作废-->
+                                        <!--</label>-->
+                                    </div>
+                                </div>
+
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-6">
+                                        <label class="i-checks">
+                                            <input ng-model="imagetype.merged"  ng-checked="imagetype.merged"
+                                                   type="checkbox"><i></i> 是否需要合成
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-6" ng-show="imagetype.merged">
+                                        <select ng-model="imagetype.mergeTemplateId"
+                                                ng-options="value.id as value.name for value in contracts"
+                                                class="form-control">
+                                            <option  value="" disabled>请选择模板</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>查看权限（请选择哪些角色可以查看此档案）</label>
+                                    <ui-select multiple ng-model="imagetype.sysRoleIds" theme="bootstrap">
+                                        <ui-select-match placeholder="分配系统角色" >{{$item.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="sysRole.id as sysRole in sysRoles | filter: $select.search">
+                                            <div ng-bind-html="sysRole.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>编辑权限（请选择哪些角色可以查看此档案）</label>
+                                    <ui-select multiple ng-model="imagetype.sysRoleIds" theme="bootstrap">
+                                        <ui-select-match placeholder="分配系统角色" >{{$item.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="sysRole.id as sysRole in sysRoles | filter: $select.search">
+                                            <div ng-bind-html="sysRole.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>删除权限（请选择哪些角色可以查看此档案）</label>
+                                    <ui-select multiple ng-model="imagetype.sysRoleIds" theme="bootstrap">
+                                        <ui-select-match placeholder="分配系统角色" >{{$item.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="sysRole.id as sysRole in sysRoles | filter: $select.search">
+                                            <div ng-bind-html="sysRole.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-6">
+                                        <label class="i-checks">
+                                            <input ng-model="imagetype.generated"  ng-checked="imagetype.generated"
+                                                   type="checkbox" ng-disabled="onlyread"><i></i> 是否需要生成
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-6" ng-show="imagetype.generated">
+                                        <select ng-model="imagetype.generateTemplateId"
+                                                ng-options="value.id as value.name for value in contracts"
+                                                ng-disabled="onlyread"
+                                                class="form-control">
+                                            <option  value="" disabled>请选择模板</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!--                                <div class="form-group">
+                                                                    <label>系统角色</label>
+                                                                    <ui-select multiple ng-model="imagetype.sysRoleIds" theme="bootstrap">
+                                                                        <ui-select-match placeholder="给用户分配系统角色" >{{$item.name}}</ui-select-match>
+                                                                        <ui-select-choices  repeat="sysRole.id as sysRole in sysRoles | filter: $select.search">
+                                                                            <div ng-bind-html="sysRole.name | highlight: $select.search"></div>
+                                                                        </ui-select-choices>
+                                                                    </ui-select>
+                                                                </div>-->
+
+                                <div class="form-group">
+                                    <label>样本说明</label>
+                                    <textarea class="form-control " rows="6" placeholder="请输入样本填写要求"
+                                              ng-model="imagetype.comment" name="comment" ng-disabled="onlyread"/>
+                                </div>
+                                <div class="form-group" ng-show="previewShow">
+                                    <label>预览图</label>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-6">
+                                            <div class="thumbnail" style="position:relative;left:0;right:0;top:0;">
+                                                <button type="button" class="close"  aria-label="Close" ng-click="clealFile()"><span aria-hidden="true">&times;</span></button>
+                                                <img src="{{fileSelected}}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>样例图片</label>
+                                    <input type="file" name="file" nv-file-select="" uploader="fileUploader" multiple class="hidden" id="file"/>
+                                    <div class="row">
+                                        <div class="col-md-3 col-xs-6" ng-repeat="fileid in imagetype.exampleFileIds">
+                                            <div class="thumbnail" style="position:relative;">
+                                                <img ng-src="{{fileid|imgsrc}}" class="img-responsive" style="height:160px;width:100%;"/>
+                                                <div style="position:absolute;left:0;right:0;top:0;" class="bg-light">
+                                                    <button type="button" class="close"  aria-label="Close" ng-click="deleteFile(imagetype,fileid,$index)"><span aria-hidden="true" ng-show="imagetype.dataStatus !=9 && imagetype.id != null ">&times;</span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6 text-center">
+                                            <div class="thumbnail">
+                                                <button class="btn btn-lg" ng-disabled="onlyread" style="height:160px;width:100%;" onclick="javascript:$('#file').click();" ng-click="previewShowButton()"><i class="fa fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    (样例图片上传完成后需要点击保存)
+                                </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wrapper-sm b-t b-light text-right">
+                <button class="btn btn-success" type="button" ng-click="upload()">上传图片</button>
+
+                <button class="btn btn-success" type="button" ng-click="save()" ng-disabled="userForm.$invalid" ng-show="imagetype.id != null && imagetype.dataStatus != 9">保 存</button>
+                <button class="btn btn-info" type="button" ng-click="save()" ng-disabled="userForm.$invalid" ng-show="imagetype.id == null">添 加</button>
+                <button class="btn btn-primary" type="button" ng-click="discard()" ng-show="imagetype.dataStatus != 9 && imagetype.id != null ">作 废</button>
+                <button class="btn btn-danger" type="button" ng-click="discard()" ng-show="imagetype.dataStatus == 9 && imagetype.id != null ">删 除</button>
+                <button class="btn btn-success" type="button" ng-click="renew()" ng-show="imagetype.dataStatus == 9 && imagetype.id != null ">恢 复</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

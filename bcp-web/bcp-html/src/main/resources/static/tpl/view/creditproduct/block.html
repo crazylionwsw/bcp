@@ -1,0 +1,72 @@
+<div class="row">
+    <div class="col-md-12">
+        <h4><cashsource-info ng-if="creditproduct.cashSourceId !== undefined" id="creditproduct.cashSourceId"></cashsource-info> - {{creditproduct.name}}</h4>
+        <div class="form-group pull-in clearfix">
+            <div class="col-lg-3">
+                <label>首付比例（%）</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.salePrice.downPaymentRatio}}%
+                </p>
+            </div>
+            <div class="col-lg-3">
+                <label>贷款比例（%）</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.salePrice.creditRatio}}%
+                </p>
+            </div>
+            <div class="col-lg-3">
+                <label>贷款金额（元）</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.salePrice.limitAmount|currency:'￥'}}
+                </p>
+            </div>
+            <div class="col-lg-3">
+                <label>贷款月数（月）</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.salePrice.creditMonths}}个月
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group pull-in clearfix">
+            <div class="col-lg-3">
+                <label>手续费率（%）</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.salePrice.chargeRatio}}%
+                </p>
+            </div>
+            <div class="col-lg-3">
+                <label>手续费（元）</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.salePrice.charge|currency:'￥'}}
+                </p>
+            </div>
+
+            <div class="col-lg-3">
+                <label>银行利率（%）</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.salePrice.bankChargeRatio}}%
+                </p>
+            </div>
+
+            <div class="col-lg-3">
+                <label>富择利率（%）</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.salePrice.fuzeChargeRatio}}%
+                </p>
+            </div>
+            <div class="col-lg-3">
+                <label>是否贴息</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.compensatoryInterest|yesno}}
+                </p>
+            </div>
+            <div class="col-lg-3" ng-show="creditproduct.compensatoryInterest==true">
+                <label>贴息金额（元）</label>
+                <p class="form-control-static b-b">
+                    {{creditproduct.compensatory.amount|currency:'￥'}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

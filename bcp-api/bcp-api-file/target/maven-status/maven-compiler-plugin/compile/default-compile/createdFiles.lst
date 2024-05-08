@@ -1,0 +1,9 @@
+com/fuze/bcp/api/file/bean/PushObjectBean.class
+com/fuze/bcp/api/file/service/IFileBizService.class
+com/fuze/bcp/api/file/SerializationOptimizerImpl.class
+com/fuze/bcp/api/file/utils/FileBeanUtils.class
+com/fuze/bcp/api/file/bean/EmailObjectBean.class
+com/fuze/bcp/api/file/bean/TemplateObjectBean.class
+com/fuze/bcp/api/file/service/ITemplateBizService.class
+com/fuze/bcp/api/file/bean/DocumentTypeBean.class
+com/fuze/bcp/api/file/bean/FileBean.class

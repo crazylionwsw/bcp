@@ -1,0 +1,6 @@
+com\fuze\bcp\bd\service\OrgMrgServiceTest.class
+com\fuze\bcp\bd\service\CashSourceMrgServiceTest.class
+com\fuze\bcp\bd\service\CreditProductServiceTest.class
+com\fuze\bcp\bd\service\BaseDataMrgServiceTest.class
+com\fuze\bcp\AppTest.class
+com\fuze\bcp\bd\service\CarTypeMrgServiceTest.class

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="A031" name="A031" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="Decompress_Submit" name="提交解押" activiti:candidateGroups="G_SUBMIT"></userTask>
+    <userTask id="Decompress_Confirm" name="解押确认" activiti:candidateGroups="G_PLEDGE_MANAGER"></userTask>
+    <sequenceFlow id="flow1" name="通过" sourceRef="Decompress_Submit" targetRef="Decompress_Confirm">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approveStatus=='2'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow2" name="通过" sourceRef="Decompress_Confirm" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approveStatus=='2'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow3" name="驳回" sourceRef="Decompress_Confirm" targetRef="Decompress_Submit">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approveStatus=='8'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="startevent1" targetRef="Decompress_Submit"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_A031">
+    <bpmndi:BPMNPlane bpmnElement="A031" id="BPMNPlane_A031">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="505.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Decompress_Submit" id="BPMNShape_Decompress_Submit">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Decompress_Confirm" id="BPMNShape_Decompress_Confirm">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="505.0" y="500.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="522.0" y="195.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="320.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="530.0" y="239.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="522.0" y="375.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="500.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="530.0" y="439.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="470.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="229.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="229.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="470.0" y="167.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="241.0" y="253.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="522.0" y="55.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="140.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <dubbo:reference id="iCustomerBizService" interface="com.fuze.bcp.api.customer.service.ICustomerBizService"/>
+    <dubbo:reference id="iBaseDataBizService" interface="com.fuze.bcp.api.bd.service.IBaseDataBizService"/>
+    <dubbo:reference id="iAmqpBizService" interface="com.fuze.bcp.api.mq.service.IAmqpBizService"/>
+    <dubbo:reference id="iCarTypeBizService" interface="com.fuze.bcp.api.bd.service.ICarTypeBizService"/>
+    <dubbo:reference id="iAuthenticationBizService"
+                     interface="com.fuze.bcp.api.auth.service.IAuthenticationBizService"/>
+    <dubbo:reference id="iCustomerImageTypeBizService"
+                     interface="com.fuze.bcp.api.bd.service.ICustomerImageTypeBizService"/>
+    <dubbo:reference id="iWorkflowBizService" interface="com.fuze.bcp.api.workflow.service.IWorkflowBizService"/>
+    <dubbo:reference id="iParamBizService" interface="com.fuze.bcp.api.sys.service.IParamBizService"/>
+    <dubbo:reference id="iOrgBizService" interface="com.fuze.bcp.api.bd.service.IOrgBizService"/>
+    <dubbo:reference id="iFileBizService" interface="com.fuze.bcp.api.file.service.IFileBizService"/>
+    <dubbo:reference id="iCarDealerBizService" interface="com.fuze.bcp.api.cardealer.service.ICarDealerBizService"/>
+    <dubbo:reference id="iProductBizService" interface="com.fuze.bcp.api.bd.service.IProductBizService"/>
+    <dubbo:reference id="iDroolsBizService" interface="com.fuze.bcp.api.drools.service.IDroolsBizService"/>
+    <dubbo:reference id="iCashSourceBizService" interface="com.fuze.bcp.api.bd.service.ICashSourceBizService"/>
+    <dubbo:reference id="iTemplateBizService" interface="com.fuze.bcp.api.file.service.ITemplateBizService"/>
+    <dubbo:reference id="iBankSettlementStandardBizService" interface="com.fuze.bcp.api.bd.service.IBankSettlementStandardBizService"/>
+    <dubbo:reference id="iBusinessBookBizService" interface="com.fuze.bcp.api.creditcar.service.IBusinessBookBizService"/>
+    <dubbo:reference id="iMessageBizService" interface="com.fuze.bcp.api.msg.service.IMessageBizService"/>
+    <dubbo:reference id="iQuestionBizService" interface="com.fuze.bcp.api.customer.service.IQuestionBizService"/>
+    <dubbo:reference id="iQuestionCategoryBizService" interface="com.fuze.bcp.api.customer.service.IQuestionCategoryBizService"/>
+    <dubbo:reference id="iCustomerTransactionBizService" interface="com.fuze.bcp.api.transaction.service.ICustomerTransactionBizService"/>
+
+</beans>

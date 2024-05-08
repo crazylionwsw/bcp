@@ -1,0 +1,169 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤:请输入业务类型" ng-model="key">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                                <a role="button" class="btn btn-sm btn-success"  ng-click="showQuery()">查询</a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                订阅人
+                            </th>
+                            <th>
+                                业务事件类型
+                            </th>
+                            <th>
+                                发送渠道
+                            </th>
+                            <th>
+                                状态
+                            </th>
+
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="msgsubscribe in msgsubscribes|filter:{businessType:key}" ng-class="{true:'danger'}[msgsubscribe.dataStatus == 9]">
+                                <td>
+                                    <subsribesource-list ids="msgsubscribe.subScribeSourceIds"></subsribesource-list>
+                                </td>
+                                <td class="text-info">{{msgsubscribe.businessType}}(<msgsubscribe-info businesstype="msgsubscribe.businessType"></msgsubscribe-info>)</td>
+                                <td>
+                                    <span ng-repeat="userChanne in msgsubscribe.userChannel">
+                                                    {{userChanne|channelFilter}},
+                                    </span>
+                                </td>
+                                <td>{{msgsubscribe.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(msgsubscribe)" ng-show="msgsubscribe.dataStatus != 9 && msgsubscribe.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-if="msgsubscribe.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(msgsubscribe, $index)" ng-show="msgsubscribe.dataStatus == 9 && msgsubscribe.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(msgsubscribe, $index)" ng-show="msgsubscribe.dataStatus != 9 && msgsubscribe.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(msgsubscribe, $index)" ng-show="msgsubscribe.dataStatus == 9 && msgsubscribe.id != null ">
+                                                    删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------添加编辑页面------>
+<script type="text/ng-template" id="subForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="msgsubscribe.id">
+
+                <div class="form-group" ng-hide="visible">
+                    <label>订阅类型</label>
+                    <ui-select  ng-model="msgsubscribe.scribeType" theme="bootstrap" on-select="selectType($item)">
+                        <ui-select-match placeholder="请选择订阅类型" >{{$select.selected.type}}</ui-select-match>
+                        <ui-select-choices  repeat="scb.id as scb in scribeTypes | filter: $select.search">
+                            <div ng-bind-html="scb.type | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="form-group" ng-show="roleShow">
+                    <label>订阅角色</label>
+                    <ui-select  ng-model="role" theme="bootstrap" on-select="selectRole($item)">
+                        <ui-select-match placeholder="请选择订阅角色" >{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices  repeat="rtype.id as rtype in roleTypes | filter: $select.search">
+                            <div ng-bind-html="rtype.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="form-group" ng-hide="visible">
+                    <label>订阅人</label>
+                    <ui-select multiple sortable="true" ng-model="msgsubscribe.subScribeSourceIds" theme="bootstrap">
+                        <ui-select-match placeholder="请选择订阅人" >{{$item.username}}</ui-select-match>
+                        <ui-select-choices  repeat="subman.id as subman in submans | filter: $select.search">
+                            <div ng-bind-html="subman.username | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="form-group">
+                    <label>业务事件类型</label>
+                    <ui-select  ng-model="msgsubscribe.businessType" theme="bootstrap" on-select="selectChannel($item, $model)">
+                        <ui-select-match placeholder="请选择业务事件类型" >{{$select.selected.comment}}({{$select.selected.eventTypeCode}})</ui-select-match>
+                        <ui-select-choices  repeat="desctype.eventTypeCode as desctype in descTypes | filter: $select.search">
+                            <div ng-bind-html="desctype.comment | highlight: $select.search"></div>
+                            <div ng-bind-html="desctype.eventTypeCode | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="form-group">
+                    <label>发送渠道</label>
+                    <ui-select multiple sortable="true" ng-model="msgsubscribe.userChannel" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match placeholder="请选择发送渠道" >{{$item.label}}</ui-select-match>
+                        <ui-select-choices  repeat="sendtype.code as sendtype in sendTypes | filter: $select.search">
+                            <div ng-bind-html="sendtype.label | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+<!--查询页面-->
+<script type="text/ng-template" id="query.html">
+    <msgsubscribe-query-form search="searchFilter" query="queryBill(searchFilter)" clear="clearQuery()" sendtypes="sendTypes" desctypes="descTypes"></msgsubscribe-query-form>
+</script>

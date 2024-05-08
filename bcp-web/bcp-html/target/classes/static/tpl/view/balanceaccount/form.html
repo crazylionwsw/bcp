@@ -1,0 +1,161 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="wrapper row m-n">
+                            <div class="">
+                                <div class="panel-heading">
+                                    <span class="h2">{{balanceaccount.year}}-{{balanceaccount.month}}月的订单</span>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <span class="h4">本月结费汇总</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-lg-12">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-3">
+                                                            <label>借款合计</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{balanceaccount.totalCredit | currency:'￥'}}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>结算费用合计</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{balanceaccount.totalPaymentAmount | currency:'￥'}}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>结算状态</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{balanceaccount.checkStatus | AccountFilter}}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>操作日期</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{balanceaccount.checkDate  | date:'yyyy-MM-dd'}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-3">
+                                                            <label>操作员</label>
+                                                            <p class="form-control-static b-b">
+                                                                <loginuser-info id="balanceaccount.loginUserId"></loginuser-info>
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>操作人</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{balanceaccount.checkUserId}}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>结算人</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{balanceaccount.settleUserId }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default" >
+                                    <div class="panel-heading">
+                                        <span class="h4">结费明细单</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <table class="table table-striped b-t b-light m-b-none">
+                                                <thead>
+                                                    <th class="text-center">
+                                                        客户
+                                                    </th>
+                                                    <th class="text-center">
+                                                        渠道
+                                                    </th>
+                                                    <th class="text-center">
+                                                        刷卡金额
+                                                    </th>
+                                                    <th class="text-center">
+                                                        刷卡日期
+                                                    </th>
+                                                    <th class="text-center">
+                                                        业务类型
+                                                    </th>
+                                                    <th class="text-center">
+                                                        手续费缴纳方式
+                                                    </th>
+                                                    <th class="text-center">
+                                                        借款金额
+                                                    </th>
+                                                    <th class="text-center">
+                                                        借款期限
+                                                    </th>
+                                                    <th class="text-center">
+                                                        银行手续费金额
+                                                    </th>
+                                                    <th class="text-center">
+                                                        银行手续费率
+                                                    </th>
+                                                    <th class="text-center">
+                                                        结算费用金额
+                                                    </th>
+                                                    <th class="text-center">
+                                                        操作
+                                                    </th>
+                                                </thead>
+                                                <tbody ng-repeat="balanceaccountdetail in balanceaccountdetails" >
+                                                    <tr>
+                                                        <td class="text-center"><customer-info id="balanceaccountdetail.customerId"></customer-info></td>
+                                                        <td class="text-center"><transaction-cardealer-info transactionid="balanceaccountdetail.customerTransactionId"></transaction-cardealer-info></td>
+                                                        <td class="text-right">{{balanceaccountdetail.swingAmount |  currency:'￥'}}</td>
+                                                        <td class="text-center">{{balanceaccountdetail.swingCardDate | date:'yyyy-MM-dd'}}</td>
+                                                        <td class="text-center">{{balanceaccountdetail.businessTypeCode  | NoFilter}}</td>
+                                                        <td class="text-center">{{balanceaccountdetail.chargePaymentWay | chargePaymentWayFilter}}</td>
+                                                        <td class="text-right">{{balanceaccountdetail.creditAmount |  currency:'￥'}}</td>
+                                                        <td class="text-center">{{balanceaccountdetail.creditMonths}}</td>
+                                                        <td class="text-right">{{balanceaccountdetail.chargeFee | currency:'￥'}}</td>
+                                                        <td class="text-center">{{balanceaccountdetail.chargeFeeRatio *100}}%</td>
+                                                        <td class="text-right">{{balanceaccountdetail.checkFee |  currency:'￥'}}</td>
+                                                        <td class="text-right"><div class="btn-group dropdown" dropdown>
+                                                            <button class="btn btn-success btn-xs" dropdown-toggle>操作<span class="caret"></span></button>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a class="blue" ng-click="toOrder(balanceaccountdetail)" ng-show="true" href>签约信息</a></li>
+                                                                <li><a class="blue" ng-click="toPayment(balanceaccountdetail,$index)" ng-show="true" href>垫资信息</a></li>
+                                                                <li><a class="blue" ng-click="toBankCard(balanceaccountdetail,$index)" ng-show="true" href>卡业务信息</a></li>
+                                                                <!--<li><a href>业务检查</a></li>-->
+                                                                <!--<li class="divider"></li>-->
+                                                                <!--<li><a href>卡业务状态</a></li>-->
+                                                                <!--<li><a href>还款计划表</a></li>-->
+                                                            </ul>
+                                                        </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+
+                        </div><!--弹出层页面foot-->
+                    </div>
+                </div>
+                    <div class="wrapper-sm b-t b-light text-right">
+                        <button class="btn btn-primary" type="button" ui-sref="app.business.balanceaccount">返回</button>
+                    </div>
+             </div>
+         </div>
+     </div>
+</div>

@@ -1,0 +1,112 @@
+<div class="hbox hbox-auto-xs bg-light">
+    <!-- column -->
+    <div class="col w-lg b-r">
+        <div class="vbox">
+            <div class="wrapper b-b">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="wrapper-xs">
+                            <abn-tree
+                                    tree-data         = "sysresources"
+                                    tree-control      = "sysresourceTree"
+                                    on-select         = "selectSysResource(branch)"
+                                    expand-level      = "2"
+                                    initial-selection = "Granny Smith"
+                                    icon-leaf         = "fa fa-file-o"
+                                    icon-expand       = "fa fa-plus"
+                                    icon-collapse     = "fa fa-minus"
+                            >
+                            </abn-tree>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-sm b-t text-center">
+                <a role="button" class="btn btn-sm btn-default" data-toggle="modal" ng-click="edit('')"><i class="ace-icon fa fa-plus bigger-130" ></i></a>
+                <a role="button" ng-show="selectedSysResource" class="btn btn-sm btn-default" data-toggle="modal"  ng-click="remove(sysresource,$index)"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- /column -->
+
+    <div class="col lter">
+        <div class="vbox">
+            <div class="wrapper b-b b-light lt">
+                <div class="font-thin h4">{{formTitle}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="wrapper-md">
+                            <form name="userForm" class="form-validation">
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-12 checkbox">
+                                        <label class="i-checks">
+                                            <input type="checkbox" ng-model="sysresource.isVirtual">
+                                            <i></i>
+                                            是否虚拟功能节点
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-6">
+                                        <label>功能编码</label>
+                                        <input class="form-control"  ng-model="sysresource.code"
+                                               ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                                               ng-pattern="/^[0-9]{5,}$/"
+                                               placeholder="请输入功能编码" type="text" required name="code" ng-readonly="onlyread"/>
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">功能编码是必须的!</span>
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">功能编码不能重复！</span>
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">功能编码为数字且大于等于五位，如00007！</span>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>功能名称</label>
+                                        <input class="form-control" ng-model="sysresource.name"
+                                               ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                                               placeholder="请输入功能名称"  type="text" required name="name" ng-readonly="onlyread"/>
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">功能名称是必须的!</span>
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">功能名称不能重复！</span>
+                                    </div>
+                                </div>
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-6">
+                                        <label>操作编码</label>
+                                        <input class="form-control" ng-model="sysresource.operationCode" placeholder="请输入操作编码"  type="text" required ng-readonly="onlyread"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>操作名称</label>
+                                        <input class="form-control"  ng-model="sysresource.operationName" placeholder="请输入操作名称" type="text" required ng-readonly="onlyread"/>
+                                    </div>
+                                </div>
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-6">
+                                        <label>数据访问URL</label>
+                                        <input class="form-control" ng-model="sysresource.dataurl" placeholder="请输入数据访问URL"  type="text" ng-readonly="onlyread"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>界面访问URL</label>
+                                        <input class="form-control" ng-model="sysresource.url" placeholder="请输入界面访问URL" type="text" ng-readonly="onlyread"/>
+                                    </div>
+                                </div>
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-12">
+                                        <label>操作说明</label>
+                                        <textarea class="form-control " placeholder="请输入操作说明" ng-model="sysresource.comment"  ng-readonly="onlyread"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-sm b-t b-light text-right lt">
+                <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid || saved" ng-click="save()" ng-show="sysresource.dataStatus != 9">保  存</button>
+                <button class="btn btn-success" type="button" ng-click="renew(sysresource,$index)" ng-show="sysresource.dataStatus == 9 && sysresource.id != null">恢 复</button>
+            </div>
+        </div>
+    </div>
+
+</div>

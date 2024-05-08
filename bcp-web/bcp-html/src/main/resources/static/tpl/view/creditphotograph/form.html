@@ -1,0 +1,32 @@
+<div class="hbox hbox-auto-xs bg-light ">
+	<div class="bg-light lter b-b wrapper-md">
+		<h1 class="m-n font-thin h3">{{formTitle}}</h1>
+	</div>
+	<div class="wrapper-md">
+
+		<div class="row">
+			<div class="col-lg-9">
+
+				<div class="panel panel-default">
+					<div class="panel-heading"><span class="h4">客户信息</span></div>
+					<div class="panel-body">
+						<customer-block id="creditphotograph.customerId"></customer-block>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span class="h4">相关资料</span>
+					</div>
+					<div class="panel-body">
+						<creditphotographimage-block ng-if="creditphotograph !== null" bill="creditphotograph"></creditphotographimage-block>
+					</div>
+				</div>
+				<footer class="text-right">
+					<button class="btn btn-warning" type="button" ui-sref="app.business.creditphotograph">返 回</button>
+				</footer>
+			</div>
+		</div>
+
+	</div>
+</div>

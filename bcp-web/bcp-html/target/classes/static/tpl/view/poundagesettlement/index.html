@@ -1,0 +1,227 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell" style="overflow-x: hidden;overflow-y: auto">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <accordion close-others="oneAtATime">
+                                <accordion-group is-open="!status.open" class="b-info">
+                                    <accordion-heading>
+                                        <i class="pull-right fa fa-angle-right" style="vertical-align:middle;line-height:50%" ng-class="{'fa-angle-down': !status.open, 'fa-angle-right': status.open}"></i>
+                                    </accordion-heading>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-4">
+                                                    <label>姓名 </label>
+                                                    <input class="form-control"
+                                                           placeholder="请输入客户姓名" ng-model="customerQuery.userName"
+                                                           ng-change="updateQueryString()"
+                                                           type="text">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label>报单支行</label>
+                                                    <ui-select ng-model="poundagesettlementQuery.declarationCashSourceId" theme="bootstrap" ng-disabled="false" ng-change="updateQueryString()">
+                                                        <ui-select-match placeholder="请选择报单支行" >{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices  repeat="cashSource.id as cashSource in declarationCashSources">
+                                                            <div ng-bind-html="cashSource.name"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label>渠道支行</label>
+                                                    <ui-select ng-model="poundagesettlementQuery.channelCashSourceId" theme="bootstrap" ng-disabled="false" ng-change="updateQueryString()">
+                                                        <ui-select-match placeholder="请选择渠道合作支行" >{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices  repeat="cashSource.id as cashSource in cashSources">
+                                                            <div style="padding-left:{{cashSource.depth*10}}px" ng-bind-html="cashSource.name"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-4">
+                                                    <label class="control-label">手续费缴纳方式</label>
+                                                    <ui-select ng-model="poundagesettlementQuery.chargePaymentWayCode" name="chargePaymentWayCode" theme="bootstrap" ng-disabled="disabled" ng-change="updateQueryString()">
+                                                        <ui-select-match  placeholder="请选择客户的手续费缴纳方式" >{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="bankChargePaymentWay.code as bankChargePaymentWay in bankChargePaymentWays | filter: $select.search">
+                                                            <div ng-bind-html="bankChargePaymentWay.name"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label>开始时间</label>
+                                                    <div class="input-group" moment-picker="poundagesettlementQuery.startTime" format="YYYY-MM-DD"
+                                                         locale="zh-cn" selectable="true">
+                                                        <input type="text" class="form-control"
+                                                               ng-model="poundagesettlementQuery.startTime"
+                                                               ng-model-options="{ updateOn: 'blur' }"/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label>结束时间</label>
+                                                    <div class="input-group" moment-picker="poundagesettlementQuery.endTime" format="YYYY-MM-DD"
+                                                         locale="zh-cn" selectable="true">
+                                                        <input type="text" class="form-control"
+                                                               ng-model="poundagesettlementQuery.endTime"
+                                                               ng-model-options="{ updateOn: 'blur' }"/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 m-b-xs text-right">
+                                                <a role="button" class="btn btn-sm btn-primary"  ng-click="changePage(1)">查询</a>
+                                            </div>
+                                            <div class="col-sm-4 m-b-xs text-right">
+                                                <a role="button" class="btn btn-sm btn-success"  ng-click="clearPoundageSettlement()">清除</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </accordion-group>
+                            </accordion>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                序号
+                                            </th>
+                                            <th>
+                                                客户姓名【身份证】
+                                            </th>
+                                            <th>
+                                                经销商名称
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height:40px" ng-repeat="poundagesettlement in poundagesettlements|filter:query"  ng-class="{0:'warning',1: 'success', 8: 'error', 9: 'danger'}[poundagesettlement.dataStatus]">
+                                            <td>{{$index+1}}</td>
+                                            <td><customer-info id="poundagesettlement.customerId"></customer-info></td>
+                                            <td><cardealer-info ng-if="poundagesettlement.customerTransactionId !== undefined" id="poundagesettlement.customerTransactionId"></cardealer-info></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td class="text-center">本页合计：</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-7" style="margin-left:130px;overflow: scroll;overflow-y: hidden;">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                贷款金额（元）
+                                            </th>
+                                            <th>
+                                                贷款期数（月）
+                                            </th>
+                                            <th>
+                                                手续费（元）
+                                            </th>
+                                            <th>
+                                                手续费交纳方式
+                                            </th>
+                                            <th>
+                                                代码行
+                                            </th>
+                                            <th >
+                                                报单行
+                                            </th>
+                                            <th >
+                                                渠道行
+                                            </th>
+                                            <th>
+                                                订单日期
+                                            </th>
+                                            <th>
+                                                生效状态
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height:40px" ng-repeat="poundagesettlement in poundagesettlements|filter:query"  ng-class="{0:'warning',1: 'success', 8: 'error', 9: 'danger'}[poundagesettlement.dataStatus]">
+                                            <td class="text-right">{{poundagesettlement.limitAmount |currency:'￥'}}</td>
+                                            <td>{{poundagesettlement.creditMonths || "" }}</td>
+                                            <td class="text-right">{{poundagesettlement.poundage | currency:'￥' }}</td>
+                                            <td>{{poundagesettlement.chargePaymentWayCode |chargePaymentWayFilter }}</td>
+                                            <td><cashsource-info ng-if="poundagesettlement.settlementCashSourceId" id="poundagesettlement.settlementCashSourceId"></cashsource-info></td>
+                                            <td><cashsource-info ng-if="poundagesettlement.declarationCashSourceId" id="poundagesettlement.declarationCashSourceId"></cashsource-info></td>
+                                            <td><cashsource-info ng-if="poundagesettlement.channelCashSourceId" id="poundagesettlement.channelCashSourceId"></cashsource-info></td>
+                                            <td>{{poundagesettlement.orderTime |momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                            <td>{{poundagesettlement.effectStatus | zeroone}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">{{creditAmountTotal | currency:"￥"}}</td>
+                                            <td></td>
+                                            <td class="text-right">{{chargeTotal | currency:"￥"}}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-1" style="margin-left:-30px;">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <tr class="bg-white">
+                                            <th>
+                                                操作
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height:40px" class="bg-white" ng-repeat="poundagesettlement in poundagesettlements|filter:query"  ng-class="{0:'warning',1: 'success', 8: 'error', 9: 'danger'}[poundagesettlement.dataStatus]">
+                                            <td>
+                                                <div class="btn-group dropdown" dropdown>
+                                                    <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-class="{'text-success': poundagesettlement.selected}" ng-click="refresh(poundagesettlement, $index)" data-toggle="modal">
+                                                                刷新
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

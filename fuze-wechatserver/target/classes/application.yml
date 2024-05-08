@@ -1,0 +1,59 @@
+spring:
+  cache:
+    type: redis
+  logging:
+    config: src/main/resources/logback.xml
+  application:
+    name: FUZE WeXin Public And Enterpeise Application
+  profiles:
+    active: dev
+  data:
+    mongodb:
+      database: bcp_dev
+      uri: mongodb://mongodev:FuzefenqiDev11@192.168.1.140:27017/admin
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
+    password: 123456
+    pool:
+      max-idle: 16
+      max-total: 32
+      max-wait-millis : 100000
+    timeout: 10000
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 200MB
+  rabbitmq:
+    host: 192.168.1.147
+    port: 5672
+    username: guest
+    password: guest
+    exchange: fuze-exchange
+    routingKey-b: business-routingKey
+    routingKey-l: log-routingKey
+    routingKey-m: message-routingKey
+server:
+    port: 443
+    tomcat:
+      uri-encoding: UTF-8
+fuze:
+  wechat:
+    # 微信企业号配置
+    enterprise:
+      agentid: 1000006
+      secret: SjU04PzhJEkqWBtw_-POUPyiBRs2M_dI-0gOqz_9yWk
+      secretW: UDFucBQyTOL2VhC-l0UAmGupVAEyS1scf0TIJbQjnZs
+      corpid: wwce3beff4c92222e9
+    # 微信公众号配置
+    public:
+      appid: wxfb808481d48d11ac
+      secret: 024053f60543d500740a1b56ab8f6def
+    # 微信公众平台信任域名
+    believeIp: test.fuzefenqi.com

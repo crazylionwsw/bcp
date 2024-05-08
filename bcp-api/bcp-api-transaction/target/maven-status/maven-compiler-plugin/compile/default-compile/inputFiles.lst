@@ -1,0 +1,6 @@
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-transaction/src/main/java/com/fuze/bcp/api/transaction/service/ICustomerTransactionBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-transaction/src/main/java/com/fuze/bcp/api/transaction/bean/CustomerTransactionBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-transaction/src/main/java/com/fuze/bcp/api/transaction/SerializationOptimizerImpl.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-transaction/src/main/java/com/fuze/bcp/api/transaction/bean/TransactionStageBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-transaction/src/main/java/com/fuze/bcp/api/transaction/bean/TransactionSummaryBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-transaction/src/main/java/com/fuze/bcp/api/transaction/bean/PadCustomerTransactionBean.java

@@ -1,0 +1,179 @@
+<div class="hbox hbox-auto-xs bg-light ">
+	<div class="bg-light lter b-b wrapper-md">
+		<h1 class="m-n font-thin h3">{{formTitle}}--{{cardemand.businessType.name}}</h1>
+	</div>
+	<div class="wrapper-md">
+		<div class="row">
+			<div class="col-lg-9">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span class="h4">客户来源</span>
+					</div>
+					<div class="panel-body">
+						<cardealer-block ng-if="cardemand.carDealerId != undefined" id="cardemand.carDealerId"></cardealer-block>
+					</div>
+				</div>
+
+				<div class="panel panel-primary">
+					<div class="panel-heading"><span class="h4">贷款主体</span></div>
+					<div class="panel-body">
+						<customer-block id="cardemand.creditMasterId"></customer-block>
+						<div class="form-group pull-in clearfix">
+							<div class="col-sm-4">
+								<a class="icon-link text-info" target="_blank" href="https://www.so.com/s?ie=utf-8&src=hao_360so_suggest&shb=1&hsid=d17deaa98d22973d&q=%E5%A4%B1%E4%BF%A1%E5%90%8D%E5%8D%95"> 法院失信被执行人查询</a>
+							</div>
+							<div class="col-sm-4">
+								<a class="icon-link text-info" target="_blank" href="javascript:void(0)"> 黑名单查询</a>
+							</div>
+							<div class="col-sm-4">
+								<a class="icon-link text-info" target="_blank" href="http://zhixing.court.gov.cn/search/"> 法院被执行人信息查询</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default" ng-show="cardemand.mateCustomer!=null">
+					<div class="panel-heading"><span class="h4">配偶信息</span></div>
+					<div class="panel-body">
+						<customer-block id="cardemand.mateCustomerId"></customer-block>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading"><span class="h4">指标人</span> - {{cardemand.relation|relationFilter}}</div>
+					<div class="panel-body">
+						<customer-block id="cardemand.pledgeCustomerId"></customer-block>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading"><span class="h4">购车预算</span></div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="form-group pull-in clearfix">
+									<div class="col-sm-6">
+										<label>首付金额（元）</label>
+										<p class="form-control-static b-b">{{cardemand.downPayment|currency:'￥'}}</p>
+									</div>
+									<div class="col-sm-6">
+										<label>首付比例（%）</label>
+										<p class="form-control-static b-b">{{cardemand.downParmentRatio}}%</p>
+									</div>
+								</div>
+
+								<div class="form-group pull-in clearfix">
+									<div class="col-sm-6">
+										<label>贷款额度（元）</label>
+										<p class="form-control-static b-b">{{cardemand.creditAmount|currency:'￥'}}</p>
+									</div>
+									<div class="col-sm-6">
+										<label>贷款比例（%）</label>
+										<p class="form-control-static b-b">{{cardemand.creditRatio}}%</p>
+									</div>
+								</div>
+
+								<div class="form-group pull-in clearfix">
+									<div class="col-sm-6">
+										<label>贷款期限（月）</label>
+										<p class="form-control-static b-b">{{cardemand.months}}个月</p>
+									</div>
+									<div class="col-sm-6">
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading"><span class="h4">拟购车型</span></div>
+					<ul class="list-group">
+						<li class="list-group-item" ng-repeat="selectCar in cardemand.selectCars">
+							<cartype-block ng-if="selectCar !== undefined" selectcar="selectCar"></cartype-block>
+						</li>
+
+					</ul>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading"><span class="h4">档案资料</span></div>
+					<div class="panel-body">
+						<customerimage-block ng-if="cardemand !== null" canAudit="true" bill="cardemand" save="save(bill)"></customerimage-block>
+					</div>
+				</div>
+				<div class="panel panel-default" ng-if="cardemand.billType.documentIds.length > 0">
+					<div class="panel-heading">
+						<span class="h4">文档信息</span>
+					</div>
+
+					<business-contract-block ng-if="cardemand !== null" bill="cardemand"></business-contract-block>
+
+				</div>
+
+
+
+				<footer class="text-right">
+					<button class="btn btn-primary" type="button" ng-click="comment()">特殊情况说明</button>
+					<button class="btn btn-success" type="button" ng-click="customercheck(cardemand)">客户核对</button>
+					<button class="btn btn-primary" type="button" can-audit="cardemand" ng-click="audit()">审 核</button>
+					<button class="btn btn-warning" type="button" ui-sref="app.business.cardemand">返 回</button>
+				</footer>
+			</div>
+
+			<div class="col-lg-3">
+
+				<!--显示特殊情况信息-->
+				<div class="m-b-md clearfix" ng-show="cardemand.comment!=null">
+					<div class="m-b text-md">特殊情况说明</div>
+					<div class="panel b-a">
+						<div class="panel-heading pos-rlt">
+							<span class="arrow top pull-left"></span>
+							{{cardemand.comment}}
+						</div>
+					</div>
+				</div>
+
+				<!--当前业务分期经理 -->
+				<div class="m-b-md clearfix">
+					<div class="m-b text-md">当前业务分期经理</div>
+					<div class="panel b-a">
+						<div class="panel-heading pos-rlt bg-info">
+							<span class="arrow top pull-left arrow-info"></span>
+							<employee-info ng-if="cardemand.employeeId !== undefined" id="cardemand.employeeId"></employee-info>
+						</div>
+					</div>
+				</div>
+
+				<!--显示订单的签批信息-->
+				<div class="m-b-md clearfix" ng-show="cardemand.signInfos != null">
+					<signinfo-list signinfos="cardemand.signInfos"></signinfo-list>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+<!------签批对话框------>
+<script type="text/ng-template" id="audit.html">
+	<signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="commentForm.html">
+	<div class="panel panel-default m-b-none">
+		<div class="panel-heading">
+			<span class="h4">{{modalTitle}}</span>
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<textarea class="form-control" rows="6" placeholder="输入特殊情况说明" ng-model="cardemand.comment"></textarea>
+			</div>
+		</div>
+		<footer class="panel-footer text-right bg-light lter">
+			<button class="btn btn-primary" type="button"  ng-click="save()">保 存</button>
+			<button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+		</footer>
+	</div>
+</script>

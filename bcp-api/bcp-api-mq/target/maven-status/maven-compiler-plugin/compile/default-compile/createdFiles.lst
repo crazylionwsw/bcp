@@ -1,0 +1,8 @@
+com/fuze/bcp/api/mq/bean/DynamicDescribeBean.class
+com/fuze/bcp/api/mq/bean/TaskDescribeBean.class
+com/fuze/bcp/api/mq/bean/TaskRecordBean.class
+com/fuze/bcp/api/mq/bean/MsgRecordBean.class
+com/fuze/bcp/api/mq/bean/BusinessLogBean.class
+com/fuze/bcp/api/mq/bean/TaskDescribeLookupBean.class
+com/fuze/bcp/api/mq/service/IAmqpBizService.class
+com/fuze/bcp/api/mq/SerializationOptimizerImpl.class

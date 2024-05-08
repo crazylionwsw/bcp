@@ -1,0 +1,623 @@
+<div class="hbox hbox-auto-xs bg-light">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <accordion close-others="oneAtATime">
+                                <accordion-group is-open="status.open" class="b-info">
+                                    <accordion-heading>
+                                        <i class="pull-right fa fa-angle-right" style="vertical-align:middle;line-height:50%" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i>
+                                    </accordion-heading>
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-2 m-b-xs ">
+                                            <label>姓名</label>
+                                            <input class="form-control" placeholder="请输入客户姓名" ng-model="customerQuery.name" type="text">
+                                        </div>
+                                        <div class="col-sm-2 m-b-xs ">
+                                            <label class="control-label">客户类别</label>
+                                            <ui-select ng-model="declarationQuery.customerClass" name="customerClass" theme="bootstrap" ng-disabled="disabled">
+                                                <ui-select-match  placeholder="请选择客户类别" >{{$select.selected.name}}</ui-select-match>
+                                                <ui-select-choices repeat="customerclass.code as customerclass in customerclasses | filter: $select.search">
+                                                    <div ng-bind-html="customerclass.name"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                        <div class="col-sm-2  m-b-xs">
+                                            <label class="control-label">报批状态</label>
+                                            <select class="form-control"  ng-model="declarationQuery.status" required>
+                                                <option value="-1" disabled>请选择报批状态</option>
+                                                <option value="0">未报批</option>
+                                                <option value="4">报批中</option>
+                                                <option value="1">报批通过</option>
+                                                <option value="2">报批拒绝</option>
+                                                <option value="3">报批调整</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-2  m-b-xs">
+                                            <label>报批时间</label>
+                                            <div class="input-group" moment-picker="declarationQuery.ts" format="YYYY-MM-DD"
+                                                 locale="zh-cn" selectable="true">
+                                                <input type="text" class="form-control"
+                                                   ng-model="declarationQuery.ts" placeholder="请输入报批时间"
+                                                   ng-model-options="{ updateOn: 'blur' }"/>
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 m-b-xs text-right">
+                                            <a role="button" class="btn btn-sm btn-primary"  ng-click="searchDeclaration(customerQuery,declarationQuery)">查询</a>
+                                        </div>
+                                        <div class="col-sm-4 m-b-xs text-right">
+                                            <a role="button" class="btn btn-sm btn-success"  ng-click="clearDeclaration()">清除</a>
+                                        </div>
+                                    </div>
+                                </accordion-group>
+                            </accordion>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none" data-filter="#filter" >
+                            <thead>
+                                <tr>
+                                    <th>
+                                        序号
+                                    </th>
+                                    <th>
+                                        报单支行
+                                    </th>
+                                    <th>
+                                        渠道支行
+                                    </th>
+                                    <th>
+                                        业务类型
+                                    </th>
+                                    <th>
+                                        客户姓名【身份证号码】
+                                    </th>
+                                    <th>
+                                        分期经理【手机号码】
+                                    </th>
+                                    <th >
+                                        客户分类
+                                    </th>
+                                    <th>
+                                        报批状态
+                                    </th>
+                                    <th >
+                                        报批时间
+                                    </th>
+                                    <th>
+                                        操作
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="declaration in declarations" ng-class="{1: 'success', 3: 'warning', 2: 'danger'}[declaration.status]">
+                                    <td>{{$index+1}}</td>
+                                    <td><transaction-cashsource-info ng-if="declaration.transaction !== undefined" transaction="declaration.transaction"></transaction-cashsource-info></td>
+                                    <td><transaction-cardealer-cooperationcashsource-info ng-if="declaration.transaction !== undefined" transaction="declaration.transaction"></transaction-cardealer-cooperationcashsource-info></td>
+                                    <td>{{declaration.businessTypeCode | BusinessTypeFilter}}</td>
+                                    <td><customer-info id="declaration.customerId"></customer-info></td>
+                                    <td><employee-info ng-if="declaration.employeeId !== undefined" id="declaration.employeeId"></employee-info></td>
+                                    <td>
+                                        <span  ng-if="declaration.customerClass == null">未分类</span>
+                                        <span  ng-if="declaration.customerClass !== null">{{declaration.customerClass | customerClassFilter}}类</span>
+                                    </td>
+                                    <td><approve-status ng-if="declaration.status != null && declaration.transaction != undefined" transaction="declaration.transaction" status="declaration.status" billtypecode="declaration.billTypeCode"></approve-status></td>
+                                    <td>{{declaration.ts|momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    <td>
+                                        <div class="btn-group dropdown" dropdown>
+                                            <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a ng-class="{'text-success': declaration.selected}" ng-click="edit(declaration, $index)" data-toggle="modal">
+                                                        编辑
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light">
+                    <div class="panel-body">
+                        <div class="col-sm-2 text-info">
+                            <h1 class="m-n font-thin h3">银行报批--{{declaration.businessTypeCode |BusinessTypeFilter}}</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-sm-3 control-label"><h4>客户类别</h4></label>
+                            <div class="col-sm-9">
+                                <ui-select ng-model="declaration.customerClass" name="customerClass" theme="bootstrap" ng-disabled="disabled" on-select="customerClass(declaration,$item)">
+                                    <ui-select-match  placeholder="请选择客户类别" >{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="customerclass.code as customerclass in customerclasses | filter: $select.search">
+                                        <div ng-bind-html="customerclass.name"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="wrapper row m-n">
+                                <div class="col-lg-9">
+                                    <!--基本信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">申请人</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-block id="declaration.customerId"></customer-block>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default" ng-if="declaration.cardemand.mateCustomerId !== null">
+                                        <div class="panel-heading">
+                                            <span class="pull-right">
+                                                <div class="checkbox">
+                                                    模板是否需要展示：
+                                                    <label class="i-checks">
+                                                        <input type="checkbox" ng-model="declaration.needCommon" name="needCommon" value="false"><i></i>
+                                                    </label>
+                                                </div>
+                                            </span>
+                                            <span class="h4">共同申请人</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-3">
+                                                            <label>姓名</label>
+                                                            <p class="form-control-static b-b">{{declaration.cardemand.mateCustomer.name }}</p>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label>身份证号</label>
+                                                            <p class="form-control-static b-b">{{declaration.cardemand.mateCustomer.identifyNo }}</p>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label>单位</label>
+                                                            <p class="form-control-static b-b">
+                                                                <a href="#" editable-text="declaration.cardemand.mateCustomer.customerJob.companyName" e-label="" onaftersave="updateMateCustomer(declaration.cardemand.mateCustomer)">{{declaration.cardemand.mateCustomer.customerJob.companyName ||"未录入"}}</a>
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label>职务</label>
+                                                            <p class="form-control-static b-b">
+                                                                <a href="#" editable-text="declaration.cardemand.mateCustomer.customerJob.job" e-label="" onaftersave="updateMateCustomer(declaration.cardemand.mateCustomer)">{{declaration.cardemand.mateCustomer.customerJob.job ||"未录入"}}</a>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default" ng-if="declaration.cardemand.pledgeCustomerId !== null">
+                                        <div class="panel-heading">
+                                            <span class="h4">抵押人</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-3">
+                                                            <label>姓名</label>
+                                                            <p class="form-control-static b-b">{{declaration.cardemand.pledgeCustomer.name }}</p>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label>身份证号</label>
+                                                            <p class="form-control-static b-b">{{declaration.cardemand.pledgeCustomer.identifyNo }}</p>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label>与申请人关系</label>
+                                                            <p class="form-control-static b-b">{{declaration.cardemand.relation |relationFilter}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">购买车辆信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-car ng-if="declaration.order.customerCarId !== undefined" transactionid="declaration.customerTransactionId"  id="declaration.order.customerCarId" billtypecode="declaration.billTypeCode" businesstypecode="declaration.businessTypeCode"></customer-car>
+                                        </div>
+                                    </div>
+
+                                    <!--贷款信息-->
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款信息</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <customer-loan ng-if="declaration.customerTransactionId !== undefined" transactionid="declaration.customerTransactionId" billtypecode="declaration.billTypeCode" businesstypecode="declaration.businessTypeCode"></customer-loan>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-3">
+                                                            <label>平均年还款（元）</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{declaration.order.repaymentAmountMonthly * 12 || 0 | currency:'￥' }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">社保信息</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-3">
+                                                            <label>社保卡信息---单位是否一致</label>
+                                                            <label class="i-checks">
+                                                                <input ng-model="declaration.companyIsSame"  type="checkbox"/><i></i>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label>社保卡信息---是否正常缴费</label>
+                                                            <label class="i-checks">
+                                                                <input ng-model="declaration.normalPayment"  type="checkbox"/><i></i>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label class="col-lg-4 control-label">社保缴费基数</label>
+                                                            <div class="col-lg-8">
+                                                                <input class="form-control" placeholder="社保缴费基数最小为2000" style="display: block;" type="number"
+                                                                       ng-model="declaration.insuranceBase">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">征信查询结果</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <textarea rows="3" cols="12" class="form-control" placeholder="请录入征信查询结果" ng-model="declaration.creditReportComment"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">社保查询结果</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <textarea rows="3" cols="12" class="form-control" placeholder="请录入社保查询结果" ng-model="declaration.socialSecurityComment"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">工商查询结果</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <textarea rows="3" cols="12" class="form-control" placeholder="请录入工商查询结果" ng-model="declaration.icbcQueryComment"></textarea>
+                                        </div>
+                                    </div>
+                                    <!--法院查询信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">法院执行查询信息</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <textarea rows="3" cols="12" class="form-control" placeholder="请录入法院执行查询信息" ng-model="declaration.fayuanQueryComment"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!--收入还贷比信息----三类客户-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">收入还贷比信息</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">账户一类型</label>
+                                                            <input class="form-control" type="text" placeholder="请输入账户类型" ng-model-options="{updateOn: 'blur'}" ng-model="declaration.paymentToIncome.accountOneType">
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">账户二类型</label>
+                                                            <input class="form-control" type="text" placeholder="请输入账户类型" ng-model-options="{updateOn: 'blur'}" ng-model="declaration.paymentToIncome.accountTwoType">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label" ng-if="declaration.customerClass !=4 ">账户一收入流水</label>
+                                                            <label class="control-label" ng-if="declaration.customerClass ==4 ">个人收入流水</label>
+                                                            <button type="button" class="btn btn-default pull-right" ng-show="!tableform.$visible" ng-click="tableform.$show()">
+                                                                编辑
+                                                            </button>
+                                                            <div>
+                                                                <form editable-form name="tableform" onaftersave="saveTable()" oncancel="cancel()">
+                                                                    <!-- table -->
+                                                                    <table class="table table-bordered table-hover table-condensed">
+                                                                        <tr style="font-weight: bold">
+                                                                            <td style="width:35%">年</td>
+                                                                            <td style="width:20%">月</td>
+                                                                            <td style="width:20%">收入(万元)</td>
+                                                                            <td style="width:20%"><span ng-show="tableform.$visible">操作</span></td>
+                                                                        </tr>
+                                                                        <tr ng-repeat="account in declaration.paymentToIncome.accountList">
+                                                                            <td>
+                                                                                <span editable-text="account.year" e-form="tableform">
+                                                                                    {{ account.year  }}
+                                                                                </span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span editable-text="account.month" e-form="tableform">
+                                                                                    {{ account.month }}
+                                                                                </span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span editable-text="account.income" e-form="tableform">
+                                                                                    {{ account.income }}
+                                                                                </span>
+                                                                            </td>
+                                                                            <td><button type="button" ng-show="tableform.$visible" ng-click="removeAccount($index,1)" class="btn btn-danger pull-right">删除</button></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="btn-edit">
+
+                                                                    </div>
+                                                                    <div class="btn-form" ng-show="tableform.$visible">
+                                                                        <button type="button" ng-disabled="tableform.$waiting" ng-click="addAccount(1)" class="btn btn-default pull-right">添加流水</button>
+                                                                        <button type="submit" ng-disabled="tableform.$waiting" class="btn btn-primary">保存</button>
+                                                                        <button type="button" ng-disabled="tableform.$waiting" ng-click="tableform.$cancel()" class="btn btn-default">取消</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label" ng-if="declaration.customerClass !=4 ">账户二收入流水</label>
+                                                            <label class="control-label" ng-if="declaration.customerClass ==4 ">企业收入流水</label>
+                                                            <button type="button" class="btn btn-default pull-right" ng-show="!tableform2.$visible" ng-click="tableform2.$show()">
+                                                                编辑
+                                                            </button>
+                                                            <div>
+                                                                <form editable-form name="tableform2" onaftersave="saveTable2()" oncancel="cancel()">
+                                                                    <!-- table -->
+                                                                    <table class="table table-bordered table-hover table-condensed">
+                                                                        <tr style="font-weight: bold">
+                                                                            <td style="width:35%">年</td>
+                                                                            <td style="width:20%">月</td>
+                                                                            <td style="width:20%">收入(万元)</td>
+                                                                            <td style="width:20%"><span ng-show="tableform2.$visible">操作</span></td>
+                                                                        </tr>
+                                                                        <tr ng-repeat="account in declaration.paymentToIncome.accountList2">
+                                                                            <td>
+                                                                                <span editable-text="account.year" e-form="tableform2">
+                                                                                    {{ account.year  }}
+                                                                                </span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span editable-text="account.month" e-form="tableform2">
+                                                                                    {{ account.month }}
+                                                                                </span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span editable-text="account.income" e-form="tableform2">
+                                                                                    {{ account.income }}
+                                                                                </span>
+                                                                            </td>
+                                                                            <td><button type="button" ng-show="tableform2.$visible" ng-click="removeAccount($index,2)" class="btn btn-danger pull-right">删除</button></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="btn-edit">
+
+                                                                    </div>
+                                                                    <div class="btn-form" ng-show="tableform2.$visible">
+                                                                        <button type="button" ng-disabled="tableform2.$waiting" ng-click="addAccount(2)" class="btn btn-default pull-right">添加流水</button>
+                                                                        <button type="submit" ng-disabled="tableform2.$waiting" class="btn btn-primary">保存</button>
+                                                                        <button type="button" ng-disabled="tableform2.$waiting" ng-click="tableform2.$cancel()" class="btn btn-default">取消</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-6">
+                                                            <label>账户一备注</label>
+                                                            <textarea class="form-control" rows="3" ng-model="declaration.paymentToIncome.accountOneDescription"></textarea>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label>账户二备注</label>
+                                                            <textarea class="form-control" rows="3" ng-model="declaration.paymentToIncome.accountTwoDescription"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">主要收入来源</label>
+                                                            <ui-select multiple ng-model="declaration.paymentToIncome.sourceIncomes" name="sourceIncomes" theme="bootstrap" ng-disabled="disabled">
+                                                                <ui-select-match  placeholder="请选择客户的主要收入来源" >{{$item.name}}</ui-select-match>
+                                                                <ui-select-choices repeat="sourceIncomeWay.code as sourceIncomeWay in sourceIncomeWays | filter: $select.search">
+                                                                    <div ng-bind-html="sourceIncomeWay.name"></div>
+                                                                </ui-select-choices>
+                                                            </ui-select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="updateStageApplication(stageValue)">{{stageText}}</button>
+                                            <span class="h4">客户分期购车情况汇总</span></b>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div lazy-load="textAngular">
+                                                        <div text-angular ng-model="declaration.stageApplication" class="btn-groups" placeholder="输入购车分期情况"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">材料清单</span></div>
+                                        <div class="panel-body">
+                                            <div class="col-lg-12">
+                                                <declaration-collection ng-if="transaction !== null " transaction="transaction" imagetypecods="declaration.imageTypeCodes"></declaration-collection>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--文档信息-->
+                                    <div class="panel panel-default" ng-if="declaration.billTypeCode !== undefined">
+                                        <div class="panel-heading">
+                                            <span class="h4">报批文件</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <declaration-contract-block ng-if="declaration !== null" bill="declaration"></declaration-contract-block>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">报批记录</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <declaration-history-list ng-if="declaration.historys != null" historyrecords="declaration.historys.historyRecords"></declaration-history-list>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+
+                                    <!--当前业务分期经理 -->
+                                    <div class="panel b-success b-light clearfix">
+                                        <div class="panel-body">
+                                            <a href="" class="thumb avatar pull-left m-r">
+                                                <employee-avatar ng-if="declaration.employeeId !== undefined" id="declaration.employeeId"></employee-avatar>
+                                                <i class="on b-white bottom"></i>
+                                            </a>
+                                            <div class="clear">
+                                                <employee-info ng-if="declaration.employeeId !== undefined" id="declaration.employeeId"></employee-info>
+                                                <br/><br/>
+                                                <small class="block text-muted text-xs"><i class="icon-action-redo"></i>当前业务分期经理</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-sm b-t b-light">
+                    <div class="panel-body">
+                        <div class="col-sm-6 text-left">
+                            <button class="btn btn-success" type="button" ladda="declarating" ng-click="submit(declaration)">{{submitText}}</button>
+                            <button class="btn btn-warning" type="button" ng-click="feedback()" ng-show="declaration.status == 4">银行反馈</button>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <button class="btn btn-primary" type="button" ng-click="save()">保存报批</button>
+                            <button class="btn btn-primary" type="button" ng-click="close()">关 闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+<!------查询输入框-->
+<script type="text/ng-template" id="query.html">
+    <query-form customer="customerFilter" query="queryBill(customer)" clear="clearQuery()"></query-form>
+</script>
+
+<script type="text/ng-template" id="feedback.html">
+    <div class="panel panel-default m-b-none"  dw-loading="declarationResult" dw-loading-options="{text: ''}">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+
+            <div class="col-lg-12">
+                <div class="form-group pull-in clearfix">
+                    <label>签批结果</label>
+                    <select class="form-control"  ng-model="declarationResult.result"
+                            required>
+                        <option value="0" disabled>请选择客户的签批结果</option>
+                        <option value="2">报批通过</option>
+                        <option value="8">报批调整</option>
+                        <option value="9">报批被拒绝</option>
+                    </select>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <label>银行批复额度（元）</label>
+                    <p class="form-control-static b-b">
+                        <input type="number" class="form-control" placeholder="请输入银行批复额度"
+                               ng-model="declarationResult.approvedCreditAmount" ng-model-options="{updateOn: 'blur'}"
+                               name="approvedCreditAmount">
+                    </p>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <label>备注</label>
+                    <textarea class="form-control" rows="6" placeholder="输入备注说明" ng-model="declarationResult.comment"></textarea>
+                </div>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-click="saveDeclarationResult()">保   存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取    消</button>
+        </footer>
+    </div>
+</script>

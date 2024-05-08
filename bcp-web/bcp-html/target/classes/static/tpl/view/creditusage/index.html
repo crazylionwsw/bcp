@@ -1,0 +1,110 @@
+
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">{{title}}</h1>
+</div>
+<div class="wrapper-md">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {{tableTitle}}
+        </div>
+        <div class="row wrapper">
+            <div class="col-sm-4 m-b-xs">
+                <input type="text" class="input-sm form-control" placeholder="过滤" ng-model="query" ng-show="!isReferenceDialog">
+            </div>
+            <div class="col-sm-8 m-b-xs text-right ">
+                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped b-t b-light">
+                <thead>
+                <th data-toggle="true">
+                    编码
+                </th>
+
+                <th>
+                    名称
+                </th>
+
+                <th>
+                    数据状态
+                </th>
+
+                <th>操作</th>
+                </thead>
+                <tbody >
+                <tr ng-repeat="creditusage in creditusages|filter:query">
+                    <td>{{creditusage.code}}</td>
+                    <td>{{creditusage.name}}</td>
+                    <td>{{creditusage.dataStatus|dataStatusFilter}}</td>
+                    <td>
+                        <div class="hidden-sm hidden-xs action-buttons">
+                            <a class="green" role="button" data-toggle="modal" ng-click="edit(creditusage)">
+                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                            </a>
+                            <a class="red" href ng-click="delete(creditusage,$index)">
+                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="creditUsageModal.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation" >
+
+                <input type="hidden" ng-model="creditusage.id">
+
+                <div class="form-group">
+                    <label class="control-label">编码</label>
+                    <input type="text" class="form-control" placeholder="请输入编码"
+                           ng-model="creditusage.code" ng-model-options="{updateOn: 'blur'}"
+                           ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                           required name="code">
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">编码是必须的!</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">编码不能重复！</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">名称</label>
+                    <input type="text" class="form-control" placeholder="请输入名称"
+                           ng-model="creditusage.name" ng-model-options="{updateOn: 'blur'}"
+                           ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                           required name="name">
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">名称是必须的!</span>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">名称不能重复！</span>
+                </div>
+
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="submit" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

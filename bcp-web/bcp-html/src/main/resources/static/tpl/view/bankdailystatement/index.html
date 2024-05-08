@@ -1,0 +1,180 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+            <div class="row-row">
+                <div class="row">
+                    <div class="row wrapper">
+                        <div class="col-sm-6 m-b-xs">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">渠道支行</label>
+                                <div class="col-sm-9">
+                                    <ui-select ng-model="poundagesettlement.channelCashSourceId" theme="bootstrap"
+                                               ng-disabled="false">
+                                        <ui-select-match placeholder="请选择渠道合作支行">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="cashSource.id as cashSource in cashSources">
+                                            <div style="padding-left:{{cashSource.depth*10}}px"
+                                                 ng-bind-html="cashSource.name"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">报单支行</label>
+                                <div class="col-sm-9">
+                                    <ui-select ng-model="poundagesettlement.declarationCashSourceId" theme="bootstrap"
+                                               ng-disabled="false">
+                                        <ui-select-match placeholder="请选择报单支行">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="cashSource.id as cashSource in declarationCashSources">
+                                            <div ng-bind-html="cashSource.name"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">日期:</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group" moment-picker="poundagesettlement.orderTime" format="YYYY-MM-DD"
+                                         locale="zh-cn" selectable="true">
+                                        <input type="text" class="col-sm-6 form-control"
+                                               ng-model="poundagesettlement.orderTime"
+                                               ng-model-options="{ updateOn: 'blur' }"/>
+                                        <span class="input-group-btn">
+                                             <button type="button" class="btn btn-default"><i
+                                                     class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            <div class="col-sm-12">
+                                <a role="button" class="btn btn-sm btn-primary" ng-click="query()">查询</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper-md">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            累计发生
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped b-t b-light">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">手续费缴纳方式</th>
+                                    <th class="text-center" ng-if="showTwoBank">代码支行</th>
+                                    <th class="text-center">累计业务量(笔)</th>
+                                    <th class="text-center">累计贷款额(元)</th>
+                                    <th class="text-center">累计手续费(元)</th>
+                                    <th class="text-center" ng-if="showTwoBank">分润比例(%)</th>
+                                </tr>
+                                </thead>
+                                <tbody >
+                                <tr ng-repeat="item in wholeTotal | orderBy : '_id'">
+                                    <td rowspan="{{wholeTotal.length}}" ng-if="$index==0" class="text-center">趸交 </td>
+                                    <td class="text-center" ng-if="showTwoBank"><cashsource-info id="item._id "/></td>
+                                    <td class="text-center">{{item.totalNum || 0 }}</td>
+                                    <td class="text-right">{{item.limitAmountTotal  || 0 |currency:'￥' }}</td>
+                                    <td class="text-right">{{item.poundageTotal || 0 |currency:'￥' }}</td>
+                                    <td class="text-right" ng-if="showTwoBank">{{item.ratio*100 | number : 2}}%</td>
+                                </tr>
+                                <tr ng-repeat="item in stagesTotal  | orderBy : '_id'">
+                                    <td rowspan="{{stagesTotal.length}}" ng-if="$index==0" class="text-center">分期</td>
+                                    <td class="text-center" ng-if="showTwoBank"><cashsource-info id="item._id "/></td>
+                                    <td class="text-center">{{item.totalNum || 0 }}</td>
+                                    <td class="text-right">{{item.limitAmountTotal  || 0 |currency:'￥' }}</td>
+                                    <td class="text-right">{{item.poundageTotal || 0 |currency:'￥' }}</td>
+                                    <td class="text-right" ng-if="showTwoBank">{{item.ratio*100 | number : 2 }}%</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="table-responsive">
+                                    <table class="table table-striped m-b-none">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">缴纳方式</th>
+                                            <th class="text-center">渠道名称</th>
+                                            <th class="text-center">车型</th>
+                                            <th class="text-center">客户姓名</th>
+                                            <th class="text-center">贷款额(元)</th>
+                                            <th class="text-center">贷款期限(期)</th>
+                                            <th class="text-center">手续费(元)</th>
+                                        </tr>
+                                        <tr >
+                                            <th colspan="7" class="text-center panel-heading " >代码行：{{selectedDeclarationCashSourceName}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody >
+                                        <tr ng-repeat="declarationbankdailystatement in declarationbankdailystatements">
+                                            <td >{{declarationbankdailystatement.chargePaymentWayCode | chargePaymentWayFilter}} </td>
+                                            <td><transaction-cardealer-info transactionid="declarationbankdailystatement.customerTransactionId"></transaction-cardealer-info>
+                                            </td>
+                                            <td>
+                                                <transaction-cartype-info
+                                                        transactionid="declarationbankdailystatement.customerTransactionId"></transaction-cartype-info>
+                                            </td>
+                                            <td>
+                                                <customer-info id="declarationbankdailystatement.customerId"></customer-info>
+                                            </td>
+                                            <td  class="text-right">{{declarationbankdailystatement.limitAmount || 0 |currency:'￥' }}</td>
+                                            <td>{{declarationbankdailystatement.creditMonths || 0}}</td>
+                                            <td  class="text-right">{{declarationbankdailystatement.poundage || 0 |currency:'￥' }}</td>
+                                        </tr>
+                                        <tr class="warning">
+                                            <td colspan="3" class="text-center">合计</td>
+                                            <td>{{declarationTotal.nums || "共0笔"}}</td>
+                                            <td   class="text-right">{{declarationTotal.limitAmountTotal || 0 |currency:'￥' }}</td>
+                                            <td>/</td>
+                                            <td   class="text-right">{{declarationTotal.chargeTotal || 0 |currency:'￥' }}</td>
+                                        </tr>
+                                        <tr ng-if="showTwoBank">
+                                            <th colspan="7" class="text-center panel-heading">代码行：{{selectedChannelCashSourceName}}</th>
+                                        </tr>
+                                        <tr ng-if="showTwoBank" ng-repeat="channelbankdailystatement in channelbankdailystatements">
+                                            <td>{{channelbankdailystatement.chargePaymentWayCode | chargePaymentWayFilter}}</td>
+                                            <td>
+                                                <transaction-cardealer-info
+                                                        transactionid="channelbankdailystatement.customerTransactionId"></transaction-cardealer-info>
+                                            </td>
+                                            <td>
+                                                <transaction-cartype-info
+                                                        transactionid="channelbankdailystatement.customerTransactionId"></transaction-cartype-info>
+                                            </td>
+                                            <td>
+                                                <customer-info id="channelbankdailystatement.customerId"></customer-info>
+                                            </td>
+                                            <td   class="text-right">{{channelbankdailystatement.limitAmount || 0 |currency:'￥'}}</td>
+                                            <td>{{channelbankdailystatement.creditMonths ||0 }}</td>
+                                            <td   class="text-right">{{channelbankdailystatement.poundage || 0 |currency:'￥'}}</td>
+                                        </tr>
+                                        <tr ng-if="showTwoBank" class="warning">
+                                            <td colspan="3"  align="center">合计</td>
+                                            <td>{{channelTotal.nums || "共0笔"}}</td>
+                                            <td   class="text-right">{{channelTotal.limitAmountTotal || 0 |currency:'￥' }}</td>
+                                            <td>/</td>
+                                            <td   class="text-right">{{channelTotal.chargeTotal || 0 |currency:'￥' }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+<div class="table-responsive">
+    <table class="table table-striped b-t b-light m-b-none">
+        <thead>
+        <tr>
+            <th>
+                名称
+            </th>
+            <th>
+                下载次数
+            </th>
+            <th >
+                最新下载
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+        </thead>
+        <tbody >
+        <tr ng-repeat="document in documents">
+            <td>{{document.name}}</td>
+            <td>{{document.downloads}}</td>
+            <td>{{document.customerContract.latestDownloadTime | date:'yyyy-MM-dd hh:mm'}}</td>
+            <td>
+                <div class="hidden-sm hidden-xs action-buttons">
+                    <a class="green" role="button" ng-click="view(document)" tooltip="查看" target="_blank">
+                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                    </a>
+                    <a class="green" role="button" ng-click="download(document)" tooltip="下载" target="_blank">
+                        <i class="ace-icon fa fa-download bigger-130"></i>
+                    </a>
+                    <a class="green" role="button" ng-click="check(document)" ng-show="document.customerContract !=null" tooltip="重新生成" target="_blank">
+                        <i class="ace-icon fa fa-refresh bigger-130"></i>
+                    </a>
+                    <!--<a class="green" role="button" ng-click="preview(document)" ng-show="document.customerContract !=null && document.code == 004 " tooltip="预览" target="_blank">
+                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                    </a>-->
+                    <a class="green" role="button" ng-click="chooseDocument(document)" ng-show="document.name == '客户资料交接单'" tooltip="选择要交换的资料" target="_blank">
+                        <i class="ace-icon fa fa-exchange bigger-130"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--     文档资料中，选择交接资料框   -->
+<script type="text/ng-template" id="chooseDocument.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group pull-in clearfix">
+                        <div class="col-sm-12">
+                            <label class="control-label">客户交接资料选择</label>
+                            <ui-select multiple ng-model="receptFile.fileNames" name="fileNames" theme="bootstrap" ng-disabled="disabled">
+                                <ui-select-match  placeholder="请选择客户要交接的资料" >{{$item}}</ui-select-match>
+                                <ui-select-choices repeat="receiptData in receiptDatas | filter: $select.search">
+                                    <div ng-bind-html="receiptData"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button"  ng-click="saveReceiptData()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

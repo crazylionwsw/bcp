@@ -1,0 +1,4 @@
+com/fuze/bcp/api/push/SerializationOptimizerImpl.class
+com/fuze/bcp/api/push/bean/PushTokenBindBean.class
+com/fuze/bcp/api/push/service/IPushDataBizService.class
+com/fuze/bcp/api/push/bean/PushDataBean.class

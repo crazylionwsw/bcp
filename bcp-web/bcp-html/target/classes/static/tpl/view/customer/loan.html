@@ -1,0 +1,109 @@
+<div class="col-lg-12">
+    <div class="form-group pull-in clearfix">
+        <div class="col-sm-3">
+            <label>分期申请车价(元)</label>
+            <p class="form-control-static b-b text-danger">
+                {{order.loan.applyAmount || 0 |currency:'￥'}}
+                <compare-data ng-if="transactionid != null && order.loan.applyAmountProname != null && billtypecode == 'A002'" proname="order.loan.applyAmountProname" transactionid="transactionid"></compare-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>官方指导价（元）</label>
+            <p class="form-control-static b-b">{{order.car.guidePrice || 0 |currency:'￥'}}</p>
+        </div>
+        <div class="col-sm-3">
+            <label>车辆开票价（元）</label>
+            <p class="form-control-static b-b text-danger">{{order.loan.receiptPrice || 0 |currency:'￥'}}</p>
+        </div>
+        <div class="col-sm-3">
+            <label>车辆成交价（元）</label>
+            <p class="form-control-static b-b">{{order.loan.realPrice || 0 |currency:'￥'}}</p>
+        </div>
+        <div class="col-sm-3" ng-show="businesstypecode == 'OC'">
+            <label>评估价格（元）</label>
+            <p class="form-control-static b-b">
+                <vin-price ng-if="order.car.vin !== undefined" vin="order.car.vin"></vin-price>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>贷款金额(元)</label>
+            <p class="form-control-static b-b text-danger">
+                {{order.loan.creditAmount || 0 |currency:'￥'}}
+                <compare-data ng-if="transactionid != null && order.loan.creditAmountProname != null && billtypecode == 'A002'" proname="order.loan.creditAmountProname" transactionid="transactionid"></compare-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>贷款比例(%)</label>
+            <p class="form-control-static b-b text-danger">{{order.loan.creditRatio || 0 }}%</p>
+        </div>
+        <div class="col-sm-3">
+            <label>贷款期数(期)</label>
+            <p class="form-control-static b-b text-danger">
+                {{order.loan.rateType.months || 0 }}期
+                <compare-data ng-if="transactionid != null && order.loan.monthsProname != null && billtypecode == 'A002'" proname="order.loan.monthsProname" transactionid="transactionid"></compare-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>银行手续费率(%)</label>
+            <p class="form-control-static b-b text-danger">{{order.loan.rateType.ratio || 0 | percentage:2:"%" }}</p>
+        </div>
+        <div class="col-sm-3">
+            <label>首付金额(元)</label>
+            <p class="form-control-static b-b">{{order.loan.downPayment || 0 |currency:'￥'}}</p>
+        </div>
+        <div class="col-sm-3">
+            <label>首付比例(%)</label>
+            <p class="form-control-static b-b">
+                {{order.loan.downPaymentRatio || 0 }}%
+                <compare-data ng-if="transactionid != null && order.loan.downPaymentRatioProname != null && billtypecode == 'A002'" proname="order.loan.downPaymentRatioProname" transactionid="transactionid"></compare-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>银行手续费(元)</label>
+            <p class="form-control-static b-b">{{order.loan.bankFeeAmount || 0 |currency:'￥' }}</p>
+        </div>
+        <div class="col-sm-3">
+            <label>贷款服务费(元)</label>
+            <p class="form-control-static b-b">
+                {{order.loan.loanServiceFee || 0 |currency:'￥' }}
+                <compare-data ng-if="transactionid != null && order.loan.loanServiceFeeProname != null && billtypecode == 'A002'" proname="order.loan.loanServiceFeeProname" transactionid="transactionid"></compare-data>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <label>手续费缴纳方式</label>
+            <p class="form-control-static b-b text-danger">
+                {{order.loan.chargePaymentWay |chargePaymentWayFilter }}
+                <compare-data ng-if="transactionid != null && order.loan.chargePaymentWayProname != null && billtypecode == 'A002'" proname="order.loan.chargePaymentWayProname" transactionid="transactionid"></compare-data>
+            </p>
+        </div>
+        <div class="col-sm-3" ng-show="billtypecode == 'A002' && businesstypecode == 'NC'">
+            <label>是否贴息</label>
+            <p class="form-control-static b-b">{{order.loan.compensatoryInterest||false |yesno}}</p>
+        </div>
+        <div class="col-sm-3" ng-show="businesstypecode == 'NC'">
+            <label>贴息金额(元)</label>
+            <p class="form-control-static b-b">{{order.loan.compensatoryAmount ||0 |currency:'￥'}}</p>
+        </div>
+        <div class="col-sm-3" ng-if="billtypecode == 'A002'">
+            <label>银行批复额度(元)</label>
+            <p class="form-control-static b-b">
+                <a href="#" editable-text="order.loan.approvedCreditAmount" e-label="" onaftersave="updateApprovedAmount(loan)">{{order.loan.approvedCreditAmount || 0 |currency:'￥' }}</a>
+            </p>
+        </div>
+        <div class="col-sm-3" ng-if="billtypecode != 'A001' && billtypecode != 'A002'">
+            <label>银行批复额度(元)</label>
+            <p class="form-control-static b-b">{{order.loan.approvedCreditAmount ||0 |currency:'￥'}}</p>
+        </div>
+        <div ng-repeat="feeitem in order.feeItemList" ng-if="order.feeItemList !== undefined">
+            <div class="col-sm-3">
+                <label>
+                    <!--{{feeitem.id |placeholder}}(元)-->
+                    <feeitem-info id="feeitem.id"></feeitem-info>
+                </label>
+                <p class="form-control-static b-b">
+                    {{feeitem.fee || 0 | currency:'￥' }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

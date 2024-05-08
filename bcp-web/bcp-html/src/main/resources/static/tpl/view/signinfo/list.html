@@ -1,0 +1,40 @@
+<div class="sign-info-list">
+    <div class="m-b text-md">审核信息</div>
+    <div class="streamline b-l m-l-lg m-b padder-v">
+        <element ng-repeat="signinfo in signInfos|orderBy: 'ts': true">
+            <div class="sl-item b-l"  ng-if="!signinfo.fromSalesman" ng-class="{2: 'b-success', 8: 'b-primary', 9: 'b-danger'}[signinfo.result]">
+                <a class="pull-left thumb-xs avatar m-l-n-md">
+                    <!--签批用户的头像-->
+                    <employee-avatar ng-if="signinfo.employeeId !== undefined" id="signinfo.employeeId"></employee-avatar>
+                </a>
+                <div class="m-l-lg m-b-lg panel b-a" ng-class="{2: 'bg-success', 8: 'bg-primary', 9: 'bg-danger'}[signinfo.result]">
+                    <div class="panel-heading pos-rlt b-light">
+                        <span class="arrow left pull-up hidden-left"  ng-class="{2: 'arrow-success', 8: 'arrow-primary', 9: 'arrow-danger'}[signinfo.result]"></span>
+                        <!--签批用户的姓名-->
+                        <a href><small><employee-info ng-if="signinfo.employeeId !== undefined" id="signinfo.employeeId"></employee-info></small></a>
+                        <small>{{signinfo.result|signStatusFilter}}于</small>
+                        <small class="text-muted" tooltip="{{signinfo.ts|date:'yyyy-MM-dd HH:mm'}}">{{signinfo.ts|fromNow}}</small>
+                    </div>
+                    <div class="panel-body">
+                        <p><small class="initialism" ng-show="signinfo.comment != ''">{{signinfo.comment}}</small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-info wrapper-sm m-l-n m-b r r-2x" ng-if="signinfo.fromSalesman">
+                <a href><small><employee-info ng-if="signinfo.employeeId !== undefined" id="signinfo.employeeId"></employee-info></small></a>
+                <small class="text-muted">于{{signinfo.ts|fromNow}}</small><br/>
+                <p class="m-t"><small class="initialism" ng-show="signinfo.comment != ''">{{signinfo.comment}}</small></p>
+            </div>
+        </element>
+
+        <div class="panel panel-default m-t-md m-b-n-sm pos-rlt">
+            <span class="arrow top pull-left"></span>
+            <form>
+                <textarea class="form-control no-border" rows="3" ng-model="comment" placeholder="输入备注信息"></textarea>
+            </form>
+            <div class="panel-footer bg-light lter">
+                <button class="btn btn-info pull-right btn-sm" ng-click="addComment()">添加</button>
+            </div>
+        </div>
+    </div>
+</div>

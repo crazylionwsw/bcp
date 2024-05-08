@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-auth" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-bd" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-blockchain" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-cardealer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-creditcar" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-credithome" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-customer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-drools" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-dubbo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-file" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-message" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-mq" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-mq-receiver" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-push" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-statistics" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-system" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-timertask" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-transaction" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-wechat" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bcp-workflow" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

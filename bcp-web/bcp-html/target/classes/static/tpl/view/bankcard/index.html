@@ -1,0 +1,444 @@
+<div class="hbox hbox-auto-xs bg-light ">
+
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <select ng-model="selectedStatus"
+                                        ng-options="st.name for st in statusList track by st.id" ng-change="changeStatus()"
+                                        class="form-control">
+                                </select>
+                            </div>
+                            <div class="col-sm-1 text-left">
+                                <select class="form-control" ng-model="pageSize" ng-change="changePageSize()">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="1000">1000</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-7 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light  m-b-none" data-filter="#filter" >
+                            <thead>
+                            <tr>
+                                <th>
+                                    序号
+                                </th>
+                                <th>
+                                    报单支行
+                                </th>
+                                <th>
+                                    渠道支行
+                                </th>
+                                <th>
+                                    业务类型
+                                </th>
+                                <th>
+                                    持卡人姓名【身份证号码】
+                                </th>
+                                <th>
+                                    分期经理【手机号码】
+                                </th>
+                                <th>
+                                    卡业务状态
+                                </th>
+                                <th>
+                                    申请时间
+                                </th>
+                                <th>
+                                    制卡时间
+                                </th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="bankcard in bankcards |orderBy: 'ts': true" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[bankcard.approveStatus]">
+                                <td>{{$index+1}}</td>
+                                <td><transaction-cashsource-info ng-if="bankcard.transaction !== undefined" transaction="bankcard.transaction"></transaction-cashsource-info></td>
+                                <td><transaction-cardealer-cooperationcashsource-info ng-if="bankcard.transaction !== undefined" transaction="bankcard.transaction"></transaction-cardealer-cooperationcashsource-info></td>
+                                <td>{{bankcard.businessTypeCode | BusinessTypeFilter}}</td>
+                                <td><customer-info id="bankcard.customerId"></customer-info></td>
+                                <td><employee-info ng-if="bankcard.employeeId !== undefined" id="bankcard.employeeId"></employee-info></td>
+                                <td><approve-status ng-if="bankcard.status != null && bankcard.transaction != undefined" transaction="bankcard.transaction" status="bankcard.status" billtypecode="bankcard.billTypeCode"></approve-status></td>
+                                <td>{{bankcard.ts | momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                <td>{{bankcard.applyTime}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(bankcard, $index)">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-2 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-10 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">卡业务处理--{{bankcard.businessTypeCode |BusinessTypeFilter}}</h1>
+                    </div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="padder-v row m-n">
+                                <div class="col-lg-9">
+                                    <!--持卡人信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">持卡人信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-base id="bankcard.customerId"></customer-base>
+                                        </div>
+                                    </div>
+
+                                    <!--贷款信息-->
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <customer-loan ng-if="bankcard.customerTransactionId !== undefined" transactionid="bankcard.customerTransactionId" billtypecode="bankcard.billTypeCode" businesstypecode="bankcard.businessTypeCode"></customer-loan>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--卡信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">卡信息</span></div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-4" ng-if="bankcard.customerCard.cardNo != null">
+                                                    <label>卡号</label>
+                                                    <p class="form-control-static b-b">{{bankcard.customerCard.cardNo}}</p>
+                                                </div>
+                                                <div class="col-sm-4 has-warning" ng-if="bankcard.customerCard.expireDate != null">
+                                                    <label>有效期</label>
+                                                    <p class="form-control-static b-b">{{bankcard.customerCard.expireDate}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.customerCard.cvv != null">
+                                                    <label>CVV</label>
+                                                    <p class="form-control-static b-b">{{bankcard.customerCard.cvv}}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-4" ng-if="bankcard.customerCard.initPassword != null">
+                                                    <label>初始密码</label>
+                                                    <p class="form-control-static b-b">{{bankcard.customerCard.initPassword}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.replaceActivateName != null">
+                                                    <label>代启卡人</label>
+                                                    <p class="form-control-static b-b">{{bankcard.replaceActivateName}}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-4" ng-if="bankcard.swipingMoney != null">
+                                                    <label>刷卡金额</label>
+                                                    <p class="form-control-static b-b">{{bankcard.swipingMoney}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.swipingPeriods != null">
+                                                    <label>刷卡期数</label>
+                                                    <p class="form-control-static b-b">{{bankcard.swipingPeriods}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.swipingName != null">
+                                                    <label>刷卡人</label>
+                                                    <p class="form-control-static b-b">{{bankcard.swipingName}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-4" ng-if="bankcard.firstReimbursement != null">
+                                                    <label>首次还款时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.firstReimbursement}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.billingDate != null">
+                                                    <label>账单日(号)</label>
+                                                    <p class="form-control-static b-b">{{bankcard.billingDate}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.defaultReimbursement != null">
+                                                    <label>还款日(号)</label>
+                                                    <p class="form-control-static b-b">{{bankcard.defaultReimbursement}}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group pull-in clearfix" >
+                                                <div class="col-sm-4" ng-if="bankcard.receiveCardName != null">
+                                                    <label>领卡人</label>
+                                                    <p class="form-control-static b-b">{{bankcard.receiveCardName}}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-4" ng-if="bankcard.applyTime != null">
+                                                    <label>制卡时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.applyTime}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.takeTime != null">
+                                                    <label>取卡时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.takeTime}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.activateTime != null">
+                                                    <label>启卡时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.activateTime}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.replaceActivateTime != null && bankcard.activateTime == null">
+                                                    <label>启卡时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.replaceActivateTime}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-4" ng-if="bankcard.changeAmountTime != null">
+                                                    <label>调额时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.changeAmountTime}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.swipingShopTime != null">
+                                                    <label>刷卡时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.swipingShopTime}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.swipingTrusteeTime != null">
+                                                    <label>刷卡时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.swipingTrusteeTime}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.receiveDiscountTime != null">
+                                                    <label>领卡时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.receiveDiscountTime}}</p>
+                                                </div>
+                                                <div class="col-sm-4" ng-if="bankcard.receiveTrusteeTime != null">
+                                                    <label>领卡时间</label>
+                                                    <p class="form-control-static b-b">{{bankcard.receiveTrusteeTime}}</p>
+                                                </div>
+                                            </div>
+
+                                            <!--<div class="form-group pull-in clearfix" >-->
+                                                <!--<div class="col-sm-4" >-->
+                                                    <!--<label>手续费缴纳方式</label>-->
+                                                    <!--<p class="form-control-static b-b">{{bankcard.customerLoanBean.chargePaymentWay|chargePaymentWayFilter}}</p>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                            <div class="form-group pull-in clearfix" ng-if="currentTask == '取卡' || bankcard.status == 2 ">
+                                                <div class="col-sm-3">
+                                                    <label>卡号</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.customerCard.cardNo"/>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>有效期</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.customerCard.expireDate"/>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>CVV</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.customerCard.cvv"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group pull-in clearfix" ng-if="currentTask == '代启卡' ">
+                                                <div class="col-sm-3">
+                                                        <label>代启卡人</label>
+                                                        <ui-select sortable="true" ng-model="bankcard.replaceActivateName" theme="bootstrap">
+                                                            <ui-select-match placeholder="请选择员工领卡人" >{{$select.selected.username}}</ui-select-match>
+                                                            <ui-select-choices  repeat="businessName.username as businessName in businessNames | filter: $select.search">
+                                                                <div ng-bind-html="businessName.username | highlight: $select.search"></div>
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>初始密码</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.customerCard.initPassword"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group pull-in clearfix" ng-if="currentTask == '启卡' ">
+                                                <div class="col-sm-3">
+                                                    <label>初始密码</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.customerCard.initPassword"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group pull-in clearfix" ng-if="currentTask == '调额'">
+                                                <div class="col-sm-3">
+                                                    <label>刷卡金额</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.swipingMoney"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group pull-in clearfix" ng-if="currentTask == '代刷卡' ">
+                                                <div class="col-sm-3">
+                                                    <label>刷卡金额</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.swipingMoney"/>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>刷卡期数</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.swipingPeriods"/>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>刷卡人</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.swipingName"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix" ng-if="currentTask == '代刷卡' ">
+                                                <div class="col-sm-3">
+                                                    <label>首次还款时间</label>
+                                                    <div class="input-group" moment-picker="bankcard.firstReimbursement" format="YYYY-MM-DD"
+                                                         locale="zh-cn" selectable="true">
+                                                        <input type="text" class="form-control"
+                                                               ng-model="bankcard.firstReimbursement"/>
+                                                            <span class="input-group-btn">
+                                                                 <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                            </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>账单日（号）</label>
+                                                    <div class="input-group bootstrap-touchspin">
+                                                        <input type="number" default="25" class="form-control" ng-model="bankcard.billingDate" data-min="1" data-max="31"/>
+                                                        <span class="input-group-addon bootstrap-touchspin-postfix">号</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>还款日（号）</label>
+                                                    <div class="input-group bootstrap-touchspin">
+                                                        <input type="number" default="25" class="form-control" ng-model="bankcard.defaultReimbursement" data-min="1" data-max="31"/>
+                                                        <span class="input-group-addon bootstrap-touchspin-postfix">号</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group pull-in clearfix" ng-if="currentTask == '领卡' || currentTask == '渠道领卡' ">
+                                                <div class="col-sm-3">
+                                                    <div class="checkbox">
+                                                        <label class="i-checks">
+                                                            <input type="checkbox" ng-model="sumType" ng-change="changeType()" value="1"><i></i>员工代领卡
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3" ng-show="cusShow">
+                                                    <label>领卡人</label>
+                                                    <input type="text" class="form-control" ng-model="bankcard.receiveCardName"/>
+                                                </div>
+                                                <div class="col-sm-3" ng-show="!cusShow">
+                                                    <label>领卡人</label>
+                                                    <ui-select sortable="true" ng-model="bankcard.receiveCardName" theme="bootstrap">
+                                                        <ui-select-match placeholder="请选择员工领卡人" >{{$select.selected.username}}</ui-select-match>
+                                                        <ui-select-choices  repeat="businessName.username as businessName in businessNames | filter: $select.search">
+                                                            <div ng-bind-html="businessName.username | highlight: $select.search"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!--档案资料-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">档案资料</span></div>
+                                        <div class="panel-body">
+                                            <customerimage-block ng-if="bankcard != null" bill="bankcard" save="save(bill)"></customerimage-block>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div style="position: fixed;" ng-show="checked">
+                                        <div style="height:650px;overflow-y:scroll;">
+                                            <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+                                            <ul class="timeline">
+                                                <li class="tl-header">
+                                                    <div class="btn btn-info"></div>
+                                                </li>
+                                            </ul>
+                                            <ul class="timeline" >
+                                                <li class="tl-item" ng-repeat="tasklist in bankcard.actionRecords">
+                                                    <div class="tl-wrap b-info" ng-if="tasklist.action != null">
+                                                        <span class="tl-date">{{tasklist.action}}</span>
+                                                        <div class="tl-content">
+                                                            {{tasklist.ts| date : 'yyyy-MM-dd HH:mm'}}【{{tasklist.actionName}}】<br/>{{tasklist.comment}}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <ul class="timeline">
+                                                <li class="tl-header">
+                                                    <div class="btn btn-info"></div>
+                                                </li>
+                                            </ul>
+                                            <ul class="timeline">
+                                                <li class="tl-item" ng-if="currentTask != null">
+                                                    <div class="tl-wrap b-success">
+                                                        <span class="tl-date">{{currentTask}}</span>
+                                                        <div class="tl-content">
+                                                            {{}}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="tl-header">
+                                                    <button class="btn btn-sm btn-default btn-rounded" ng-click="process(2)" ng-show="visible1" ng-if="currentTask != null" ng-disabled="syncing">完成</button>
+                                                    <button class="btn btn-sm btn-default btn-rounded" ng-click="process(1)" ng-hide="visible3" ng-if="currentTask != null" ng-disabled="syncing">成功</button>
+                                                    <button class="btn btn-sm btn-default btn-rounded" ng-click="process(0)" ng-hide="visible4" ng-if="currentTask != null" ng-disabled="syncing">失败</button>
+                                                    <button class="btn btn-sm btn-default btn-rounded" ng-click="process(9)" ng-show="visible2" ng-if="currentTask != null" ng-disabled="syncing">销卡</button>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-danger" type="button" ng-click="clearReport(bankcard)" ng-show="bankcard.status == 5 || bankcard.status == 9">清除征信报告</button>
+                    <button class="btn btn-info" type="button" ng-click="remakecard(bankcard)" ng-show="bankcard.status != '5' && bankcard.status != '6' ">重新制卡</button>
+                    <button class="btn btn-primary" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+<script type="text/ng-template" id="query.html">
+    <query-form search="searchFilter" query="queryBill(search)" clear="clearQuery()"></query-form>
+</script>
+

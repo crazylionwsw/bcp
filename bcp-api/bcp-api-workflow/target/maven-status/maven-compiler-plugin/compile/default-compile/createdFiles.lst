@@ -1,0 +1,11 @@
+com/fuze/bcp/api/workflow/bean/TEMSignInfo.class
+com/fuze/bcp/api/workflow/service/IWorkflowBizService.class
+com/fuze/bcp/api/workflow/bean/ExecutionBean.class
+com/fuze/bcp/api/workflow/bean/GroupBean.class
+com/fuze/bcp/api/workflow/bean/TaskBean.class
+com/fuze/bcp/api/workflow/bean/SignInfo.class
+com/fuze/bcp/api/workflow/bean/WorkFlowBillBean.class
+com/fuze/bcp/api/workflow/bean/SignCondition.class
+com/fuze/bcp/api/workflow/bean/SignInfoBean.class
+com/fuze/bcp/api/workflow/bean/BillSignInfo.class
+com/fuze/bcp/api/workflow/SerializationOptimizerImpl.class

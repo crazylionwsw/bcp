@@ -1,0 +1,107 @@
+<div class="bg-light lter b-b wrapper-md">
+	<h1 class="m-n font-thin h3">{{formTitle}}--{{dmvpledge.businessType.name}}</h1>
+</div>
+<div class="wrapper-md">
+
+	<div class="row">
+		<div class="col-lg-9">
+			<form name="userForm" class="form-horizontal form-validation">
+				<div class="panel panel-default">
+					<div class="panel-heading"><span class="h4">客户信息</span></div>
+					<div class="panel-body">
+						<customer-block id="dmvpledge.customerId"></customer-block>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span class="h4">车管所抵押</span>
+					</div>
+					<div class="panel-body">
+						<div class="form-group pull-in clearfix">
+							<div class="col-sm-6">
+								<label>报送银行盖章时间</label>
+								<div class="input-group" moment-picker="dmvpledge.contractStartTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="dmvpledge.contractStartTime" name="contractStartTime"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+
+							</div>
+							<div class="col-sm-6">
+								<label>合同盖章完成取件时间</label>
+								<div class="input-group" moment-picker="dmvpledge.takeContractTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="dmvpledge.takeContractTime" name="takeContractTime"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+
+							</div>
+						</div>
+						<div class="form-group pull-in clearfix">
+							<div class="col-sm-6">
+								<label>抵押开始时间</label>
+								<div class="input-group" moment-picker="dmvpledge.pledgeStartTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="dmvpledge.pledgeStartTime" name="pledgeStartTime"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+
+							</div>
+							<div class="col-sm-6">
+								<label>抵押完成时间</label>
+								<div class="input-group" moment-picker="dmvpledge.pledgeEndTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="dmvpledge.pledgeEndTime"
+										   ui-validate="{endtimeInvalid:'checkDmvPledgeEndTime($value)'}"
+										   ui-validate-watch="'dmvpledge.pledgeStartTime'"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   name="pledgeEndTime"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+								<span ng-show="userForm.pledgeEndTime.$error.endtimeInvalid" class="help-block text-danger">完成时间必须大于开始时间!</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading"><span class="h4">档案资料</span></div>
+					<div class="panel-body">
+						<customerimage-block ng-if="dmvpledge != null" bill="dmvpledge" save="save(bill)"></customerimage-block>
+					</div>
+				</div>
+
+				<footer class="text-right">
+					<button class="btn btn-success" type="submit" ng-click="submitDmvPledge()">保 存</button>
+					<button class="btn btn-warning" type="button" ui-sref="app.business.dmvpledge">返 回</button>
+				</footer>
+			</form>
+		</div>
+
+		<div class="col-lg-3">
+
+			<!--当前业务分期经理 -->
+			<div class="m-b-md clearfix">
+				<div class="m-b text-md">当前业务分期经理</div>
+				<div class="panel b-a">
+					<div class="panel-heading pos-rlt bg-info">
+						<span class="arrow top pull-left arrow-info"></span>
+						<employee-info ng-if="dmvpledge.employeeId !== undefined" id="dmvpledge.employeeId"></employee-info>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+	</div>
+
+</div>

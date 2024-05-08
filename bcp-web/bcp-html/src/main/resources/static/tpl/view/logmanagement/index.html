@@ -1,0 +1,71 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <!--<a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>-->
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                登陆人
+                            </th>
+                            <th>
+                                登陆账号
+                            </th>
+                            <th>
+                                登陆类型
+                            </th>
+                            <th>
+                                登陆时间
+                            </th>
+                            <th>
+                                操作
+                            </th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="logmanagement in logmanagements|filter:query" ng-class="{true:'danger'}[terminal.dataStatus == 9]">
+                                <td><loginuser-employee-info id="logmanagement.userName"></loginuser-employee-info></td>
+                                <td>{{logmanagement.logName}}</td>
+                                <td>{{logmanagement.logType}}</td>
+                                <td>{{logmanagement.logTime}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="offline(logmanagement,$index)">下线</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

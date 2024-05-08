@@ -1,0 +1,10 @@
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\service\impl\LoanQueryServiceImpl.java
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\domain\LoanQuery.java
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\repository\LoanQueryRepository.java
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\starter\config\DubboConfig.java
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\starter\config\RedisConfig.java
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\business\BizWechatService.java
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\starter\WechatBootStarter.java
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\service\ILoanQueryService.java
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\business\BizOfficialAccountsService.java
+E:\developer\bcp\bcp-server\bcp-wechat\src\main\java\com\fuze\bcp\wechat\business\BizLoanQueryService.java

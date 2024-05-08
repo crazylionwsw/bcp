@@ -1,0 +1,428 @@
+<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+
+<div class="hbox hbox-auto-xs bg-light">
+
+    <div class="col w b-r">
+        <div class="vbox">
+            <div class="wrapper b-b">
+                <div class="font-thin h4">品牌</div>
+            </div>
+            <div class="wrapper-xs b-b">
+                <div class="input-group m-b-xxs">
+                    <span class="input-group-addon input-sm no-border no-bg"><i class="icon-magnifier text-md m-t-xxs"></i></span>
+                    <input type="text" class="form-control input-sm no-border no-bg text-md" placeholder="检索 {{group.name ? group.name : '品牌'}}" ng-model="key">
+                </div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="list-group no-radius no-border no-bg m-b-none">
+                            <a ng-repeat="carbrand in carBrands | filter:{group:filter} | filter:{name:key} | orderBy:'first'"
+                               ng-dblclick="editCarBrandName(carbrand)"
+                               class="list-group-item m-l hover-anchor b-a no-select"
+                               ng-class="{'select m-l-none': carbrand.selected}"
+                               ng-click="selectCarBrand(carbrand)">
+                                <span class="block m-l-n" ng-class="{'m-n': carbrand.selected ,'text-danger': carbrand.dataStatus == 9}">{{ carbrand.name ? carbrand.name : 'Untitled' }}</span>
+                                <input type="text" class="form-control pos-abt" ng-show="carbrand.editing" ng-blur="doneBrandNameEditing(carbrand)" ng-model="carbrand.name" style="top:3px;left:2px;width:98%" ui-focus="carbrand.editing">
+                            </a>
+                        </div>
+                        <div class="text-center pos-abt w-full" style="top:50%;" ng-hide="(carBrands | filter:{group:filter} | filter:key).length">没有找到品牌</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-sm b-t text-center">
+                <a role="button" class="btn btn-sm btn-default" data-toggle="modal" ng-click="editCarBrand(0)"><i class="ace-icon fa fa-plus bigger-130"></i></a>
+                <a role="button" ng-show="selectedCarBrand" class="btn btn-sm btn-default" ng-click="syncCarBrand()" tooltip="同步车型" ng-disabled="syncing">
+                    <i class="ace-icon fa fa-refresh bigger-130" ng-hide="syncing"></i>
+                    <i class="fa fa-spin fa-spinner" ng-show="syncing"></i>
+                </a>
+                <a role="button"  ng-show="selectedCarBrand" class="btn btn-sm btn-default" data-toggle="modal" ng-click="editCarBrand(1)"><i class="ace-icon fa fa-pencil bigger-130"></i></a>
+                <!--<a role="button"  ng-show="selectedCarBrand" class="btn btn-sm btn-default" ng-click="deleteCarBrand()"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- column -->
+    <div class="col w b-r">
+        <div class="vbox">
+            <div class="wrapper b-b">
+                <div class="font-thin h4">车系</div>
+            </div>
+            <div class="wrapper-xs b-b">
+                <div class="input-group m-b-xxs">
+                    <span class="input-group-addon input-sm no-border no-bg"><i class="icon-magnifier text-md m-t-xxs"></i></span>
+                    <input type="text" class="form-control input-sm no-border no-bg text-md" placeholder="检索 {{group.name ? group.name : '车系'}}" ng-model="key1">
+                </div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="m-t-n-xxs">
+                            <div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+                                <a ng-repeat="carmodel in carModels | filter:{group:filter} | filter:{name:key1} | orderBy:'first'"
+                                   ng-dblclick="editCarModelName(carmodel)"
+                                   class="list-group-item m-l"
+                                   ng-class="{'select m-l-none': carmodel.selected }"
+                                   ng-click="selectCarModel(carmodel)">
+                                    <span class="block m-l-n" ng-class="{'m-n': carmodel.selected ,'text-danger': carmodel.dataStatus == 9 }">{{ carmodel.name ? carmodel.name : "Untitled"}}</span>
+                                    <input type="text" class="form-control pos-abt" ng-show="carmodel.editing" ng-blur="doneModelNameEditing(carmodel)" ng-model="carmodel.name" style="top:3px;left:2px;width:98%" ui-focus="carmodel.editing">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="text-center pos-abt w-full" style="top:50%;" ng-hide="(carModels | filter:{group:filter} | filter:key1).length">没有找到车系</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-sm b-t text-center">
+                <a role="button"  class="btn btn-sm btn-default" data-toggle="modal" ng-click="editCarModel(0)"><i class="ace-icon fa fa-plus bigger-130"></i></a>
+                <a role="button"  ng-show="selectedCarModel" class="btn btn-sm btn-default" data-toggle="modal" ng-click="editCarModel(1)"><i class="ace-icon fa fa-pencil bigger-130"></i></a>
+               <!-- <a role="button"  ng-show="selectedCarModel" class="btn btn-sm btn-default" ng-click="deleteCarModel()"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>-->
+            </div>
+        </div>
+    </div>
+    <!-- /column -->
+
+    <div class="col lter">
+        <div class="vbox">
+            <div class="wrapper b-b b-light lt">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="editCarType('')"  ng-show="!isReferenceDialog">
+                                    添加车型 </a></div>
+                        </div>
+                        <table class="table table-striped b-t b-light m-b-none m-b-none">
+                            <thead>
+                            <th ng-show="isReferenceDialog">
+                                <label class="i-checks m-b-none">
+                                    <input type="checkbox" ng-model="selectedAll" ng-click="checkAll()"/><i></i>
+                                </label>
+                            </th>
+                            <th>
+                                名称
+                            </th>
+                            <th>
+                                排量（ML）
+                            </th>
+                            <th>
+                                官方定价（元）
+                            </th>
+                            <th>
+                                年款
+                            </th>
+                            <th>
+                                上市时间
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+                            <th ng-show="!isReferenceDialog">操作</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="cartype in cartypes|filter:query" ng-class="{true:'danger'}[cartype.dataStatus == 9]">
+                                <td ng-show="isReferenceDialog">
+                                    <label class="i-checks m-b-none">
+                                        <input type="checkbox" data-ng-model="cartype.selected"><i></i>
+                                    </label>
+                                </td>
+                                <td>{{cartype.name}}</td>
+                                <td>{{cartype.ml}}</td>
+                                <td>{{cartype.price.toFixed(2)}}</td>
+                                <td>{{cartype.groupName}}</td>
+                                <td>{{cartype.marketDate|date:'yyyy-MM-dd'}}</td>
+                                <td>{{cartype.dataStatus|dataStatusFilter}}</td>
+                                <td ng-show="!isReferenceDialog">
+                                    <!--<div class="hidden-sm hidden-xs action-buttons">-->
+                                        <!--<a class="green" role="button" data-toggle="modal"-->
+                                           <!--ng-click="editCarType(cartype)" ng-show="cartype.dataStatus != 9 && cartype.id != null ">-->
+                                            <!--<i class="ace-icon fa fa-pencil bigger-130"></i>-->
+                                        <!--</a>-->
+                                        <!--&lt;!&ndash;启用&ndash;&gt;-->
+                                        <!--<a ng-if="cartype.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(cartype, $index)" tooltip="启用" ng-show="cartype.dataStatus == 9 && cartype.id != null">-->
+                                            <!--<i class="ace-icon fa fa-undo bigger-130"></i>-->
+                                        <!--</a>-->
+                                        <!--&lt;!&ndash;<a class="red" href ng-click="deleteCarType(cartype,$index)">-->
+                                            <!--<i class="ace-icon fa fa-trash-o bigger-130"></i>-->
+                                        <!--</a>&ndash;&gt;-->
+                                    <!--</div>-->
+                                    <div class="  btn-group  dropdown " dropdown>
+                                        <button class="btn-xs btn btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal"
+                                                   ng-click="editCarType(cartype)" ng-show="cartype.dataStatus != 9 && cartype.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="m-n b-t lt row">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalCartypePages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination boundary-links="true" first-text="首页" last-text="尾页"   ng-change="selectCarModel()"  ng-model="currentPage" items-per-page="pageCartypeSize" total-items="totalCartypeItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="carTypeForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="cartype.id">
+                <!--<input type="hidden" ng-model="cartype.carModel">-->
+                <div class="form-group pull-in clearfix">
+
+                    <div class="col-sm-6">
+                        <label class="control-label">品牌</label>
+                        <p class="form-control-static">
+                            {{selectedCarBrand.name}}
+                        </p>
+                        <!--<select ng-model="cartype.carBrandId"-->
+                                <!--ng-options="carbrand.name for carbrand in carBrands track by carbrand.id"-->
+                                <!--class="form-control">-->
+                        <!--</select>-->
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">车系</label>
+                        <p class="form-control-static">
+                            {{selectedCarModel.name}}
+                        </p>
+                        <!--<select ng-model="cartype.carModelId"-->
+                                <!--ng-options="carmodel.name for carmodel in carModels track by carmodel.id"-->
+                                <!--class="form-control">-->
+                        <!--</select>-->
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class=" control-label">名称</label>
+                        <div>
+                            <input type="text" class="form-control" placeholder="输入名称"
+                                   ui-validate-async="{notUnique: 'checkUniqueCarType(\'name\', $value)'}"
+                                   ng-model="cartype.name" ng-model-options="{updateOn: 'blur'}"
+                                   name="name" required>
+                            <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">品牌名称是必须的!</span>
+                            <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">品牌名称不能重复！</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">型号</label>
+                        <div>
+                            <input type="text" class="form-control" placeholder="输入型号"
+                                   ng-model="cartype.model" ng-model-options="{updateOn: 'blur'}"
+                                   name="model" required>
+                            <span ng-show="userForm.model.$dirty && userForm.model.$error.required" class="help-block text-danger">型号是必须的!</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class="control-label">动力类型</label><br>
+                        <label class="checkbox-inline i-checks">
+                            <input value="0" ng-model="cartype.motiveType" name="motiveType" required type="radio"><i></i>汽油
+                        </label>
+                        <label class="checkbox-inline i-checks">
+                            <input value="1" ng-model="cartype.motiveType" type="radio" name="motiveType" required><i></i>柴油
+                        </label>
+                        <label class="checkbox-inline i-checks">
+                            <input value="2" ng-model="cartype.motiveType" type="radio" name="motiveType" required><i></i>混合动力
+                        </label>
+                        <label class="checkbox-inline i-checks">
+                            <input value="3" ng-model="cartype.motiveType" type="radio" name="motiveType" required><i></i>新能源
+                        </label>
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="control-label">排量</label>
+                        <input type="text" class="form-control" placeholder="输入排量"
+                               ng-model="cartype.ml" ng-model-options="{updateOn: 'blur'}"
+                               name="ml">
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="control-label">座位数 </label>
+                        <input type="text" class="form-control" placeholder="输入座位数"
+                               ng-model="cartype.seat" ng-model-options="{updateOn: 'blur'}"
+                               name="seat">
+                    </div>
+                </div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class="control-label">精真估ID</label>
+                        <input type="text" class="form-control" placeholder="输入精真估ID"
+                               ng-model="cartype.refStyleId" ng-model-options="{updateOn: 'blur'}"
+                               name="refStyleId" required>
+                        <span ng-show="userForm.refStyleId.$dirty && userForm.refStyleId.$error.required" class="help-block text-danger">精真估ID是必须的!</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">价格（元）</label>
+                        <input type="text" class="form-control" placeholder="输入车的价格"
+                               ng-model="cartype.price" ng-model-options="{updateOn: 'blur'}"
+                               name="price" required>
+                        <span ng-show="userForm.price.$dirty && userForm.price.$error.required" class="help-block text-danger">车的价格是必须的!</span>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class="control-label">年款</label>
+                        <input type="text" class="form-control" placeholder="请输入年款"
+                               ng-model="cartype.groupName" ng-model-options="{updateOn: 'blur'}"
+                               name="year">
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">上市时间</label>
+                        <div class="input-group" moment-picker="cartype.marketDate" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control" placeholder="请输入上市时间"
+                                   ng-model="cartype.marketDate" ng-model-options="{updateOn: 'blur'}"
+                                   name="marketDate">
+                            <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class="control-label">车型图片</label>
+                        <input type="file" name="file" nv-file-select="" uploader="fileUploaderCartype"/>
+                        <div ng-show="cartype.imageFileId">
+                            <a href="#" class="thumbnail">
+                                <img ng-src="{{cartype.imageFileId|imgsrc}}" class="img-responsive">
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="button" ng-click="uploadCarType()">上传图片</button>
+            <button class="btn btn-primary" type="submit" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+
+<script type="text/ng-template" id="carBrandForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-horizontal form-validation"  >
+                <input type="hidden" ng-model="carbrand.id">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">品牌编码</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" placeholder="输入品牌编码,如:福特(FUTE)"
+                               ui-validate-async="{notUnique: 'checkUniqueCarBrand(\'code\', $value)'}"
+                               ng-model="carbrand.code" ng-model-options="{updateOn: 'blur'}"
+                               ng-pattern="/^[A-Z]{2,}$/"
+                               name="code" required>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">品牌编码是必须的!</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">品牌编码不能重复！</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">品牌编码为品牌名称大写字母且最小为2位！</span>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">品牌名称</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" placeholder="输入品牌名称"
+                               ui-validate-async="{notUnique: 'checkUniqueCarBrand(\'name\', $value)'}"
+                               ng-model="carbrand.name" ng-model-options="{updateOn: 'blur'}"
+                               name="name"  required>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">品牌名称是必须的!</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">品牌名称不能重复！</span>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">品牌LOGO（300x300）</label>
+                    <div class="col-sm-9">
+                        <input type="file" name="file" nv-file-select="" uploader="fileUploaderBrand"/>
+                        <a href="#" class="thumbnail" ng-show="carbrand.logoFileId">
+                            <img ng-src="{{carbrand.logoFileId|imgsrc}}" class="img-responsive">
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="button" ng-click="uploadBrand()">上传图片</button>
+            <button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+
+<script type="text/ng-template" id="carModelForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-horizontal form-validation"  >
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">生产商</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" placeholder="输入生产商"
+                               ng-model="carmodel.groupName" ng-model-options="{updateOn: 'blur'}"
+                               name="code" required>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">车系名称</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" placeholder="输入车系名称"
+                               ui-validate-async="{notUnique: 'checkUniqueCarModel(\'name\', $value)'}"
+                               ng-model="carmodel.name" ng-model-options="{updateOn: 'blur'}"
+                               name="name"  required>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">车系名称是必须的!</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">车系名称不能重复！</span>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

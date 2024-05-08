@@ -1,0 +1,260 @@
+<div class="panel panel-default m-b-none">
+    <div class="panel-heading">
+        <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+        <span class="h4">{{modalTitle}}</span>
+    </div>
+    <form name="userForm" class="form-validation">
+        <div class="panel-heading b-b b-light" ng-if="customershow == 1">
+            客户信息
+        </div>
+        <div class="panel-body" ng-if="customershow == 1">
+            <div class="col-lg-12">
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-3">
+                        <label>姓名</label>
+                        <input class="form-control"
+                               placeholder="请输入客户姓名" ng-model="search.name"
+                               ng-change="updateQueryString()"
+                               type="text">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>身份证号码</label>
+                        <input class="form-control"
+                               placeholder="请输入身份证号码" ng-model="search.identifyNo"
+                               ng-change="updateQueryString()"
+                               type="text">
+                    </div>
+                    <div class="col-sm-3" ng-if="search.billTypeCode != null" ng-show="search.billTypeCode != 'A031' && search.billTypeCode != 'A032' && search.billTypeCode != 'A025' && search.billTypeCode != 'A030'">
+                        <label>指标人姓名</label>
+                        <input class="form-control"
+                               placeholder="请输入指标人姓名" ng-model="search.pledgeName"
+                               ng-change="updateQueryString()"
+                               type="text">
+                    </div>
+                    <div class="col-sm-3" ng-if="search.billTypeCode != null" ng-show="search.billTypeCode != 'A031' && search.billTypeCode != 'A032' && search.billTypeCode != 'A025' && search.billTypeCode != 'A030'">
+                        <label>配偶姓名</label>
+                        <input class="form-control"
+                               placeholder="请输入配偶姓名" ng-model="search.mateName"
+                               ng-change="updateQueryString()"
+                               type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-heading b-b b-light" ng-if="orginfoshow == 1">
+            部门信息
+        </div>
+        <div class="panel-body" ng-if="orginfoshow == 1">
+            <div class="col-lg-12">
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-4" ng-show="search.billTypeCode != 'A032'">
+                        <div class="form-group">
+                            <label>业务部门</label>
+                            <ui-select sortable="true" ng-model="search.orginfoId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择业务部门" >{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices  repeat="orginfo.id as orginfo in orginfos | filter: $select.search">
+                                    <div ng-bind-html="orginfo.name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>分期经理</label>
+                            <ui-select sortable="true" ng-model="search.businessManagerId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择分期经理" >{{$select.selected.username}}</ui-select-match>
+                                <ui-select-choices  repeat="businessManager.id as businessManager in businessManagers | filter: $select.search">
+                                    <div ng-bind-html="businessManager.username | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>渠道名称</label>
+                            <ui-select sortable="true" ng-model="search.carDealerId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择渠道名称" >{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices  repeat="cardealer.id as cardealer in cardealers | filter: $select.search">
+                                    <div ng-bind-html="cardealer.name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-heading b-b b-light" ng-if="loanshow == 1">
+            借款信息
+        </div>
+        <div class="panel-body" ng-if="loanshow == 1">
+            <div class="col-lg-12">
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-7">
+                        <label class="col-sm-3 control-label">贷款金额：</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control" placeholder="请输入最小金额" ng-model="search.startLimitAmount">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control" placeholder="请输入最大金额" ng-model="search.endLimitAmount">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <label class="col-sm-4 control-label">贷款期限：</label>
+                        <div class="col-sm-8">
+                            <select ng-model="search.creditMonths" class="form-control">
+                                <option value="0">请选择贷款期限</option>
+                                <option value="12">12</option>
+                                <option value="18">18</option>
+                                <option value="24">24</option>
+                                <option value="30">30</option>
+                                <option value="36">36</option>
+                                <option value="48">48</option>
+                                <option value="60">60</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix" ng-if="search.billTypeCode != 'A001'">
+                    <div class="col-sm-6">
+                        <label class="col-sm-6 control-label">贴息：</label>
+                        <div class="col-sm-6">
+                            <div class="checkbox">
+                                <label class="i-checks">
+                                    <input type="checkbox" name="compensatory" ng-model="search.compensatory"/></input><i></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-6 control-label">商贷：</label>
+                        <div class="col-sm-6">
+                            <div class="checkbox">
+                                <label class="i-checks">
+                                    <input type="checkbox" name="business" ng-model="search.business"/></input><i></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--    转移过户、提车上牌  不展示 -->
+                <div class="form-group pull-in clearfix" ng-if="search.billTypeCode != 'A005' && search.billTypeCode != 'A023'">
+                    <div class="col-sm-6">
+                        <label class="col-sm-6 control-label">新车：</label>
+                        <div class="col-sm-6">
+                            <div class="checkbox">
+                                <label class="i-checks">
+                                    <input type="checkbox" name="nc" ng-model="search.nc"/></input><i></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-6 control-label">二手车：</label>
+                        <div class="col-sm-6">
+                            <div class="checkbox">
+                                <label class="i-checks">
+                                    <input type="checkbox" name="oc" ng-model="search.oc"/></input><i></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--只在垫资支付页面显示-->
+                <div class="form-group pull-in clearfix" ng-if="search.advancedPay != null && search.advancedPay != undefined && search.billTypeCode == 'A004' ">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label">是否开票前支付</label>
+                            <div class="form-control">
+                                <label class="i-checks">
+                                    <input type="radio"  name="advancedPay"  ng-model="search.advancedPay"  ng-value="1" />
+                                    <i></i>
+                                    开票前支付
+                                </label>
+                                <label class="i-checks">
+                                    <input type="radio"  name="advancedPay"  ng-model="search.advancedPay"   ng-value="2" />
+                                    <i></i>
+                                    开票后支付
+                                </label>
+                                <label class="i-checks">
+                                    <input type="radio" name="advancedPay"  ng-model="search.advancedPay"  ng-value="0" />
+                                    <i></i>
+                                    全部
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-heading b-b b-light" ng-if="timeshow == 1">
+            日期信息
+        </div>
+        <div class="panel-body" ng-if="timeshow == 1">
+            <div class="col-lg-12">
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-2">{{search.billTypeCode |billTimeName }}</div>
+                    <div class="col-sm-5">
+                        <div class="input-group" moment-picker="search.startTime" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control"
+                                   ng-model="search.startTime" placeholder="请输入开始时间"
+                                   ng-model-options="{ updateOn: 'blur' }"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="input-group" moment-picker="search.endTime" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control"
+                                   ng-model="search.endTime" placeholder="请输入结束时间"
+                                   ng-model-options="{ updateOn: 'blur' }"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12" ng-if="search.billTypeCode != 'A026' && search.billTypeCode != 'A000' && search.billTypeCode != 'A008' && search.billTypeCode != 'A020' && search.billTypeCode != 'A011' ">
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-2">业务处理时间</div>
+                    <div class="col-sm-5">
+                        <div class="input-group" moment-picker="search.startApproveTime" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control"
+                                   ng-model="search.startApproveTime" placeholder="请输入开始时间"
+                                   ng-model-options="{ updateOn: 'blur' }"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="input-group" moment-picker="search.endApproveTime" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control"
+                                   ng-model="search.endApproveTime" placeholder="请输入结束时间"
+                                   ng-model-options="{ updateOn: 'blur' }"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid" ng-click="doQuery(search)">查  询</button>
+            <button class="btn btn-primary" type="button" ng-click="clearQuery()">清  除</button>
+            <button class="btn btn-warning" type="button" ng-click="close()">关  闭</button>
+        </footer>
+    </form>
+</div>
+
+

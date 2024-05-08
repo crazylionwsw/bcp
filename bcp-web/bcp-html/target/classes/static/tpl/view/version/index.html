@@ -1,0 +1,166 @@
+<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                app名称
+                            </th>
+                            <th>
+                                包名
+                            </th>
+                            <th >
+                                apk编码
+                            </th>
+                            <th >
+                                版本名称
+                            </th>
+                            <th >
+                                apk远程服务起地址
+                            </th>
+                            <th>
+                                是否需要强制升级
+                            </th>
+                            <th>
+                                状态
+                            </th>
+                            <th>
+                                操作
+                            </th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="version in versions|filter:query" ng-class="{true:'danger'}[version.dataStatus == 9]">
+                                <td>{{version.appName}}</td>
+                                <td>{{version.packageName}}</td>
+                                <td>{{version.versionCode}}</td>
+                                <td>{{version.versionName}}</td>
+                                <td>{{version.apkUrl}}</td>
+                                <td>{{version.forceUpgrade|yesno}}</td>
+                                <td>{{version.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li> <a class="green" role="button" data-toggle="modal" ng-click="edit(version)" ng-show="version.dataStatus != 9 && version.id != null ">
+                                                编辑
+                                            </a>
+                                            </li>
+                                            <li>
+                                                <a ng-if="version.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(version, $index)" ng-show="version.dataStatus == 9 && version.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(version,$index)" ng-show="version.dataStatus != 9 && version.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(version,$index)" ng-show="version.dataStatus == 9 && version.id != null ">
+                                                    删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--模态框页面-->
+<script type="text/ng-template" id="apkForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation"  >
+                <div class="form-group">
+                    <label>app名称</label>
+                    <input class="form-control" placeholder="请输入app名称" ng-model="version.appName" required type="text">
+                </div>
+                <div class="form-group">
+                    <label>安装包名称</label>
+                    <input class="form-control" placeholder="请输入包名" ng-model="version.packageName" required type="text">
+                </div>
+                <div class="form-group">
+                    <label>apk编码</label>
+                    <input class="form-control" placeholder="请输入apk编码" ng-model="version.versionCode" required type="number">
+                </div>
+                <div class="form-group">
+                    <label>版本名称</label>
+                    <input type="text" class="form-control" placeholder="请输入版本名称"
+                           ui-validate-async="{notUnique: 'checkUnique(\'versionName\', $value)'}"
+                           ng-model="version.versionName" ng-model-options="{updateOn: 'blur'}"
+                           required name="versionName">
+                    <span ng-show="userForm.versionName.$dirty && userForm.versionName.$error.required" class="help-block text-danger">版本名称是必须的!</span>
+                    <span ng-show="userForm.versionName.$dirty && userForm.versionName.$error.notUnique" class="help-block text-danger">版本名称不能重复！</span>
+                </div>
+                <div class="form-group">
+                    <label>更新说明</label>
+                    <input class="form-control" placeholder="请输入更新说明" ng-model="version.updateTips" required type="text">
+                </div>
+                <div class="form-group">
+                    <label> apk远程服务起地址</label>
+                    <input type="text" class="form-control" placeholder="请输入apk远程服务起地址"
+                           ui-validate-async="{notUnique: 'checkUnique(\'apkUrl\', $value)'}"
+                           ng-model="version.apkUrl" ng-model-options="{updateOn: 'blur'}"
+                           required name="apkUrl">
+                    <span ng-show="userForm.apkUrl.$dirty && userForm.apkUrl.$error.required" class="help-block text-danger">apk远程服务起地址是必须的!</span>
+                    <span ng-show="userForm.apkUrl.$dirty && userForm.apkUrl.$error.notUnique" class="help-block text-danger">apk远程服务起地址不能重复！</span>
+                </div>
+                <div class="form-group">
+                    <label>APK上传</label>
+                    <input type="file" name="file" nv-file-select="" uploader="fileUploaderVersion"/>
+                </div>
+                <div class="form-group">
+                    <label class="i-checks">
+                        <input ng-model="version.forceUpgrade"  type="checkbox"/><i></i> 是否需要强制升级
+                    </label>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" ladda="uploading" type="button" ng-click="uploadVersion()">上传APK</button>
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid" ng-click="save()" >保  存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取  消</button>
+        </footer>
+    </div>
+</script>

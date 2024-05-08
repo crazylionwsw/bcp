@@ -1,0 +1,48 @@
+package com.fuze.bcp.api.creditcar.service.IAppointSwipingCardService;
+
+import com.fuze.bcp.api.drools.bean.DroolsBaseBean;
+import com.fuze.bcp.api.creditcar.bean.appointswipingcard.AppointSwipingCardSubmissionBean
+import java.text.SimpleDateFormat
+import java.text.DateFormat;
+import com.fuze.bcp.utils.DateTimeUtils;
+
+
+rule "actSaveAppointSwipingCard"
+       dialect "java"
+       lock-on-active true
+when
+       $droolsBeans:DroolsBaseBean(apiBaseBean != null,message:message);
+       $appointSwipingCardSubmissionBean : AppointSwipingCardSubmissionBean() from $droolsBeans.apiBaseBean;
+then
+
+        String  newPattern = "yyyy-MM-dd";
+        String  oldPattern = "yyyy年MM月dd日";
+        //预计领卡时间
+        if($appointSwipingCardSubmissionBean.getAppointTakeTime() == null || "".equals($appointSwipingCardSubmissionBean.getAppointTakeTime())){
+            System.out.println("MSG_NO_APPOINT_TAKETIME");
+            message.add("MSG_NO_APPOINT_TAKETIME");
+        }
+        //预计刷卡时间
+        if($appointSwipingCardSubmissionBean.getAppointPayTime() != null || "".equals($appointSwipingCardSubmissionBean.getAppointPayTime())){
+            //  领卡时间 <  刷卡时间
+            if(!DateTimeUtils.compareTwoTs(DateTimeUtils.StringPattern($appointSwipingCardSubmissionBean.getAppointTakeTime(),oldPattern,newPattern),DateTimeUtils.StringPattern($appointSwipingCardSubmissionBean.getAppointPayTime(),oldPattern,newPattern))){
+                  System.out.println("MSG_APPOINTPAYTIME_BEFORE_APPOINTTAKETIME");
+                  message.add("MSG_APPOINTPAYTIME_BEFORE_APPOINTTAKETIME");
+            }
+        }else {
+            System.out.println("MSG_NO_APPOINT_PAYTIME");
+            message.add("MSG_NO_APPOINT_PAYTIME");
+        }
+        //预计提车时间
+        if($appointSwipingCardSubmissionBean.getPickupDate() != null || "".equals($appointSwipingCardSubmissionBean.getPickupDate())){
+            if(!DateTimeUtils.compareTwoTs(DateTimeUtils.StringPattern($appointSwipingCardSubmissionBean.getAppointPayTime(),oldPattern,newPattern),DateTimeUtils.StringPattern($appointSwipingCardSubmissionBean.getPickupDate(),oldPattern,newPattern))){
+               System.out.println("MSG_PICKUPDATE_BEFORE_APPOINTPAYTIME");
+               message.add("MSG_PICKUPDATE_BEFORE_APPOINTPAYTIME");
+            }
+        }else {
+            System.out.println("MSG_NO_PICKUP_DATE");
+            message.add("MSG_NO_PICKUP_DATE");
+        }
+
+update($droolsBeans)
+end

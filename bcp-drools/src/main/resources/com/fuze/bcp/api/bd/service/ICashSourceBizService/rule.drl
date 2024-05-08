@@ -1,0 +1,20 @@
+package com.fuze.bcp.api.bd.service;
+
+import com.fuze.bcp.api.bd.bean.*;
+
+rule "actSaveCarBrand"
+    dialect "java"
+    when
+        $carBrand:CarBrandBean( refMakeId == "1" )
+    then
+         System.out.println("refMakeId == 1");
+end
+
+rule "actSaveCarModel"
+  dialect "java"
+    when
+        $carModel:CarModelBean( carBrandId == "1" )
+    then
+         System.out.println("carBrandId == 1");
+end
+

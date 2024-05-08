@@ -1,0 +1,161 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th>
+                                姓名
+                            </th>
+                            <th>
+                                订阅组
+                            </th>
+                            <th>
+                                手机号码
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                微信号
+                            </th>
+                            <th>
+                                账号
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="subsribesource in subsribesources|filter:query" ng-class="{true:'danger'}[subsribesource.dataStatus == 9]">
+                                <td>{{subsribesource.name}}</td>
+                                <td>{{subsribesource.groupName}}</td>
+                                <td>{{subsribesource.phoneNo}}</td>
+                                <td>{{subsribesource.email}}</td>
+                                <td>{{subsribesource.vcharNo}}</td>
+                                <td>{{subsribesource.websocket}}</td>
+                                <td>{{subsribesource.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="hidden-sm hidden-xs action-buttons">
+                                        <a class="green" role="button" data-toggle="modal" ng-click="edit(subsribesource,$index)" ng-show="subsribesource.dataStatus != 9 && subsribesource.id != null ">
+                                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                        </a>
+                                        <a ng-if="subsribesource.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(subsribesource, $index)" ng-show="subsribesource.dataStatus == 9 && subsribesource.id != null ">
+                                            <i class="ace-icon fa fa-undo bigger-130"></i>
+                                        </a>
+                                        <a class="red" href ng-click="delete(subsribesource, $index)">
+                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="subsribesourceForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="subsribesource.id">
+
+                <div class="form-group">
+                    <label class="control-label">姓名</label>
+                    <input type="text" class="form-control" name="name" placeholder="请输入姓名"
+                           ng-model="subsribesource.name" ng-model-options="{updateOn: 'blur'}"
+                           required>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">姓名为必填！</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">订阅组</label>
+                    <input type="text" class="form-control" name="groupName" placeholder="请输入订阅组名"
+                           ng-model="subsribesource.groupName" ng-model-options="{updateOn: 'blur'}"
+                           required>
+                    <span ng-show="userForm.groupName.$dirty && userForm.groupName.$error.required" class="help-block text-danger">订阅组为必填！</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">手机号码</label>
+                    <input  type="text" class="form-control" placeholder="请输入手机号" name="phoneNo" ng-pattern="/^1[3|4|5|7|8]\d{9}$/"
+                            ng-model="subsribesource.phoneNo" ng-model-options="{updateOn: 'blur'}"
+                            ui-validate-async="{notUnique: 'checkUnique(\'phoneNo\', $value)'}"
+                            name="cell" required>
+                    <span ng-show="userForm.phoneNo.$error.pattern" class="help-block text-danger">手机格式不正确</span>
+                    <span ng-show="userForm.phoneNo.$dirty && userForm.phoneNo.$error.required" class="help-block text-danger">手机号码是必须的！</span>
+                    <span ng-show="userForm.phoneNo.$dirty && userForm.phoneNo.$error.notUnique" class="help-block text-danger">手机号码不能重复！</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Email</label>
+                    <input class="form-control" type="email" placeholder="请输入Email" name="email"
+                           ui-validate-async="{notUnique: 'checkUnique(\'email\', $value)'}"
+                           ng-model="subsribesource.email" ng-model-options="{updateOn: 'blur'}" required>
+                    <span class="help-block text-danger" ng-show="userForm.email.$error.email &&userForm.email.$dirty">邮箱格式不正确</span>
+                    <span ng-show="userForm.email.$dirty && userForm.email.$error.notUnique" class="help-block text-danger">邮箱不能重复！</span>
+                    <span ng-show="userForm.email.$dirty && userForm.email.$error.required" class="help-block text-danger">邮箱是必须的！</span>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label">微信号</label>
+                    <input type="text" class="form-control" name="vcharNo" placeholder="请输入微信号"
+                           ui-validate-async="{notUnique: 'checkUnique(\'vcharNo\', $value)'}"
+                           ng-model="subsribesource.vcharNo" ng-model-options="{updateOn: 'blur'}"
+                           required>
+                    <span ng-show="userForm.vcharNo.$dirty && userForm.vcharNo.$error.required" class="help-block text-danger">微信号为必须的！</span>
+                    <span ng-show="userForm.vcharNo.$dirty && userForm.vcharNo.$error.notUnique" class="help-block text-danger">微信号不能重复！</span>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label">账号</label>
+                    <input type="text" class="form-control" name="websocket" placeholder="请输入账号"
+                           ng-model="subsribesource.websocket" ng-model-options="{updateOn: 'blur'}"
+                           required>
+                    <span ng-show="userForm.websocket.$dirty && userForm.websocket.$error.required" class="help-block text-danger">账号为必须的！</span>
+                </div>
+
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button" ng-disabled="!userForm.$valid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

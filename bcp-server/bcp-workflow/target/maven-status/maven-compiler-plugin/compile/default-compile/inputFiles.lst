@@ -1,0 +1,11 @@
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\repository\WorkFlowBillRepository.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\service\impl\WorkFlowBillServiceImpl.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\service\impl\BusinessFlowServiceImpl.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\starter\WorkflowBootStarter.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\business\BizWorkflowService.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\service\IWorkFlowBillService.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\starter\config\ActivitiConfig.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\domain\WorkFlowBill.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\service\IBusinessFlowService.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\starter\config\DubboConfig.java
+E:\developer\bcp\bcp-server\bcp-workflow\src\main\java\com\fuze\bcp\workflow\starter\config\RedisConfig.java

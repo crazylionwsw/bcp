@@ -1,0 +1,230 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <ui-select ng-model="orgId" theme="bootstrap" on-select="chooseOrg($item, $model)">
+                                    <ui-select-match placeholder="选择部门" >{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices  repeat="org.id as org in orginfos | filter: $select.search">
+                                        <div ng-bind-html="org.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <div class="input-group" moment-picker="saleMonth" format="YYYY-MM"
+                                     locale="zh-cn" selectable="true">
+                                    <input type="text" class="form-control" ng-model="saleMonth" placeholder="选择月份"/>
+                                    <span class="input-group-btn">
+                                         <button type="button" class="btn btn-default btn-sm" ng-click="clearMonth()">重置时间</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-b-xs text-right ">
+                                <a role="button" ladda="calcing" data-spinner-color="#999999" class="btn btn-sm btn-primary"  ng-click="calcSharing()">{{calcLabel}}</a>
+                                <a role="button" data-spinner-color="#999999" class="btn btn-sm btn-success"  ng-click="searchDetail()">查 询</a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none" data-filter="#filter">
+                            <thead>
+                            <tr>
+                                <th>月份</th>
+                                <th>经销商名称</th>
+                                <th>渠道经理</th>
+                                <th>分成状态</th>
+                                <th>贷款金额合计</th>
+                                <th>贷款笔数合计</th>
+                                <th>分成金额合计</th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="ds in dealersharings">
+                                <td>{{ds.month}}</td>
+                                <td>{{ds.dealerName}}</td>
+                                <td><employee-info id="ds.channelId"></employee-info></td>
+                                <td>
+                                    <div ng-show="ds.status != null && ds.status != 3">{{ds.status | sharingConfirmStatus}}</div>
+                                    <button class="btn btn-primary btn-xs" type="button" ng-click="balanceSave(ds)" ng-show="ds.status != null && ds.status == 3 ">结算</button>
+                                </td>
+                                <td>{{ds.totalCredit | currency:'￥'}}</td>
+                                <td>{{ds.totalCount}}</td>
+                                <td>{{ds.totalSharing | currency:'￥'}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="blue" ng-click="view(ds)" data-toggle="modal">
+                                                    详情
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="blue" ng-click="refreshSharing(ds)" data-toggle="modal">
+                                                    重算
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1800px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">渠道分成</h1>
+                    </div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="wrapper row m-n">
+                                <div class="col-lg-12">
+                                    <!--来源渠道-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"  style="text-align: center"><span class="h4">{{dealerName}}{{salemonth}}月分成详情表</span></div>
+                                        <div class="panel-body" style="height: 800px;width: 1720px;">
+                                            <div>
+                                                <div class="table-responsive" style="vertical-align: middle;min-height:165px;">
+                                                    <table class="table">
+                                                        <thead>
+                                                        <th>
+                                                            客户姓名【身份证号码】
+                                                        </th>
+                                                        <th>
+                                                            贷款金额
+                                                        </th>
+                                                        <th>
+                                                            银行手续费
+                                                        </th>
+                                                        <th>
+                                                            贷款服务费
+                                                        </th>
+                                                        <th>
+                                                            登记证收取时间
+                                                        </th>
+                                                        <th>
+                                                            期数
+                                                        </th>
+                                                        <th>
+                                                            手续费缴纳方式
+                                                        </th>
+                                                        <th>
+                                                            是否贴息
+                                                        </th>
+                                                        <th>
+                                                            分成比例
+                                                        </th>
+                                                        <th>
+                                                            分成金额
+                                                        </th>
+                                                        <th>
+                                                            分成对象
+                                                        </th>
+                                                        <th>
+                                                            核对状态
+                                                        </th>
+                                                        <th>
+                                                            操作
+                                                        </th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr ng-repeat="dsup in dealerSharingLookUps">
+                                                            <td><customer-info id="dsup.customerId"></customer-info></td>
+                                                            <td>{{dsup.creditAmount | currency:'￥'}}</td>
+                                                            <td>{{dsup.bankFeeAmount | currency:'￥'}}</td>
+                                                            <td>{{dsup.loanServiceFee | currency:'￥'}}</td>
+                                                            <td>{{dsup.pledgeDateReceiveTime}}</td>
+                                                            <td>{{dsup.months}}</td>
+                                                            <td>{{dsup.chargePaymentWay | chargePaymentWayFilter}}</td>
+                                                            <td>{{dsup.compensatoryFlag | yesno}}</td>
+                                                            <td>
+                                                                <div ng-show="dsup.status == 0" style="width: auto">
+                                                                    <p class="form-control-static b-b">
+                                                                        <a href="#" editable-text="dsup.sharingRatio" e-label="" onaftersave="updateSharingRatio(dsup)">{{dsup.sharingRatio}}</a>
+                                                                    </p>
+                                                                </div>
+                                                                <div ng-show="dsup.status != 0" style="width: auto">
+                                                                    {{dsup.sharingRatio}}
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div ng-show="dsup.status == 0">
+                                                                    <p class="form-control-static b-b">
+                                                                        <a href="#" editable-text="dsup.sharingAmount" e-label="" onaftersave="updateSharingAmount(dsup)">{{dsup.sharingAmount ||0 |currency:'￥'}}</a>
+                                                                    </p>
+                                                                </div>
+                                                                <div ng-show="dsup.status != 0" style="width: auto;">
+                                                                    {{dsup.sharingAmount ||0 |currency:'￥'}}
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div ng-show="dsup.status == 0">
+                                                                    <ui-select  ng-model="dsup.mainPartType" theme="bootstrap">
+                                                                        <ui-select-match placeholder="请选择分成对象" >{{$select.selected.name}}</ui-select-match>
+                                                                        <ui-select-choices  repeat="me.id as me in mainPartTypes | filter: $select.search">
+                                                                            <div ng-bind-html="me.name | highlight: $select.search"></div>
+                                                                        </ui-select-choices>
+                                                                    </ui-select>
+                                                                </div>
+                                                                <div ng-show="dsup.status != 0">{{dsup.mainPartType | mainPartTypeFilter}}</div>
+                                                            </td>
+                                                            <td>{{dsup.status | sharingConfirmStatus}}</td>
+                                                            <td>
+                                                            <button class="btn btn-primary btn-xs" type="button" ng-click="confirmSave(dsup)" ng-show="dsup.status != null && dsup.status == 0">修正</button>
+                                                            <button class="btn btn-primary btn-xs" type="button" ng-click="confirmSave(dsup)" ng-show="dsup.status != null && dsup.status == 1">核对</button>
+                                                            <button class="btn btn-primary btn-xs" type="button" ng-click="confirmSave(dsup)" ng-show="dsup.status != null && dsup.status == 2 ">复核</button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-info" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+

@@ -1,0 +1,183 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">{{formTitle}}--{{purchasecarorder.businessType.name}}</h1>
+</div>
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-lg-9">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="h4">客户基本信息</span>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <customer-block ng-if="purchasecarorder.customerId !== undefined" id="purchasecarorder.customerId"></customer-block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="h4">购买车辆信息</span>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-sm-3">
+                                    <label>车辆开票价（元）</label>
+                                    <p class="form-control-static b-b">{{purchasecarorder.receiptPrice|currency:'￥'}}</p>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>实际成交价（元）</label>
+                                    <p class="form-control-static b-b">{{purchasecarorder.realPrice|currency:'￥'}}</p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>现有车辆数（辆）</label>
+                                    <p class="form-control-static b-b">{{purchasecarorder.carNumber}}辆</p>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>贷款购车次数（次）</label>
+                                    <p class="form-control-static b-b">{{purchasecarorder.buyCarNumber}}次</p>
+                                </div>
+                            </div>
+
+                            <cartype-block ng-if="purchasecarorder.selectCar !== undefined" selectcar="purchasecarorder.selectCar"></cartype-block>
+                        </div>
+                    </div>
+                    <!-- -->
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="h4">借款信息</span>
+                </div>
+                <div class="panel-body bg-info">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-lg-4">
+                                    <label>首付金额（元）</label>
+                                    <p class="form-control-static b-b">
+                                        {{purchasecarorder.salePrice.downPayment|currency:'￥'}}
+                                    </p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>借款金额（元）</label>
+                                    <p class="form-control-static b-b">
+                                        {{purchasecarorder.salePrice.limitAmount|currency:'￥'}}
+                                    </p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>借款期限（月）</label>
+                                    <p class="form-control-static b-b">
+                                        {{purchasecarorder.salePrice.creditMonths}}个月
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-lg-4">
+                                    <label>借款利率（%）</label>
+                                    <p class="form-control-static b-b">
+                                        {{purchasecarorder.salePrice.fuzeChargeRatio}}%
+                                    </p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>全额手续费（元）</label>
+                                    <p class="form-control-static b-b">
+                                        {{purchasecarorder.salePrice.charge|currency:'￥'}}
+                                    </p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>是否贴息</label>
+                                    <p class="form-control-static b-b">
+                                        {{purchasecarorder.salePrice.compensatoryInterest|yesno}}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-lg-4">
+                                    <label>贴息金额（元）</label>
+                                    <p class="form-control-static b-b">
+                                        {{purchasecarorder.salePrice.compensatoryAmount|currency:'￥'}}
+                                    </p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>担保服务费（元）</label>
+                                    <p class="form-control-static b-b">
+                                        {{purchasecarorder.salePrice.serviceFee|currency:'￥'}}
+                                    </p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>风险押金（元）</label>
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" style="display: block;" type="text" ng-model="purchasecarorder.salePrice.riskDeposit">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pull-in clearfix">
+                                <div class="col-lg-4">
+                                    <label>担保方式</label>
+                                    <p class="form-control-static b-b">{{purchasecarorder.guaranteeWay.name}}</p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>银行批复额度（元）</label>
+                                    <p class="form-control-static b-b">
+                                        <a href="#" editable-text="purchasecarorder.approvedCreditAmount" e-label="" onaftersave="updateApprovedAmount()">{{purchasecarorder.approvedCreditAmount || "0" |currency:'￥' }}</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="h4">客户来源</span>
+                </div>
+                <div class="panel-body">
+                    <cardealer-block ng-if="purchasecarorder.carDealerId != undefined" id="purchasecarorder.carDealerId"></cardealer-block>
+                </div>
+            </div>
+
+            <footer class="text-right">
+                <!--是否显示审核是换车订单的对象-->
+                <button class="btn btn-primary" type="button" can-audit="resetorder" ng-click="audit()">审 核</button>
+                <button class="btn btn-warning" type="button" ui-sref="app.business.resetorder">返 回</button>
+            </footer>
+        </div>
+
+        <!--右边栏-->
+        <div class="col-lg-3">
+
+            <!--当前业务分期经理 -->
+            <div class="panel b-success b-light clearfix">
+                <div class="panel-body">
+                    <a href="" class="thumb avatar pull-left m-r">
+                        <employee-avatar ng-if="order.employeeId !== undefined" id="order.employeeId"></employee-avatar>
+                        <i class="on b-white bottom"></i>
+                    </a>
+                    <div class="clear">
+                        <employee-info ng-if="order.employeeId !== undefined" id="order.employeeId"></employee-info>
+                        <br/><br/>
+                        <small class="block text-muted text-xs"><i class="icon-action-redo"></i>当前业务分期经理</small>
+                    </div>
+                </div>
+            </div>
+
+            <!--显示订单的签批信息-->
+            <div class="m-b-md clearfix" ng-show="order.id != null">
+                <signinfo-list ng-if="order.id !== undefined" id="order.id"></signinfo-list>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="audit.html">
+    <signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>

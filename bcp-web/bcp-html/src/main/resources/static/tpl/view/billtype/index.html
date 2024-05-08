@@ -1,0 +1,258 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                单据编码
+                            </th>
+                            <th>
+                                单据名称
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="billtype in billtypes|filter:query|orderBy:'code':false" ng-class="{true:'danger'}[billtype.dataStatus == 9]">
+                                <td>{{billtype.code}}</td>
+                                <td>{{billtype.name}}</td>
+                                <td>
+                                    {{billtype.dataStatus|dataStatusFilter}}
+                                    <!--<a ng-if="billtype.dataStatus == 9" role="button" data-toggle="modal" ng-click="editDealerEmployee(billtype, $index)" tooltip="启用">
+                                        <i class="ace-icon fa fa-undo bigger-130"></i>
+                                    </a>-->
+                                </td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(billtype)" ng-show="billtype.dataStatus != 9 && billtype.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <!--启用-->
+                                                <a ng-if="billtype.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(billtype, $index)" ng-show="billtype.dataStatus == 9 && billtype.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(billtype, $index)" ng-show="billtype.dataStatus != 9 && billtype.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(billtype, $index)" ng-show="billtype.dataStatus == 9 && billtype.id != null ">
+                                                    删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="billtypeForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="billtype.id">
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class="control-label">单据编码</label>
+                        <input type="text" class="form-control" placeholder="请输入单据编码"
+                               ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                               ng-model="billtype.code" ng-model-options="{updateOn: 'blur'}"
+                               ng-pattern="/^[A-Z0-9]{4,}$/"
+                               name="code" required>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">单据编码是必须的!</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">单据编码不能重复！</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">单据编码为大写字母或数字且最小为4位，如A001！</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">单据名称</label>
+                        <input type="text" class="form-control" placeholder="请输入单据名称"
+                               ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                               ng-model="billtype.name" ng-model-options="{updateOn: 'blur'}"
+                               name="name" required>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">单据名称是必须的!</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">单据名称不能重复！</span>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class="control-label">审批流程ID</label>
+                        <input type="text" class="form-control" placeholder="请输入审批流程ID"
+                               ng-model="billtype.activitiFlowID" ng-model-options="{updateOn: 'blur'}"
+                               name="activitiFlowID">
+                    </div>
+                    <!--<div class="col-sm-6">-->
+                        <!--<label class="control-label">需要生成的合同</label>-->
+                        <!--<ui-select multiple sortable="true" ng-model="billtype.documentIds" theme="bootstrap" ng-disabled="disabled">-->
+                            <!--<ui-select-match  placeholder="请选择合同类型" >{{$item.name}}</ui-select-match>-->
+                            <!--<ui-select-choices repeat="document.id as document in documents | filter: $select.search">-->
+                                <!--<div ng-bind-html="document.name "></div>-->
+                            <!--</ui-select-choices>-->
+                        <!--</ui-select>-->
+                    <!--</div>-->
+                </div>
+                <div class="form-group">
+                    <label class="control-label">需要生成的合同</label>
+                    <ui-select multiple sortable="true" ng-model="billtype.documentIds" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match  placeholder="请选择合同类型" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="document.id as document in documents | filter: $select.search">
+                            <div ng-bind-html="document.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">必须提交的资料</label>
+                    <ui-select multiple sortable="true" ng-model="billtype.requiredImageTypeCodes" name="requiredImageList" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match  placeholder="请选择资料类型" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">
+                            <div ng-bind-html="customerimagetype.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">建议需要提交的资料</label>
+                    <ui-select multiple sortable="true" ng-model="billtype.suggestedImageTypeCodes" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match placeholder="请选择资料类型">{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">
+                            <div ng-bind-html="customerimagetype.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">必须快递的资料</label>
+                    <ui-select multiple sortable="true" ng-model="billtype.requiredExpImageTypeCodes" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match  placeholder="请选择资料类型" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">
+                            <div ng-bind-html="customerimagetype.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">建议快递的资料</label>
+                    <ui-select multiple sortable="true" ng-model="billtype.suggestedExpImageTypeCodes" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match placeholder="请选择资料类型">{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">
+                            <div ng-bind-html="customerimagetype.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+                <div class="form-group pull-in clearfix">
+                    <!--<div class="col-sm-6">-->
+                        <!--<label class="control-label">必须提交的资料</label>-->
+                        <!--<ui-select multiple sortable="true" ng-model="billtype.requiredImageTypeCodes" name="requiredImageList" theme="bootstrap" ng-disabled="disabled">-->
+                            <!--<ui-select-match  placeholder="请选择资料类型" >{{$item.name}}</ui-select-match>-->
+                            <!--<ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">-->
+                                <!--<div ng-bind-html="customerimagetype.name "></div>-->
+                            <!--</ui-select-choices>-->
+                        <!--</ui-select>-->
+                    <!--</div>-->
+                    <!--<div class="col-sm-6">-->
+                        <!--<label class="control-label">建议需要提交的资料</label>-->
+                        <!--<ui-select multiple sortable="true" ng-model="billtype.suggestedImageTypeCodes" theme="bootstrap" ng-disabled="disabled">-->
+                            <!--<ui-select-match placeholder="请选择资料类型">{{$item.name}}</ui-select-match>-->
+                            <!--<ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">-->
+                                <!--<div ng-bind-html="customerimagetype.name "></div>-->
+                            <!--</ui-select-choices>-->
+                        <!--</ui-select>-->
+                    <!--</div>-->
+                </div>
+                <!--<div class="form-group pull-in clearfix">-->
+                    <!--<div class="col-sm-6">-->
+                        <!--<label class="control-label">必须快递的资料</label>-->
+                        <!--<ui-select multiple sortable="true" ng-model="billtype.requiredExpImageTypeCodes" theme="bootstrap" ng-disabled="disabled">-->
+                            <!--<ui-select-match  placeholder="请选择资料类型" >{{$item.name}}</ui-select-match>-->
+                            <!--<ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">-->
+                                <!--<div ng-bind-html="customerimagetype.name "></div>-->
+                            <!--</ui-select-choices>-->
+                        <!--</ui-select>-->
+                    <!--</div>-->
+                    <!--<div class="col-sm-6">-->
+                        <!--<label class="control-label">建议快递的资料</label>-->
+                        <!--<ui-select multiple sortable="true" ng-model="billtype.suggestedExpImageTypeCodes" theme="bootstrap" ng-disabled="disabled">-->
+                            <!--<ui-select-match placeholder="请选择资料类型">{{$item.name}}</ui-select-match>-->
+                            <!--<ui-select-choices repeat="customerimagetype.code as customerimagetype in customerimagetypes | filter: $select.search">-->
+                                <!--<div ng-bind-html="customerimagetype.name "></div>-->
+                            <!--</ui-select-choices>-->
+                        <!--</ui-select>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button" ng-disabled="userForm.$pristine" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-ocr/src/main/java/com/fuze/bcp/api/ocr/bean/IdentifyCardInfo.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-ocr/src/main/java/com/fuze/bcp/api/ocr/service/IOCRIdentifyCardService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-ocr/src/main/java/com/fuze/bcp/api/ocr/bean/BankCardInfo.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-ocr/src/main/java/com/fuze/bcp/api/ocr/service/IOCRBankCardService.java

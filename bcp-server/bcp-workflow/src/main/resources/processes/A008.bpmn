@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="A008" name="A008" isExecutable="true">
+    <startEvent id="startevent2" name="Start"></startEvent>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <userTask id="DMVP_PledgeDateReceive" name="客户抵押资料签收"></userTask>
+    <userTask id="DMVP_TakeContract" name="银行抵押合同盖章"></userTask>
+    <userTask id="DMVP_PledgeStart" name="车管所抵押开始"></userTask>
+    <userTask id="DMVP_PledgeEnd" name="抵押完成"></userTask>
+    <sequenceFlow id="flow1" sourceRef="startevent2" targetRef="parallelgateway1"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="DMVP_ContractStart" targetRef="DMVP_TakeContract"></sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="DMVP_TakeContract" targetRef="parallelgateway2"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="DMVP_PledgeStart" targetRef="DMVP_PledgeEnd"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="DMVP_PledgeEnd" targetRef="endevent1"></sequenceFlow>
+    <userTask id="DMVP_ContractStart" name="银行抵押合同打印"></userTask>
+    <sequenceFlow id="flow7" sourceRef="parallelgateway1" targetRef="DMVP_ContractStart"></sequenceFlow>
+    <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
+    <sequenceFlow id="flow8" sourceRef="parallelgateway1" targetRef="DMVP_PledgeDateReceive"></sequenceFlow>
+    <parallelGateway id="parallelgateway2" name="Parallel Gateway"></parallelGateway>
+    <sequenceFlow id="flow9" sourceRef="parallelgateway2" targetRef="DMVP_PledgeStart"></sequenceFlow>
+    <sequenceFlow id="flow10" sourceRef="DMVP_PledgeDateReceive" targetRef="parallelgateway2"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_A008">
+    <bpmndi:BPMNPlane bpmnElement="A008" id="BPMNPlane_A008">
+      <bpmndi:BPMNShape bpmnElement="startevent2" id="BPMNShape_startevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="463.0" y="43.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="463.0" y="690.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DMVP_PledgeDateReceive" id="BPMNShape_DMVP_PledgeDateReceive">
+        <omgdc:Bounds height="55.0" width="105.0" x="520.0" y="287.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DMVP_TakeContract" id="BPMNShape_DMVP_TakeContract">
+        <omgdc:Bounds height="55.0" width="105.0" x="330.0" y="340.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DMVP_PledgeStart" id="BPMNShape_DMVP_PledgeStart">
+        <omgdc:Bounds height="55.0" width="105.0" x="428.0" y="502.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DMVP_PledgeEnd" id="BPMNShape_DMVP_PledgeEnd">
+        <omgdc:Bounds height="55.0" width="105.0" x="428.0" y="593.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DMVP_ContractStart" id="BPMNShape_DMVP_ContractStart">
+        <omgdc:Bounds height="55.0" width="105.0" x="330.0" y="232.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="parallelgateway1" id="BPMNShape_parallelgateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="460.0" y="131.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="parallelgateway2" id="BPMNShape_parallelgateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="460.0" y="420.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="480.0" y="78.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="131.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="382.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="340.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="382.0" y="395.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="440.0"></omgdi:waypoint>
+        <omgdi:waypoint x="460.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="480.0" y="557.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="593.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="480.0" y="648.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="690.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="460.0" y="151.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="151.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="232.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="500.0" y="151.0"></omgdi:waypoint>
+        <omgdi:waypoint x="572.0" y="151.0"></omgdi:waypoint>
+        <omgdi:waypoint x="572.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="480.0" y="460.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="502.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="572.0" y="342.0"></omgdi:waypoint>
+        <omgdi:waypoint x="572.0" y="440.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

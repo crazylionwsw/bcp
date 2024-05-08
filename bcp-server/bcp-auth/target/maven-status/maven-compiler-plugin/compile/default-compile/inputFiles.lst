@@ -1,0 +1,17 @@
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\business\BizLoginTokenService.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\repository\SysResourceRepository.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\starter\AuthBootStarter.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\service\impl\SysResourceServiceImpl.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\domain\LoginUser.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\repository\SysRoleRepository.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\service\ILoginUserService.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\domain\SysResource.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\service\ISysRoleService.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\domain\SysRole.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\repository\LoginUserRepository.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\starter\config\DubboConfig.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\service\impl\LoginUserServiceImpl.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\starter\config\RedisConfig.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\business\BizAuthenticationService.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\service\impl\SysRoleServiceImpl.java
+E:\developer\bcp\bcp-server\bcp-auth\src\main\java\com\fuze\bcp\auth\service\ISysResourceService.java

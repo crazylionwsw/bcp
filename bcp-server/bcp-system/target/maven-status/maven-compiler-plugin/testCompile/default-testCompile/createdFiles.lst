@@ -1,0 +1,5 @@
+com\fuze\bcp\system\service\DeviceServiceTest.class
+com\fuze\bcp\AppTest.class
+com\fuze\bcp\system\service\APKServiceTest.class
+com\fuze\bcp\system\service\LogServiceTest.class
+com\fuze\bcp\system\service\ParamServiceTest.class

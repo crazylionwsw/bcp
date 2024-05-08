@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="bcp-auth" />
+        <module name="bcp-bd" />
+        <module name="bcp-cardealer" />
+        <module name="bcp-common" />
+        <module name="bcp-creditcar" />
+        <module name="bcp-credithome" />
+        <module name="bcp-customer" />
+        <module name="bcp-drools" />
+        <module name="bcp-dubbo" />
+        <module name="bcp-file" />
+        <module name="bcp-message" />
+        <module name="bcp-mq" />
+        <module name="bcp-mq-receiver" />
+        <module name="bcp-push" />
+        <module name="bcp-statistics" />
+        <module name="bcp-system" />
+        <module name="bcp-timertask" />
+        <module name="bcp-transaction" />
+        <module name="bcp-wechat" />
+        <module name="bcp-workflow" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="bcp-auth" target="1.8" />
+      <module name="bcp-bd" target="1.8" />
+      <module name="bcp-blockchain" target="1.8" />
+      <module name="bcp-cardealer" target="1.8" />
+      <module name="bcp-common" target="1.8" />
+      <module name="bcp-creditcar" target="1.8" />
+      <module name="bcp-credithome" target="1.8" />
+      <module name="bcp-customer" target="1.8" />
+      <module name="bcp-drools" target="1.8" />
+      <module name="bcp-dubbo" target="1.8" />
+      <module name="bcp-file" target="1.8" />
+      <module name="bcp-message" target="1.8" />
+      <module name="bcp-mq" target="1.8" />
+      <module name="bcp-mq-receiver" target="1.8" />
+      <module name="bcp-push" target="1.8" />
+      <module name="bcp-server" target="1.8" />
+      <module name="bcp-statistics" target="1.8" />
+      <module name="bcp-system" target="1.8" />
+      <module name="bcp-timertask" target="1.8" />
+      <module name="bcp-transaction" target="1.8" />
+      <module name="bcp-wechat" target="1.8" />
+      <module name="bcp-workflow" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

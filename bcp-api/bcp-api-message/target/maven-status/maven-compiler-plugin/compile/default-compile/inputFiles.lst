@@ -1,0 +1,12 @@
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/bean/MessageLogBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/bean/FeedbackBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/SerializationOptimizerImpl.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/bean/MessageSubScribeBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/service/ISubscribeBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/bean/NoticeBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/bean/MessageSourceBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/bean/NoticeLookupBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/bean/MessageTemplateBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/bean/SubSribeSourceBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/bean/Channels.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-message/src/main/java/com/fuze/bcp/api/msg/service/IMessageBizService.java

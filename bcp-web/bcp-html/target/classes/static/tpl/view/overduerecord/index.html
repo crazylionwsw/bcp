@@ -1,0 +1,218 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-2 text-left">
+                                <select class="form-control" ng-model="pageSize" ng-change="changePageSize()">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="1000">1000</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs "></div>
+                            <div class="col-sm-6 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                        </div>
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <tr>
+                                <th>
+                                    序号
+                                </th>
+                                <th>
+                                    报单支行
+                                </th>
+                                <th>
+                                    渠道支行
+                                </th>
+                                <th>
+                                    客户姓名【身份证号码】
+                                </th>
+                                <th>
+                                    业务类型
+                                </th>
+                                <th>
+                                    分期经理【手机号码】
+                                </th>
+                                <th>
+                                    逾期金额
+                                </th>
+                                <th>
+                                    逾期时间
+                                </th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="overduerecord in overduerecords" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[overduerecord.approveStatus]">
+                                <td>{{$index+1}}</td>
+                                <td><transaction-cashsource-info ng-if="overduerecord.transaction !== undefined" transaction="overduerecord.transaction"></transaction-cashsource-info></td>
+                                <td><transaction-cardealer-cooperationcashsource-info ng-if="overduerecord.transaction !== undefined" transaction="overduerecord.transaction"></transaction-cardealer-cooperationcashsource-info></td>
+                                <td><customer-info id="overduerecord.customerId"></customer-info></td>
+                                <td>{{overduerecord.businessTypeCode |BusinessTypeFilter}}</td>
+                                <td><employee-info ng-if="overduerecord.employeeId !== undefined" id="overduerecord.employeeId"></employee-info></td>
+                                <td>{{overduerecord.overdueAmount |currency:'￥'}}</td>
+                                <td>{{overduerecord.overdueTime}}</td>
+                                <td>
+                                    <div class=" btn-group  btn-group" dropdown>
+                                        <button class="btn btn-success btn-xs " dropdown-toggle >操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(overduerecord, $index)">
+                                                    浏览
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-2 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-9 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+                <div class="col-sm-1 text-right"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">逾期记录--{{overduerecord.businessTypeCode |BusinessTypeFilter}}</h1>
+                    </div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="padder-v row m-n">
+                                <div class="col-lg-9">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款人身份证信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-base id="overduerecord.customerId"></customer-base>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <customer-loan ng-if="overduerecord.customerTransactionId !== undefined" transactionid="overduerecord.customerTransactionId" billtypecode="overduerecord.billTypeCode" businesstypecode="overduerecord.businessTypeCode"></customer-loan>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span class="h4">逾期信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix" ng-if="overduerecord.dataStatus == 1">
+                                                        <div class="col-lg-3">
+                                                            <label>逾期时间</label>
+                                                            <p class="form-control-static b-b">{{overduerecord.overdueTime}}</p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>逾期金额</label>
+                                                            <p class="form-control-static b-b">{{overduerecord.overdueAmount | currency:'￥'}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix" ng-if="overduerecord.dataStatus == 0">
+                                                        <div class="col-lg-3">
+                                                            <label>逾期时间</label>
+                                                            <div class="input-group" moment-picker="overduerecord.overdueTime" format="YYYY-MM-DD"
+                                                                 locale="zh-cn" selectable="true" min-date="thisDate">
+                                                                <input type="text" class="form-control" placeholder="请选择逾期时间"
+                                                                       ng-model="overduerecord.overdueTime"
+                                                                       ng-model-options="{ updateOn: 'blur' }"/>
+                                                                <span class="input-group-btn">
+                                                                <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                            </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>逾期金额</label>
+                                                            <input type="text" class="form-control" placeholder="请填写逾期金额"
+                                                                   ng-model="overduerecord.overdueAmount" name="overdueAmount">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div style="position: fixed;" ng-show="checked">
+                                        <div style="height:650px;overflow-y:scroll;">
+                                            <!--当前业务分期经理 -->
+                                            <div class="panel b-success b-light clearfix">
+                                                <div class="panel-body">
+                                                    <a href="" class="thumb avatar pull-left m-r">
+                                                        <employee-avatar ng-if="overduerecord.employeeId !== undefined" id="overduerecord.employeeId"></employee-avatar>
+                                                        <i class="on b-white bottom"></i>
+                                                    </a>
+                                                    <div class="clear">
+                                                        <employee-info ng-if="overduerecord.employeeId !== undefined" id="overduerecord.employeeId"></employee-info>
+                                                        <br/><br/>
+                                                        <small class="block text-muted text-xs"><i class="icon-action-redo"></i>当前业务分期经理</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--显示订单的签批信息-->
+                                            <div class="m-b-md clearfix" ng-show="overduerecord.id != null">
+                                                <signinfo-list ng-if="overduerecord.id !== undefined" id="overduerecord.id"></signinfo-list>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-primary" type="button" ng-if="overduerecord !== null && overduerecord.dataStatus == 0" ng-click="save(overduerecord)">创建逾期记录</button>
+                    <button class="btn btn-primary" type="button" ng-if="overduerecord !== null && overduerecord.dataStatus == 1" ng-click="sendMind(overduerecord)">发送逾期提醒</button>
+                    <button class="btn btn-primary" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+<!--                                   模糊查询模态框                    -->
+<script type="text/ng-template" id="query.html">
+    <query-form search="searchFilter" query="queryBill(search)" clear="clearQuery()"></query-form>
+</script>

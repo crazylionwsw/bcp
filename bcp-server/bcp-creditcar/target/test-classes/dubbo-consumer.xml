@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    <description>Spring公共配置 </description>
+
+    <dubbo:application name="fuze-bcp-server-provider" owner="developer" organization="fuze"/>
+
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+
+
+    <dubbo:reference id="iCreditPhotographBizService" interface="com.fuze.bcp.api.creditcar.service.ICreditPhotographBizService" />
+    <dubbo:reference id="iCreditReportQueryBizService" interface="com.fuze.bcp.api.creditcar.service.ICreditReportQueryBizService" />
+    <dubbo:reference id="iCustomerDemandBizService" interface="com.fuze.bcp.api.creditcar.service.ICustomerDemandBizService" />
+    <dubbo:reference id="iOrderBizService" interface="com.fuze.bcp.api.creditcar.service.IOrderBizService" />
+    <dubbo:reference id="iBankCardApplyBizService" interface="com.fuze.bcp.api.creditcar.service.IBankCardApplyBizService"/>
+    <dubbo:reference id="iDeclarationBizService" interface="com.fuze.bcp.api.creditcar.service.IDeclarationBizService"/>
+    <dubbo:reference id="iReceptFileBizService" interface="com.fuze.bcp.api.creditcar.service.IReceptFileBizService"/>
+    <dubbo:reference id="iSwipingCardBizService" interface="com.fuze.bcp.api.creditcar.service.ISwipingCardBizService"/>
+    <dubbo:reference id="iCarValuationBizService" interface="com.fuze.bcp.api.creditcar.service.ICarValuationBizService"/>
+    <dubbo:reference id="iCarRegistryBizService" interface="com.fuze.bcp.api.creditcar.service.ICarRegistryBizService"/>
+    <dubbo:reference id="iDmvpledgeBizService" interface="com.fuze.bcp.api.creditcar.service.IDmvpledgeBizService"/>
+
+    <dubbo:reference id="iDealerRepaymentBizService" interface="com.fuze.bcp.api.creditcar.service.IDealerRepaymentBizService"/>
+    <dubbo:reference id="iAppointSwipingCardBizService" interface="com.fuze.bcp.api.creditcar.service.IAppointSwipingCardBizService"/>
+
+    <dubbo:reference id="iAppointPaymentBizService" interface="com.fuze.bcp.api.creditcar.service.IAppointPaymentBizService"/>
+    <dubbo:reference id="iCarDealerBizService" interface="com.fuze.bcp.api.cardealer.service.ICarDealerBizService"/>
+
+    <dubbo:reference id="iCustomerTransactionBizService" interface="com.fuze.bcp.api.transaction.service.ICustomerTransactionBizService"/>
+    <dubbo:reference id="iCarTransferBizService" interface="com.fuze.bcp.api.creditcar.service.ICarTransferBizService"/>
+    <dubbo:reference id="iPoundageSettlementBizService" interface="com.fuze.bcp.api.creditcar.service.IPoundageSettlementBizService"/>
+    <dubbo:reference id="iBusinessBookBizService" interface="com.fuze.bcp.api.creditcar.service.IBusinessBookBizService"/>
+    <dubbo:reference id="iDealerSharingBizService" interface="com.fuze.bcp.api.creditcar.service.IDealerSharingBizService"/>
+    <dubbo:reference id="iPaymentBillBizService" interface="com.fuze.bcp.api.creditcar.service.IPaymentBillBizService"/>
+    <dubbo:reference id="iOverdueRecordBizService" interface="com.fuze.bcp.api.creditcar.service.IOverdueRecordBizService"/>
+    <dubbo:reference id="iBaseDataBizService" interface="com.fuze.bcp.api.bd.service.IBaseDataBizService"/>
+
+
+</beans>

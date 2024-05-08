@@ -1,0 +1,12 @@
+com/fuze/bcp/api/cardealer/bean/DealerSharingRatioBean.class
+com/fuze/bcp/api/cardealer/SerializationOptimizerImpl.class
+com/fuze/bcp/api/cardealer/bean/ChannelBean.class
+com/fuze/bcp/api/cardealer/bean/CarDealerRateBean.class
+com/fuze/bcp/api/cardealer/bean/ChannelBaseBean.class
+com/fuze/bcp/api/cardealer/bean/CarDealerBean.class
+com/fuze/bcp/api/cardealer/bean/DealerGroupBean.class
+com/fuze/bcp/api/cardealer/bean/CarDealerSubmissionBean.class
+com/fuze/bcp/api/cardealer/bean/DecorateBean.class
+com/fuze/bcp/api/cardealer/service/IChannelBizService.class
+com/fuze/bcp/api/cardealer/service/ICarDealerBizService.class
+com/fuze/bcp/api/cardealer/bean/CarDealerListBean.class

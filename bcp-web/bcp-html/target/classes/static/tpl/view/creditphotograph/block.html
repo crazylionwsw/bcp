@@ -1,0 +1,29 @@
+<div class="panel panel-default m-b-none">
+    <div class="panel-heading">
+        <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+        <span class="h4">征信照片</span>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="form-group pull-in clearfix" ui-sortable="sortableOptions" ng-model="customerImages">
+                <div class="col-md-3 col-xs-6" ng-repeat="customerImage in customerImages">
+                    <div class="thumbnail">
+                        <img ng-src="{{customerImage|imgsrc}}" class="img-responsive" style="height:160px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn btn-info" type="button" ng-click="createsave()" ladda="generating" data-spinner-color="#999999">生成PDF</button>
+        <button class="btn btn-warning" type="button" ng-click="close()">关 闭</button>
+    </footer>
+</div>
+
+<!--显示图片浏览器-->
+<div class="hidden" id="customerImages">
+    <element ng-repeat="customerImage in customerImages">
+        <img data-original="{{customerImage|imgsrc}}" ng-src="{{customerImage|imgsrc}}"/>
+    </element>
+    <img ng-src="img/p0.jpg" class="img-responsive img-placeholder"/>
+</div>

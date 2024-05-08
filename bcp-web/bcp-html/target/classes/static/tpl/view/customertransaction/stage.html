@@ -1,0 +1,13 @@
+<div class="btn-group dropdown" dropdown>
+    <button class="btn btn-xs btn-danger" dropdown-toggle>{{currentStage}} <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li ng-repeat="stage in pastStages">
+            <a href ng-click="goBill(stage.code, id)">{{stage.name}}</a>
+        </li>
+        <li class="divider"></li>
+        <li><a href ng-click="goBill('A015', id)">银行报批</a></li>
+        <li><a href ng-click="enhancement(id)">资料补全</a></li>
+        <li><a href ng-click="goDecompressBill('A031', id)">解押管理</a></li>  <!--id是transactionId -->
+        <li><a href ng-click="goOverdueBill('A032', id)">逾期记录</a></li>
+    </ul>
+</div>

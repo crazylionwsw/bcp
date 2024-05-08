@@ -1,0 +1,7 @@
+com\fuze\wechatserver\config\RedisConfig.class
+com\fuze\wechatserver\controller\AuthController.class
+com\fuze\wechatserver\config\MongoConfig.class
+com\fuze\wechatserver\config\WebAppConfig.class
+com\fuze\wechatserver\WeChatServerApplication.class
+com\fuze\wechatserver\config\AmqpConfig.class
+com\fuze\wechatserver\config\InterceptorConfig.class

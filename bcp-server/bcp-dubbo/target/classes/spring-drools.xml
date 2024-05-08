@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:kie="http://drools.org/schema/kie-spring"
+        xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://drools.org/schema/kie-spring http://drools.org/schema/kie-spring.xsd">
+    <!--没有org.kie.spring.KModuleBeanFactoryPostProcessor bean定义，KIE Spring集成将不工作。-->
+    <bean id="kiePostProcessor" class="org.kie.spring.annotations.KModuleAnnotationPostProcessor" />
+    <!-- 每5分钟扫描是否有新版本文件  enableScanner表示是否扫描   scannerInterval表示扫描间隔-->
+    <kie:import releaseId-ref="fuzRelease" enableScanner="true" scannerInterval="10000" />
+
+    <kie:releaseId id="fuzRelease" groupId="com.fuze.bcp" artifactId="bcp-drools" version="LATEST"/>
+</beans>

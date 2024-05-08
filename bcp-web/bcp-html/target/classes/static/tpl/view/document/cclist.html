@@ -1,0 +1,37 @@
+<div class="table-responsive">
+    <table class="table table-striped b-t b-light m-b-none">
+        <thead>
+        <tr>
+            <th>
+                名称
+            </th>
+            <th>
+                下载次数
+            </th>
+            <th >
+                最新下载
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+        </thead>
+        <tbody >
+        <tr ng-repeat="customerContract in customerContracts">
+            <td>{{customerContract.contract.name}}</td>
+            <td>{{customerContract.downloadRecords.length}}</td>
+            <td>{{customerContract.latestDownloadTime | date:'yyyy-MM-dd hh:mm'}}</td>
+            <td>
+                <div class="hidden-sm hidden-xs action-buttons">
+                    <a class="green" role="button" ng-click="view(customerContract)" tooltip="查看" target="_blank">
+                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                    </a>
+                    <a class="green" role="button" ng-click="download(customerContract)" tooltip="下载" target="_blank">
+                        <i class="ace-icon fa fa-download bigger-130"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

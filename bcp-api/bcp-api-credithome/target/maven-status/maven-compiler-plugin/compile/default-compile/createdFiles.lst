@@ -1,0 +1,6 @@
+com/fuze/bcp/api/credithome/service/IDomesticOutfitBizService.class
+SerializationOptimizerImpl.class
+com/fuze/bcp/api/credithome/bean/DomesticOutfitBean.class
+com/fuze/bcp/api/credithome/bean/APIHomeBillBean.class
+com/fuze/bcp/api/credithome/bean/DomesticOutfitSubmissionBean.class
+com/fuze/bcp/api/credithome/bean/HomeBillSubmissionBean.class

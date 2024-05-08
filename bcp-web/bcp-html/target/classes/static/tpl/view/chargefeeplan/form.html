@@ -1,0 +1,144 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="wrapper row m-n">
+                            <div class="col-lg-9">
+                                <!--客户信息-->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <span class="h4">客户信息</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <customer-block id="chargefeeplan.customerId"></customer-block>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <span class="h4">贷款信息</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-lg-12">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-3">
+                                                            <label>贷款金额（元）</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{chargefeeplan.limitAmount | currency:'￥'}}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>刷卡日期</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{chargefeeplan.swingCardDate | date:'yyyy-MM-dd'}}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>还款日</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{chargefeeplan.repaymentDay}}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>借款期限（月）</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{chargefeeplan.creditMonths}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-3">
+                                                            <label>手续费率%</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{chargefeeplan.bankChargeRatio*100 |number:1}}%
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>手续费</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{chargefeeplan.chargeAmount | currency:'￥'}}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>状态</label>
+                                                            <p class="form-control-static b-b">
+                                                                {{chargefeeplan.status | RepaymentPlanFilter}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default" ng-disabled="chargefeeplan.status!=9">
+                                    <div class="panel-heading">
+                                        <span class="h4">备注信息</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-lg-12">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-lg-12">
+                                                            <p class="form-control-static b-b">
+                                                                {{chargefeeplan.comment}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--购买车辆信息-->
+                                <div class="panel panel-default" >
+                                    <div class="panel-heading">
+                                        <span class="h4">收款手续费基数明细</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <table class="table table-striped b-t b-light">
+                                                <thead>
+                                                <th>
+                                                    次数
+                                                </th>
+                                                <th>
+                                                    收款月份
+                                                </th>
+                                                <th>
+                                                    手续费
+                                                </th>
+                                                </thead>
+                                                <tbody >
+                                                <tr ng-repeat="detail in chargefeeplan.detailList">
+                                                    <td>{{detail.index}}</td>
+                                                    <td>{{detail.year}}年{{detail.month}}月</td>
+                                                    <td>{{detail.chargeAmount | currency:'￥'}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wrapper-sm b-t b-light text-right">
+                                    <button class="btn btn-primary" type="button" ui-sref="app.business.chargefeeplan">返回</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!--弹出层页面foot-->
+
+            </div>
+        </div>
+    </div>
+
+</div>

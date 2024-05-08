@@ -1,0 +1,9 @@
+com\fuze\bcp\timertask\business\BizScheduleService.class
+com\fuze\bcp\timertask\starter\TimertaskBootStarter.class
+com\fuze\bcp\timertask\domain\ScheduleJob.class
+com\fuze\bcp\timertask\service\impl\QuartzJobImpl.class
+com\fuze\bcp\timertask\repository\ScheduleRepository.class
+com\fuze\bcp\timertask\service\impl\QuartzEventServiceImpl.class
+com\fuze\bcp\timertask\service\IQuartzEventService.class
+com\fuze\bcp\timertask\starter\config\DubboConfig.class
+com\fuze\bcp\timertask\starter\config\RedisConfig.class

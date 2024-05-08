@@ -1,0 +1,194 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                渠道行
+                            </th>
+                            <th>
+                                报单行
+                            </th>
+                            <th>
+                                渠道行分成比例
+                            </th>
+                            <th>
+                                报单行分成比例
+                            </th>
+                            <th>
+                                开始时间
+                            </th>
+                            <th>
+                                结束时间
+                            </th>
+                            <th ng-show="!isReferenceDialog">操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="banksettlementstandard in banksettlementstandards|filter:query"  ng-class="{true:'danger'}[banksettlementstandard.dataStatus == 9]">
+                                <td><cashsource-info ng-if="banksettlementstandard.channelId !== undefined" id="banksettlementstandard.channelId"></cashsource-info></td>
+                                <td><cashsource-info ng-if="banksettlementstandard.declarationId !== undefined" id="banksettlementstandard.declarationId"></cashsource-info></td>
+                                <td>{{banksettlementstandard.channelProportion}}</td>
+                                <td>{{banksettlementstandard.declarationProportion}}</td>
+                                <td>{{banksettlementstandard.startTime |date: 'yyyy-MM-dd'}}</td>
+                                <td>{{banksettlementstandard.endTime |date: 'yyyy-MM-dd'}}</td>
+                                <td ng-show="!isReferenceDialog">
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(banksettlementstandard)" ng-show="banksettlementstandard.dataStatus != 9">
+                                                   编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(banksettlementstandard, $index)" ng-show="banksettlementstandard.dataStatus != 9 && banksettlementstandard.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(banksettlementstandard, $index)" ng-show="banksettlementstandard.dataStatus == 9 && banksettlementstandard.id != null ">
+                                                    删除
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="renew(banksettlementstandard, $index)" ng-show="banksettlementstandard.dataStatus == 9 && banksettlementstandard.id != null ">
+                                                   启用
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!------输入对话框------>
+<script type="text/ng-template" id="banksettlementstandardForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="banksettlementstandard.id">
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label class="col-sm-2 control-label">报单支行</label>
+                        <div class="col-sm-10">
+                            <ui-select ng-model="banksettlementstandard.declarationId" theme="bootstrap" ng-disabled="false" on-select="checkBankSettlementStandard(banksettlementstandard)">
+                                <ui-select-match placeholder="请选择报单支行" >{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices  repeat="cashSource.id as cashSource in declarationCashSources">
+                                    <div ng-bind-html="cashSource.name"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="col-sm-2 control-label">渠道支行</label>
+                        <div class="col-sm-10">
+                            <ui-select ng-model="banksettlementstandard.channelId" theme="bootstrap" ng-disabled="false" on-select="checkBankSettlementStandard(banksettlementstandard)">
+                                <ui-select-match placeholder="请选择渠道合作支行" >{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices  repeat="cashSource.id as cashSource in cashSources">
+                                    <div style="padding-left:{{cashSource.depth*10}}px" ng-bind-html="cashSource.name"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label class="col-sm-4 control-label">报单行分成占比</label>
+                        <div class="col-sm-8">
+                            <div class="input-group bootstrap-touchspin">
+                                <input type="number" class="form-control" placeholder="请输入报单行分成占比" popover="数值在0与1之间" ui-validate=" '$value <= 1' "
+                                       ng-change="calculateProportion(banksettlementstandard.declarationProportion)"
+                                       ng-model="banksettlementstandard.declarationProportion" ng-readonly="status" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="col-sm-4 control-label">渠道行分成占比</label>
+                        <div class="col-sm-8">
+                            <div class="input-group bootstrap-touchspin">
+                                <input type="number" class="form-control" placeholder="请输入渠道行分成占比" popover="数值在0与1之间" ui-validate=" '$value <= 1' "
+                                       ng-model="banksettlementstandard.channelProportion" ng-readonly="status" required disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label>合作开始时间</label>
+                        <div class="input-group" moment-picker="banksettlementstandard.startTime" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control" required
+                                   ng-model="banksettlementstandard.startTime"
+                                   ng-model-options="{ updateOn: 'blur' }"/>
+                            <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>合作结束时间</label>
+                        <div class="input-group" moment-picker="banksettlementstandard.endTime" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control" popover="不选择，表示长期合作！"
+                                   ui-validate="{eddDateInvalid:'checkEndDate($value)'}"
+                                   ui-validate-watch="'banksettlementstandard.startTime'"
+                                   name="endTime"
+                                   ng-model="banksettlementstandard.endTime"
+                                   ng-model-options="{ updateOn: 'blur' }"/>
+                            <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                        <span ng-show="userForm.endTime.$error.eddDateInvalid" class="help-block text-danger">合作结束时间必须大于合作开始时间!</span>
+                    </div>
+                </div>
+
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label>合作说明</label>
+                        <textarea class="form-control" rows="6" placeholder="合作说明" ng-model="banksettlementstandard.comment" name="banksettlementstandard.comment"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid || canSave" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

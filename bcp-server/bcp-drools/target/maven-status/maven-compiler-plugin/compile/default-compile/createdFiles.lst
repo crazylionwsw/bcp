@@ -1,0 +1,5 @@
+com\fuze\bcp\drools\filter\BcpAgendaFilter.class
+com\fuze\bcp\drools\starter\config\DubboConfig.class
+com\fuze\bcp\drools\starter\DroolsBootStarter.class
+com\fuze\bcp\drools\business\BizDroolsService.class
+com\fuze\bcp\drools\starter\config\RedisConfig.class

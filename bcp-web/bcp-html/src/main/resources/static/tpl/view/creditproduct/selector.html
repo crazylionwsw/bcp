@@ -1,0 +1,64 @@
+
+    <div class="panel panel-default  m-b-none">
+        <div class="panel-heading">
+            {{title}}
+        </div>
+        <div class="panel-boday">
+            <div class="row wrapper">
+                <div class="col-sm-12 m-b-xs">
+                    <input type="text" class="input-sm form-control" placeholder="过滤" ng-model="query">
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped b-t b-light m-b-none">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            名称（编码）
+                        </th>
+                        <th>
+                            首付比例（贷款比例【%】）
+                        </th>
+                        <th >
+                            贷款限额(万元)
+                        </th>
+                        <th >
+                            贷款月数(月)
+                        </th>
+                        <th >
+                            手续费（比率【%】）
+                        </th>
+                        <th >
+                            是否贴息
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody >
+                    <tr ng-repeat="creditproduct in creditproducts|filterCreditProductsByCarTypeIds: carTypeIds|filterCreditProductsByBusinessTypeId:cardealer.businessType.id|filter:query">
+                        <td>
+                            <label class="i-checks m-b-none">
+                                <input type="checkbox" data-ng-model="creditproduct.selected"><i></i>
+                            </label>
+                        </td>
+                        <td>{{creditproduct.name}}({{creditproduct.code}})</td>
+                        <td>{{creditproduct.salePrice.downPaymentRatio}}（{{creditproduct.salePrice.creditRatio}}）</td>
+                        <td>{{creditproduct.salePrice.limitAmount}}</td>
+                        <td>{{creditproduct.salePrice.creditMonths}}</td>
+                        <td>{{creditproduct.salePrice.charge}}（{{creditproduct.salePrice.chargeRatio}}）</td>
+                        <td>
+                            <element ng-show="creditproduct.compensatoryInterest"><i class="fa fa-check text-success"></i></element>
+                            <element ng-hide="creditproduct.compensatoryInterest"><i class="fa fa-times text-danger text"></i></element>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-click="save()" >确  定</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">关  闭</button>
+        </footer>
+    </div>
+</div>

@@ -1,0 +1,199 @@
+<div class="bg-light lter b-b wrapper-md">
+	<h1 class="m-n font-thin h3">{{formTitle}}--{{bankcard.businessType.name}}</h1>
+</div>
+<div class="wrapper-md">
+
+	<div class="row">
+		<div class="col-lg-9">
+			<form name="userForm" class="form-horizontal form-validation">
+
+				<div class="panel panel-default">
+
+					<div class="panel-heading"><span class="h4">持卡人信息</span></div>
+					<div class="panel-body">
+						<customer-block id="bankcard.customerId"></customer-block>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+
+					<div class="panel-heading"><span class="h4">卡信息</span></div>
+					<div class="panel-body">
+<!--						<div class="form-group pull-in clearfix">
+							<div class="col-sm-4">
+								<label>银行申请制卡时间</label>
+								<div class="input-group" moment-picker="bankcard.applyTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="bankcard.applyTime" name="applyTime" readonly/>
+										<span class="input-group-btn" ng-if="bankcard.takeTime == null">
+                							<button type="button" class="btn btn-default" ng-click="submit()">制卡</button>
+              							</span>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<label>取卡时间</label>
+								<div class="input-group" moment-picker="bankcard.takeTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="bankcard.takeTime" name="takeTime" readonly/>
+										<span class="input-group-btn" ng-if="bankcard.applyTime != null && bankcard.activateTime == null">
+                							<button type="button" class="btn btn-default" ng-click="submit()">取卡</button>
+              							</span>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<label>启卡时间</label>
+								<div class="input-group" moment-picker="bankcard.activateTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="bankcard.activateTime" name="activateTime" readonly/>
+										<span class="input-group-btn" ng-if="bankcard.takeTime !=null &&　bankcard.changeAmountTime == null">
+                							<button type="button" class="btn btn-default" ng-click="submit()">启卡</button>
+              							</span>
+								</div>
+							</div>
+						</div>-->
+						<div class="form-group pull-in clearfix" ng-if="bankcard.takeTime != null">
+							<div class="col-sm-3">
+								<label>卡号</label>
+								<input type="text" class="form-control" ng-model="bankcard.cardNo"/>
+							</div>
+							<div class="col-sm-3">
+								<label>有效期</label>
+								<input type="text" class="form-control" ng-model="bankcard.expireDate"/>
+							</div>
+							<div class="col-sm-3">
+								<label>CVV</label>
+								<input type="text" class="form-control" ng-model="bankcard.cvv"/>
+							</div>
+							<div class="col-sm-3">
+								<label>还款日（号）</label>
+								<div class="input-group bootstrap-touchspin">
+									<input type="number" default="25" class="form-control" ng-model="bankcard.defaultReimbursement" data-min="1" data-max="31"/>
+									<span class="input-group-addon bootstrap-touchspin-postfix">号</span>
+								</div>
+							</div>
+						</div>
+<!--
+						<div class="form-group pull-in clearfix">
+							<div class="col-sm-3">
+								<label>调额时间</label>
+								<div class="input-group" moment-picker="bankcard.changeAmountTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="bankcard.changeAmountTime" name="changeAmountTime" readonly/>
+										<span class="input-group-btn" ng-if="bankcard.activateTime != null && bankcard.swipingCardTime == null">
+                							<button type="button" class="btn btn-default" ng-click="submit()">调额</button>
+              							</span>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<label>刷卡时间</label>
+								<div class="input-group" moment-picker="bankcard.swipingCardTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="bankcard.swipingCardTime" name="swipingCardTime" readonly/>
+										<span class="input-group-btn" ng-if="bankcard.changeAmountTime != null && bankcard.cancelCardTime == null">
+                							<button type="button" class="btn btn-default" ng-click="submit()">刷卡</button>
+              							</span>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<label>销卡时间</label>
+								<div class="input-group" moment-picker="bankcard.cancelCardTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="bankcard.cancelCardTime" name="cancelCardTime" readonly/>
+										<span class="input-group-btn" ng-if="bankcard.swipingCardTime != null && bankcard.returnCardTime == null">
+                							<button type="button" class="btn btn-default" ng-click="submit()">销卡</button>
+              							</span>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<label>还卡时间</label>
+								<div class="input-group" moment-picker="bankcard.returnCardTime" format="YYYY-MM-DD HH:mm"
+									 locale="zh-cn" selectable="true">
+									<input type="text" class="form-control" ng-model="bankcard.returnCardTime" name="returnCardTime" readonly/>
+										<span class="input-group-btn" ng-if="bankcard.cancelCardTime != null">
+                							<button type="button" class="btn btn-default" ng-click="submit()">还卡</button>
+              							</span>
+								</div>
+							</div>
+						</div>
+-->
+
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading"><span class="h4">档案资料</span></div>
+					<div class="panel-body">
+						<customerimage-block ng-if="bankcard != null" bill="bankcard" save="save(bill)"></customerimage-block>
+					</div>
+				</div>
+
+				<footer class="text-right">
+					<button class="btn btn-success" type="button" ng-click="submit()">保 存</button>
+					<button class="btn btn-warning" type="button" ui-sref="app.business.bankcard">返 回</button>
+				</footer>
+			</form>
+		</div>
+
+		<div class="col-lg-3">
+
+			<ul class="timeline">
+				<li class="tl-header">
+					<div class="btn btn-info"></div>
+				</li>
+				<li class="tl-item" ng-if="bankcard.applyTime != null">
+					<div class="tl-wrap b-info">
+						<span class="tl-date">制卡申请</span>
+						<div class="tl-content">
+							{{bankcard.applyTime}}
+						</div>
+					</div>
+				</li>
+				<li class="tl-item" ng-if="bankcard.takeTime != null">
+					<div class="tl-wrap b-info">
+						<span class="tl-date">取卡</span>
+						<div class="tl-content">
+							{{bankcard.takeTime}}
+						</div>
+					</div>
+				</li>
+				<li class="tl-item" ng-if="bankcard.changeAmountTime != null">
+					<div class="tl-wrap b-info">
+						<span class="tl-date">调额</span>
+						<div class="tl-content">
+							{{bankcard.changeAmountTime}}
+						</div>
+					</div>
+				</li>
+				<li class="tl-item" ng-if="bankcard.swipingCardTime != null">
+					<div class="tl-wrap b-info">
+						<span class="tl-date">刷卡</span>
+						<div class="tl-content">
+							{{bankcard.swipingCardTime}}
+						</div>
+					</div>
+				</li>
+				<li class="tl-item" ng-if="bankcard.cancelCardTime != null">
+					<div class="tl-wrap b-info">
+						<span class="tl-date">销卡</span>
+						<div class="tl-content">
+							{{bankcard.cancelCardTime}}
+						</div>
+					</div>
+				</li>
+				<li class="tl-item" ng-if="bankcard.returnCardTime != null">
+					<div class="tl-wrap b-info">
+						<span class="tl-date">还卡</span>
+						<div class="tl-content">
+							{{bankcard.returnCardTime}}
+						</div>
+					</div>
+				</li>
+				<li class="tl-header">
+					<button class="btn btn-sm btn-default btn-rounded" ng-click="process(btnVal)">{{btnName}}</button>
+				</li>
+			</ul>
+
+		</div>
+	</div>
+
+</div>

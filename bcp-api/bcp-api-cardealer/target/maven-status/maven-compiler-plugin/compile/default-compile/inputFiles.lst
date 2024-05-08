@@ -1,0 +1,12 @@
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/bean/ChannelBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/service/ICarDealerBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/bean/DecorateBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/bean/ChannelBaseBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/SerializationOptimizerImpl.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/bean/CarDealerListBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/bean/CarDealerSubmissionBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/service/IChannelBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/bean/CarDealerRateBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/bean/DealerGroupBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/bean/DealerSharingRatioBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-cardealer/src/main/java/com/fuze/bcp/api/cardealer/bean/CarDealerBean.java

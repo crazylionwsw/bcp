@@ -1,0 +1,133 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">{{title}}</h1>
+</div>
+<div class="wrapper-md">
+    <!-- toaster directive -->
+    <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+    <!-- / toaster directive -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {{tableTitle}}
+        </div>
+        <div class="row wrapper">
+            <div class="col-sm-4 m-b-xs">
+                <input type="text" class="input-sm form-control" placeholder="过滤" ng-model="query">
+            </div>
+            <div class="col-sm-8 m-b-xs text-right ">
+                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit()">添加</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped b-t b-light m-b-none">
+                <thead>
+                <tr>
+                    <th>
+                        用户名
+                    </th>
+                    <th>
+                        允许登录的终端数量
+                    </th>
+                    <th >
+                        是否系统用户
+                    </th>
+                    <th >
+                        审批流用户ID
+                    </th>
+                    <th >
+                        系统角色
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+                </thead>
+                <tbody >
+                <tr ng-repeat="user in users|filter:query">
+                    <td>{{user.username}}</td>
+                    <td>{{user.deviceNum}}</td>
+                    <td>
+                        <element ng-show="user.isRoot"><i class="fa fa-check text-success"></i></element>
+                        <element ng-hide="user.isRoot"><i class="fa fa-times text-danger text"></i></element>
+                    </td>
+                    <td>{{user.activitiUserId}}</td>
+                    <td>
+                        <sysrole-list ids="user.userRoleIds"></sysrole-list>
+                    </td>
+                    <td>
+                        <div class="hidden-sm hidden-xs action-buttons">
+                            <a class="green" role="button" data-toggle="modal" ng-click="edit(user)">
+                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                            </a>
+                            <a class="red" href ng-click="delete(user,$index)">
+                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <footer class="panel-footer">
+            <div class="row">
+                <div class="col-sm-12 text-right text-center-xs">
+                    <pagination total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+<script type="text/ng-template" id="userForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation"  >
+                <div class="form-group">
+                    <label>登录用户名 <em class="text-muted">(允许 'a-zA-Z0-9', 4-10 length)</em></label>
+                    <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-pattern"
+                           ng-model="user.username" ng-disabled="user.isRoot"
+                           ui-validate-async="{notUnique: 'checkUnique(\'username\', $value)'}"
+                           placeholder="请输入登录用户名" ng-change="updateUsername()" name="username" ng-pattern="/^[a-zA-Z0-9]{4,20}$/" required type="text">
+                    <span ng-show="userForm.username.$dirty && userForm.username.$error.required" class="help-block text-danger">登录用户名是必须的!</span>
+                    <span ng-show="userForm.username.$dirty && userForm.username.$error.notUnique" class="help-block text-danger">登录用户名不能重复！</span>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>输入密码</label>
+                        <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required" name="password" ng-model="password" type="password"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>密码确认</label>
+                        <input class="form-control ng-pristine ng-untouched ng-valid-validator ng-invalid ng-invalid-required" name="confirm_password" ng-model="confirm_password" type="password" ui-validate=" '$value==password' " ui-validate-watch=" 'password' ">
+                        <span ng-show='userForm.confirm_password.$dirty && userForm.confirm_password.$error.validator'  class="help-block text-danger">两次输入的密码不一样！</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>审批流用户ID</label>
+                    <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-pattern" ng-disabled="user.isRoot" placeholder="请输入审批流用户ID" ng-model="user.activitiUserId" type="text">
+                </div>
+                <div class="form-group">
+                    <label>分配角色</label>
+                    <ui-select multiple ng-model="user.userRoleIds" theme="bootstrap" ng-disabled="user.isRoot">
+                        <ui-select-match placeholder="请分配角色" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices  repeat="sysRole.id as sysRole in sysRoles | filter: $select.search">
+                            <div ng-bind-html="sysRole.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group">
+                    <label class="i-checks">
+                        <input ng-model="user.isRoot" type="checkbox"/><i></i> 系统内置用户
+                    </label>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid" ng-click="save()" >保  存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取  消</button>
+        </footer>
+    </div>
+</script>

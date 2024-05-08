@@ -1,0 +1,326 @@
+<div class="hbox hbox-auto-xs bg-light">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell" style="overflow-x: hidden;overflow-y: auto">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs "><!--TODO：渠道刷卡，暂存状态显示-->
+                                <select class="form-control" ng-model="searchFilter.statusValue" ng-change="search()">
+                                    <option value="-1">全部</option>
+                                    <option value="100">待处理</option>
+                                    <option value="0">未提交</option>
+                                    <option value="1">待确认</option>
+                                    <option value="2">已确认</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1 text-left">
+                                <select class="form-control" ng-model="searchFilter.pageSize" ng-change="changePageSize()">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="1000">1000</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                            <div class="col-sm-1 m-b-xs text-right "></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                序号
+                                            </th>
+                                            <th>
+                                                报单支行
+                                            </th>
+                                            <th>
+                                                客户姓名【身份证号码】
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height:40px" ng-repeat="swipingcard in swipingcards|filter:query" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[swipingcard.approveStatus]">
+                                            <td>{{$index+1}}</td>
+                                            <td><transaction-cashsource-info ng-if="swipingcard.transaction !== undefined" transaction="swipingcard.transaction"></transaction-cashsource-info></td>
+                                            <td><customer-info id="swipingcard.customerId"></customer-info></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-7" style="margin-left:-40px;overflow: scroll;overflow-y: hidden;">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                渠道支行
+                                            </th>
+                                            <th>
+                                                业务类型
+                                            </th>
+                                            <th>
+                                                分期经理【手机号码】
+                                            </th>
+                                            <th class="text-right">
+                                                贷款金额【期限-类型】
+                                            </th>
+                                            <th class="text-right">
+                                                刷卡金额【卡业务状态】
+                                            </th>
+                                            <th>
+                                                业务状态
+                                            </th>
+                                            <th>
+                                                当前任务
+                                            </th>
+                                            <th>
+                                                提交时间
+                                            </th>
+                                            <th>
+                                                刷卡日期
+                                            </th>
+                                            <th>
+                                                业务处理时间
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height:40px" ng-repeat="swipingcard in swipingcards|filter:query" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[swipingcard.approveStatus]">
+                                            <td><transaction-cardealer-cooperationcashsource-info ng-if="swipingcard.transaction !== undefined" transaction="swipingcard.transaction"></transaction-cardealer-cooperationcashsource-info></td>
+                                            <td>{{swipingcard.businessTypeCode | BusinessTypeFilter}}</td>
+                                            <td><employee-info ng-if="swipingcard.employeeId !== undefined" id="swipingcard.employeeId"></employee-info></td>
+                                            <td class="text-right"><payment-orderamount id="swipingcard.customerTransactionId"></payment-orderamount></td>
+                                            <td class="text-right"><swipingcard-info id="swipingcard.customerTransactionId"></swipingcard-info></td>
+                                            <td><approve-status ng-if="swipingcard.status != null && swipingcard.transaction != undefined" transaction="swipingcard.transaction" status="swipingcard.status" billtypecode="swipingcard.billTypeCode"></approve-status></td>
+                                            <td><flow-getpresenttaskgroup billtypecode="swipingcard.billTypeCode" billid="swipingcard.id" ng-if="swipingcard.transaction !== undefined" transaction="swipingcard.transaction"></flow-getpresenttaskgroup></td>
+                                            <td>{{swipingcard.ts | momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                            <td>{{swipingcard.payTime}}</td>
+                                            <td>{{swipingcard.approveDate | momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-center">本页合计：</td>
+                                            <td class="text-left">{{totalCreditAmount | currency:"￥"}}</td>
+                                            <td class="text-left">{{totalSwipingMoney | currency:"￥"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-1" style="margin-left:-25px;">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <tr class="bg-white">
+                                            <th>
+                                                我的任务
+                                            </th>
+                                            <th>
+                                                操作
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height:40px" class="bg-white" ng-repeat="swipingcard in swipingcards|filter:query" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[swipingcard.approveStatus]">
+                                            <td><flow-info ng-if="swipingcard.id !== undefined"  billtypecode="swipingcard.billTypeCode" billid="swipingcard.id"></flow-info></td>
+                                            <td>
+                                                <div class="btn-group dropdown" dropdown>
+                                                    <button class="btn-xs btn btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="blue" ng-click="edit(swipingcard, $index)" ng-show="true" href>
+                                                                浏览
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-n b-light b-t lt">
+                <div class="col-sm-2 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-9 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+                <div class="col-sm-1 text-right">
+            </div>
+        </div>
+    </div>
+</div>
+
+<pageslide  ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">渠道刷卡--{{swipingcard.businessTypeCode |BusinessTypeFilter}}
+                            <span ng-class="{1:'text-info',2: 'text-success', 8: 'text-warning', 9: 'text-danger'}[swipingcard.status]">({{swipingcard.status | WorkStatusFilter}})</span>
+                            <span ng-class="{11:'text-danger',16: 'text-primary'}[swipingcard.transaction.status]" ng-if="swipingcard.transaction" ng-show="swipingcard.transaction.status == 11 || swipingcard.transaction.status == 16">---{{swipingcard.transaction.status | StatusFilter}}</span>
+                        </h1>
+                    </div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="padder-v row m-n">
+                                <div class="col-lg-9">
+                                    <!--客户来源-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">来源渠道</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <cardealer-block ng-if="swipingcard.transaction != undefined" id="swipingcard.transaction.carDealerId"></cardealer-block>
+                                        </div>
+                                    </div>
+                                    <!--客户信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">贷款人身份证信息</span></div>
+                                        <div class="panel-body">
+                                            <customer-base id="swipingcard.customerId"></customer-base>
+                                        </div>
+                                    </div>
+                                    <!--购买车辆信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">购买车辆信息</span></div>
+                                        <div class="panel-body">
+                                            <customer-car ng-if="swipingcard.order.customerCarId !== undefined" id="swipingcard.order.customerCarId" businesstypecode="swipingcard.businessTypeCode" ></customer-car>
+                                        </div>
+                                    </div>
+                                    <!--贷款信息-->
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <customer-loan ng-if="swipingcard.customerTransactionId !== undefined" transactionid="swipingcard.customerTransactionId" billtypecode="swipingcard.billTypeCode" businesstypecode="swipingcard.businessTypeCode"></customer-loan>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--渠道刷卡-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">渠道刷卡</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-3">
+                                                    <label>银行卡号</label>
+                                                    <p class="form-control-static b-b">{{swipingcard.cardNumber ||"未填写"}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>刷卡金额(元)</label>
+                                                    <p class="form-control-static b-b">{{swipingcard.payAmount || 0 |currency:'￥'}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>刷卡时间</label>
+                                                    <p class="form-control-static b-b">{{swipingcard.payTime}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>首期还款日期</label>
+                                                    <p class="form-control-static b-b">{{swipingcard.customerRepaymentInfo.firstRepaymentDate | date: 'yyyy-MM-dd HH:mm'}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-3">
+                                                    <label>首期还款额(元)</label>
+                                                    <p class="form-control-static b-b">{{swipingcard.customerRepaymentInfo.firstRepayment || 0 |currency:'￥'}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>还款日</label>
+                                                    <p class="form-control-static b-b">{{swipingcard.customerRepaymentInfo.repayment}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>月还款额(元)</label>
+                                                    <p class="form-control-static b-b">{{swipingcard.customerRepaymentInfo.monthRepayment || 0 |currency:'￥'}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>银行手续费(元)</label>
+                                                    <p class="form-control-static b-b">{{swipingcard.loan.bankFeeAmount || 0 |currency:'￥'}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--档案资料-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">档案资料</span></div>
+                                        <div class="panel-body">
+                                            <customerimage-block ng-if="swipingcard !== null" canAudit="true" bill="swipingcard"></customerimage-block>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--右边栏-->
+                                <div class="col-lg-3">
+                                    <div style="position: fixed;" ng-show="checked">
+                                        <div style="height:650px;overflow-y:scroll;">
+                                            <!--当前业务分期经理 -->
+                                            <div class="panel b-success b-light clearfix">
+                                                <div class="panel-body">
+                                                    <a href="" class="thumb avatar pull-left m-r">
+                                                        <employee-avatar ng-if="swipingcard.employeeId !== undefined" id="swipingcard.employeeId"></employee-avatar>
+                                                        <i class="on b-white bottom"></i>
+                                                    </a>
+                                                    <div class="clear">
+                                                        <employee-info ng-if="swipingcard.employeeId !== undefined" id="swipingcard.employeeId"></employee-info>
+                                                        <br/><br/>
+                                                        <small class="block text-muted text-xs"><i class="icon-action-redo"></i>当前业务分期经理</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-b-md clearfix" ng-show="swipingcard.id != null">
+                                                <signinfo-list ng-if="swipingcard.id !== undefined" id="swipingcard.id"></signinfo-list>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-sm b-t b-light text-right">
+                    <sign-button ng-if="swipingcard.id && swipingcard.transaction" billid="swipingcard.id" billtypecode="swipingcard.billTypeCode" buttonshow="110" transaction="swipingcard.transaction"></sign-button>
+                    <button class="btn btn-primary" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+<!--             模糊查询模态框           -->
+<script type="text/ng-template" id="query.html">
+    <query-form search="searchFilter" query="queryBill(search)" clear="clearQuery()"></query-form>
+</script>
+<!--             审查、审核页面   -->
+<script type="text/ng-template" id="audit.html">
+    <signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>

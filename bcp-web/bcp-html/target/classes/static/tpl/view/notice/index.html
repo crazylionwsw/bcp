@@ -1,0 +1,222 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th>
+                               序号
+                            </th>
+                            <th>
+                                发送类型
+                            </th>
+                            <th>
+                                标题
+                            </th>
+                            <th>
+                                内容
+                            </th>
+                            <th>
+                                通知类型
+                            </th>
+                            <th>
+                                发送状态
+                            </th>
+                            <th>
+                                创建时间
+                            </th>
+                            <th>
+                                发送时间
+                            </th>
+                            <th>
+                                名称
+                            </th>
+                            <th>
+                                角色
+                            </th>
+                            <th>
+                                组织机构
+                            </th>
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="notice in notices|filter:query" style="height: 50px;" ng-class="{'danger': notice.dataStatus == 9}">
+                                <td>{{$index+1}}</td>
+                                <td>{{notice.sendType | noticeSendTypeFilter}}</td>
+                                <td>{{notice.title || 'N/A'}}</td>
+                                <td>
+                                    <div style="width: 150px;text-overflow: ellipsis;overflow: hidden;float: left">{{notice.content}}</div>
+                                </td>
+                                <td>
+                                    {{notice.type | noticeTypeFilter}}
+                                </td>
+                                <td>
+                                    {{notice.status | noticeStatusFilter}}
+                                </td>
+                                <td>
+                                    {{notice.ts}}
+                                </td>
+                                <td>
+                                    {{notice.sendTime}}
+                                </td>
+                                <td>
+                                    <business-man ng-if="notice.loginUserNames != null" ids="notice.loginUserNames"></business-man>
+                                </td>
+                                <td>
+                                    <sysrole-info ng-if="notice.groupId != null" id="notice.groupId"></sysrole-info>
+                                </td>
+                                <td>
+                                    <org-info ng-if="notice.orgId != null && notice.orgId != '' " id="notice.orgId"></org-info>
+                                </td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a ng-class="red" target="_blank" ng-show="notice.dataStatus != 9 && notice.id != null " ng-click="edit(notice)">
+                                                    详情
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(notice, $index)" ng-show="notice.dataStatus != 9 && notice.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(notice, $index)" ng-show="notice.dataStatus == 9 && notice.id != null ">
+                                                    删除
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-if="notice.dataStatus != 9" role="button" data-toggle="modal" ng-click="send(notice)"  ng-show="notice.dataStatus != 9 && notice.status != 3 && notice.id != null && notice.type != 'type_3'">
+                                                    发送
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-if="notice.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(notice, $index)" ng-show="notice.dataStatus == 9 && notice.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="noticeForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation"  >
+                <div class="form-group">
+                    <label class="control-label">发送类型</label>
+                    <ui-select  ng-model="notice.sendType" theme="bootstrap" on-select="selectSend($item)">
+                        <ui-select-match placeholder="请选择发送类型" >{{$select.selected.label}}</ui-select-match>
+                        <ui-select-choices  repeat="sendtype.code as sendtype in sendTypes | filter: $select.search">
+                            <div ng-bind-html="sendtype.label | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group" ng-show="titleShow">
+                    <label class="control-label">标题</label>
+                    <input type="text" class="form-control" placeholder="请输入标题"
+                           ng-model="notice.title" ng-model-options="{updateOn: 'blur'}"
+                           name="title">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">内容</label>
+                    <textarea class="form-control " rows="6" placeholder="请输入内容"
+                              ng-model="notice.content" name="content" required/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">通知类型</label>
+                    <ui-select  ng-model="notice.type" theme="bootstrap" on-select="selectType($item)" required>
+                        <ui-select-match placeholder="请选择通知类型" >{{$select.selected.typeName}}</ui-select-match>
+                        <ui-select-choices  repeat="type.code as type in typeNames | filter: $select.search">
+                            <div ng-bind-html="type.typeName | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div ng-show="hiheDiv">
+                <div class="form-group">
+                    <label class="checkbox-inline i-checks">
+                        <input value="1" ng-model="notice.fromGroup" name="fromGroup" type="radio"><i></i>员工
+                    </label>
+                    <label class="checkbox-inline i-checks">
+                        <input value="2" ng-model="notice.fromGroup" name="fromGroup" type="radio"><i></i>系统角色
+                    </label>
+                    <label class="checkbox-inline i-checks">
+                        <input value="3" ng-model="notice.fromGroup" name="fromGroup" type="radio"><i></i>组织机构
+                    </label>
+                </div>
+                <div class="form-group" ng-show="notice.fromGroup == 1">
+                    <label class="control-label">员工</label>
+                    <ui-select multiple ng-model="notice.loginUserNames" theme="bootstrap" on-select="selectEmp($item)">
+                        <ui-select-match placeholder="请选择员工" >{{$item.username}}</ui-select-match>
+                        <ui-select-choices  repeat="emp.id as emp in employees | filter: $select.search">
+                            <div ng-bind-html="emp.username | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group" ng-show="notice.fromGroup == 2">
+                    <label class="control-label">角色</label>
+                    <ui-select  ng-model="notice.groupId" theme="bootstrap" on-select="selectRole($item)">
+                        <ui-select-match placeholder="请选择角色" >{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices  repeat="role.id as role in sysRoles | filter: $select.search">
+                            <div ng-bind-html="role.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group" ng-show="notice.fromGroup == 3">
+                    <label class="control-label">部门</label>
+                    <ui-select  ng-model="notice.orgId" theme="bootstrap" on-select="selectOrg($item)">
+                        <ui-select-match placeholder="请选择部门" >{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices  repeat="org.id as org in orgInfos | filter: $select.search">
+                            <div ng-bind-html="org.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid || saved" ng-click="save()" >保  存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取  消</button>
+        </footer>
+    </div>
+</script>
+

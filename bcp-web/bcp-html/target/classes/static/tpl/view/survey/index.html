@@ -1,0 +1,43 @@
+<!-- content -->
+<div class="app-content ng-scope m-n">
+    <div class="app-content-body app-content-full fade-in-up ng-scope">
+        <div class="hbox hbox-auto-xs ng-scope">
+            <div class="col lter b-l">
+                <div class="vbox">
+                    <div class="row-row">
+                        <div class="cell">
+                            <div class="cell-inner">
+                                <style type="text/css">
+                                    fieldset {
+                                        margin-bottom: 30px
+                                    }
+                                    label {font-weight: 700;}
+                                </style>
+                                <div class="wrapper-md">
+                                    <div ng-if="!submitted">
+                                        <form name="surveyForm" id="surveyForm" sf-schema="formSchema" sf-form="form" sf-model="formData" ng-submit="submitSurvey(surveyForm, $event)"></form>
+                                    </div>
+                                    <div class="alert alert-success alert-dismissable" role="alert" ng-if="submitted">
+                                        <button type="button" class="close" ng-click="close()">
+                                            <span aria-hidden="true">×</span>
+                                            <span class="sr-only">Close</span>
+                                        </button>
+                                        <div>
+                                            <h1>提交成功！</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /content -->
+
+
+<div  ng-if="!submitted" class="app-footer app-footer-fixed wrapper bg-light lt b-t ng-scope m-n text-center" ui-view="footer">
+    <button class="btn m-b-xs w-xs btn-default btn-rounded" type="button" ng-click="submit()">提 交</button>
+</div>

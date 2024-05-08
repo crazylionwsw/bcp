@@ -1,0 +1,148 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt">
+                            <div class="m-b-xs col-sm-8">
+                                <div class="col-sm-2">
+                                    <div class="checkbox">
+                                        <label class="i-checks">
+                                            <input type="checkbox" ng-model="sumType" ng-change="changeSumType()" value="1"><i></i>按天统计
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" ng-show="sumType">
+                                    <div class="input-group" moment-picker="searchDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                                        <input type="text" class="col-sm-4 form-control" ng-model="searchDate" ng-model-options="{ updateOn: 'blur' }"/>
+                                        <span class="input-group-btn" >
+                                             <button type="button" class="btn btn-default"><i
+                                                     class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" ng-show="!sumType">
+                                    <div class="input-group" moment-picker="searchMonth" format="YYYY-MM" locale="zh-cn" selectable="true">
+                                        <input type="text" class="col-sm-4 form-control" ng-model="searchMonth" ng-model-options="{ updateOn: 'blur' }"/>
+                                          <span class="input-group-btn">
+                                                 <button type="button" class="btn btn-default"><i
+                                                         class="glyphicon glyphicon-calendar"></i></button>
+                                          </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <a role="button" class="btn btn-sm btn-primary"  ng-click="changeDate()">查  询</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 m-b-xs text-right">
+                                <a role="button" class="btn btn-sm btn-success"  ng-click="exportDetails()">导  出</a>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped b-t b-light m-b-none">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>姓名【身份证号码】</th>
+                                    <th>联系方式</th>
+                                    <th>车型</th>
+                                    <th>车价(元)</th>
+                                    <th>4S店</th>
+                                    <th>首付比例(%)</th>
+                                    <th>业务类型</th>
+                                    <th>征信查询时间</th>
+                                    <th>客户不做原因</th>
+                                    <th>报审时间</th>
+                                    <th>批复时间</th>
+                                    <th>申请金额(元)</th>
+                                    <th>批复金额(含手续费)(元)</th>
+                                    <th>实际贷款(元)</th>
+                                    <th>期限(月)</th>
+                                    <th>手续费分期</th>
+                                    <th>首次还款日</th>
+                                    <th>是否贴息</th>
+                                    <th>手续费(元)</th>
+                                    <th>领卡时间</th>
+                                    <th>卡号</th>
+                                    <th>垫资时间</th>
+                                    <th>垫资金额(元)</th>
+                                    <th>刷卡时间</th>
+                                    <th>刷卡金额(元)</th>
+                                    <th>刷卡地点</th>
+                                    <th>抵押登记时间</th>
+                                    <th>抵押人</th>
+                                    <th>与申请人关系</th>
+                                    <th>车架号</th>
+                                    <th>发动机号</th>
+                                    <th>车辆登记证编号</th>
+                                    <th>车牌</th>
+                                    <th>银行归档时间</th>
+                                    <th>客户交接时间</th>
+                                    <th>渠道经理</th>
+                                    <th>分期经理</th>
+                                    <th>审查人</th>
+                                    <th>备注</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="businessbook in businessbooks" ng-class="{8: 'success', 11: 'warning', 16: 'warning', 18: 'danger'}[customertransaction.status]">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{businessbook.customerName}}【{{businessbook.identifyNo}}】</td>
+                                    <td>{{businessbook.cells}}</td>
+                                    <td>{{businessbook.carTypeFullName}}</td>
+                                    <td style="text-align: right">{{businessbook.applyAmount || 0 |currency:'￥'}}</td>
+                                    <td>{{businessbook.cadelarName}}</td>
+                                    <td>{{businessbook.downPaymentRatio}}</td>
+                                    <td>{{businessbook.businessType}}</td>
+                                    <td>{{businessbook.creditQueryTime}}</td>
+                                    <td>{{businessbook.cancelReason}}</td>
+                                    <td>{{businessbook.reportTime}}</td>
+                                    <td>{{businessbook.replyTime}}</td>
+                                    <td style="text-align: right">{{businessbook.creditAmount}}</td>
+                                    <td style="text-align: right">{{businessbook.approvedCreditAmount}}</td>
+                                    <td style="text-align: right">{{businessbook.swipingAmount}}</td>
+                                    <td>{{businessbook.months}}</td>
+                                    <td>{{businessbook.chargePaymentWay}}</td>
+                                    <td>{{businessbook.firstRepaymentDate}}</td>
+                                    <td>{{businessbook.compensatoryInterest}}</td>
+                                    <td style="text-align: right">{{businessbook.bankFeeAmount || 0 |currency:'￥'}}</td>
+                                    <td>{{businessbook.receiveCardTime}}</td>
+                                    <td>{{businessbook.cardNo}}</td>
+                                    <td>{{businessbook.payTime}}</td>
+                                    <td style="text-align: right">{{businessbook.appointPayAmount|| 0 |currency:'￥'}}</td>
+                                    <td>{{businessbook.swipingCardTime}}</td>
+                                    <td style="text-align: right">{{businessbook.payAmount}}</td>
+                                    <td>{{businessbook.swipingAddress}}</td>
+                                    <td>{{businessbook.pledgeEndTime}}</td>
+                                    <td>{{businessbook.pledgeCustomerName}}</td>
+                                    <td>{{businessbook.relation}}</td>
+                                    <td>{{businessbook.vin}}</td>
+                                    <td>{{businessbook.motorNumber}}</td>
+                                    <td>{{businessbook.licenseNumber}}</td>
+                                    <td>{{businessbook.registryNumber}}</td>
+                                    <td>{{businessbook.bankCompleteTime}}</td>
+                                    <td>{{businessbook.customerHandoverTime}}</td>
+                                    <td>{{businessbook.employeeName}}</td>
+                                    <td>{{businessbook.businessManName}}</td>
+                                    <td>{{businessbook.reviewName}}</td>
+                                    <td>{{businessbook.comment}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!------查询输入框-->
+<script type="text/ng-template" id="query.html">
+    <query-form customer="customerFilter" query="queryBill(customer)" clear="clearQuery()"></query-form>
+</script>

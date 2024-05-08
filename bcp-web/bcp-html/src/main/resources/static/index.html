@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="" data-ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <title>富择ERP系统</title>
+    <meta name="description" content="富择分期业务系统" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="css/animate.css" type="text/css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/simple-line-icons.css" type="text/css" />
+    <link rel="stylesheet" href="css/font.css" type="text/css" />
+    <link rel="stylesheet" href="css/app.css" type="text/css" />
+    <link rel="stylesheet" href="css/custom.css" type="text/css" />
+    <link rel="stylesheet" href="vendor/modules/ng-tags-input/ng-tags-input.css" type="text/css" />
+    <link rel="stylesheet" href="vendor/modules/ng-tags-input/ng-tags-input.bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="vendor/modules/angular-bootstrap-datetimepicker/datetimepicker.css"/>
+    <link rel='stylesheet' href='vendor/modules/angular-loading-bar/loading-bar.min.css' type='text/css'/>
+    <link rel='stylesheet' href='vendor/modules/angularjs-toaster/toaster.css' type='text/css'/>
+    <link rel="stylesheet" href="vendor/modules/angular-bootstrap-lightbox/angular-bootstrap-lightbox.min.css"/>
+    <link rel="stylesheet" href="vendor/modules/image-viewer/viewer.css" type="text/css"/>
+    <link rel="stylesheet" href="vendor/modules/angular-xeditable/xeditable.min.css" type="text/css"/>
+    <link rel="stylesheet" href="vendor/modules/angular-moment-picker/angular-moment-picker.min.css" type="text/css"/>
+    <link rel="stylesheet" href="vendor/modules/angular-ladda/ladda-themeless.min.css">
+    <link rel="stylesheet" type="text/css" href="vendor/modules/angular-loading/angular-loading.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/modules/angular-resetfield/resetField.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/jquery/datatables/dataTables.bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/modules/angular-datatables/css/angular-datatables.min.css" />
+    <link rel="stylesheet" href="vendor/modules/angular-datatables/plugins/fixedcolumns/fixedColumns.dataTables.css"/>
+    <link rel="stylesheet" href="vendor/modules/angular-datatables/plugins/bootstrap/datatables.bootstrap.min.css"/>
+</head>
+<body ng-controller="AppCtrl">
+<div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view></div>
+
+
+<!-- jQuery -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/jquery/sortable/jquery.sortable.js"></script>
+<script src="vendor/jquery/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="vendor/jquery/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/jquery/datatables/fixedColumns/dataTables.fixedColumns.js"></script>
+
+<!--bootstrap-->
+<script src="vendor/libs/bootstrap.min.js"></script>
+<!-- Angular -->
+<script src="vendor/angular/angular.min.js"></script>
+<script src="js/controllers/alert.js"></script>
+
+<script src="vendor/angular/angular-animate/angular-animate.js"></script>
+<script src="vendor/angular/angular-cookies/angular-cookies.js"></script>
+<script src="vendor/angular/angular-resource/angular-resource.js"></script>
+<script src="vendor/angular/angular-sanitize/angular-sanitize.js"></script>
+<script src="vendor/angular/angular-touch/angular-touch.js"></script>
+<script src="vendor/angular/angular-percentage-directive/percentage.js"></script>
+
+<script src="vendor/libs/moment.min.js"></script>
+
+<!-- Vendor -->
+<script src="vendor/angular/angular-ui-router/angular-ui-router.js"></script>
+<script src="vendor/angular/angular-route/angular-route.js"></script>
+<script src="vendor/angular/ngstorage/ngStorage.js"></script>
+<script src="vendor/angular/restangular/restangular.js"></script>
+
+<script src="vendor/angular/extend/underscore-min.js"></script>
+<script src="vendor/modules/ng-tags-input/ng-tags-input.js"></script>
+<script src='vendor/modules/angular-loading-bar/loading-bar.min.js'></script>
+<script src='vendor/modules/angular-bootstrap-lightbox/angular-bootstrap-lightbox.min.js'></script>
+<script src='vendor/modules/image-viewer/viewer.js'></script>
+<script src="vendor/modules/angular-moment-picker/angular-moment-picker.min.js"></script>
+<script src="vendor/modules/angular-ladda/spin.min.js"></script>
+<script src="vendor/modules/angular-ladda/ladda.min.js"></script>
+<script src="vendor/modules/angular-ladda/angular-ladda.min.js"></script>
+<script src="vendor/modules/angular-loading/spin.min.js"></script>
+<script src="vendor/modules/angular-loading/angular-loading.js"></script>
+<script src="vendor/modules/angular-resetfield/resetField.js"></script>
+<!--//<script src="vendor/jquery/datatables/dataTables.bootstrap.js"></script>-->
+<script src="vendor/modules/angular-datatables/angular-datatables.js"></script>
+<script src="vendor/modules/angular-datatables/plugins/fixedcolumns/angular-datatables.fixedcolumns.js"></script>
+<script src="vendor/modules/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+
+
+<!--datetime picker-->
+<script src="vendor/modules/angular-bootstrap-datetimepicker/datetimepicker.js"></script>
+<script src="vendor/modules/angular-bootstrap-datetimepicker/datetimepicker.templates.js"></script>
+
+<script src="vendor/modules/angular-date-time-input/dateTimeInput.js"></script>
+
+<!-- bootstrap -->
+<script src="vendor/angular/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<!-- lazyload -->
+<script src="vendor/angular/oclazyload/ocLazyLoad.js"></script>
+<!-- translate -->
+<script src="vendor/angular/angular-translate/angular-translate.js"></script>
+<script src="vendor/angular/angular-translate/loader-static-files.js"></script>
+<script src="vendor/angular/angular-translate/storage-cookie.js"></script>
+<script src="vendor/angular/angular-translate/storage-local.js"></script>
+<!--modules-->
+<script src="vendor/modules/angular-file-upload/angular-file-upload.min.js"></script>
+<script src="vendor/modules/angularjs-toaster/toaster.js"></script>
+<script src="vendor/modules/angular-filter/angular-filter.min.js"></script>
+<script src="vendor/modules/qrcode/qrcode.js"></script>
+<script src="vendor/modules/qrcode/qrcode_UTF8.js"></script>
+<script src="vendor/modules/qrcode/angular-qrcode.js"></script>
+<script src="vendor/modules/angular-bootstrap-confirm/angular-bootstrap-confirm.min.js"></script>
+<script src="vendor/modules/angular-local-storage/angular-local-storage.min.js"></script>
+<script src="vendor/modules/angular-websocket/angular-websocket.min.js"></script>
+
+<!--      angular-pageslide-directive    -->
+<script src="vendor/modules/ng-pageslide/angular-pageslide-directive.min.js"></script>
+
+<!-- App -->
+<script src="js/app.js"></script>
+<script src="js/config.js"></script>
+<script src="js/config.lazyload.js"></script>
+<script src="js/config.router.js"></script>
+<script src="js/main.js"></script>
+<script src="js/app/auth/service.js"></script>
+<script src="js/app/msgsubscribe/service.js"></script>
+<script src="js/services/ui-load.js"></script>
+<script src="js/filters/fromNow.js"></script>
+<script src="js/directives/setnganimate.js"></script>
+<script src="js/directives/ui-butterbar.js"></script>
+<script src="js/directives/ui-focus.js"></script>
+<script src="js/directives/ui-fullscreen.js"></script>
+<script src="js/directives/ui-jq.js"></script>
+<script src="js/directives/ui-module.js"></script>
+<script src="js/directives/ui-nav.js"></script>
+<script src="js/directives/ui-scroll.js"></script>
+<script src="js/directives/ui-shift.js"></script>
+<script src="js/directives/ui-toggleclass.js"></script>
+<script src="js/directives/ui-validate.js"></script>
+<script src="js/directives/customer-block.js"></script>
+<script src="js/directives/customer-guarantor.js"></script>
+<script src="js/directives/customer-relation-block.js"></script>
+<script src="js/directives/customerimage-collection.js"></script>
+<script src="js/directives/cartype-block.js"></script>
+<script src="js/directives/customer-company.js"></script>
+<script src="js/directives/cartype-list.js"></script>
+<script src="js/directives/customerimage-block.js"></script>
+<script src="js/directives/customerimagetype-info.js"></script>
+<script src="js/directives/cardealer-block.js"></script>
+<script src="js/directives/cardealer-exchange-block.js"></script>
+<script src="js/directives/cardealer-orderexchange-block.js"></script>
+<script src="js/directives/creditphotographimage-block.js"></script>
+<script src="js/directives/signinfo-block.js"></script>
+<script src="js/directives/signinfo-list.js"></script>
+<script src="js/directives/product-block.js"></script>
+<script src="js/directives/product-list.js"></script>
+<script src="js/directives/user-info.js"></script>
+<script src="js/directives/contract-list.js"></script>
+<script src="js/directives/customer-info.js"></script>
+<script src="js/directives/employee-info.js"></script>
+<script src="js/directives/loginuser-info.js"></script>
+<script src="js/directives/cashsource-info.js"></script>
+<script src="js/directives/employee-avatar.js"></script>
+<script src="js/directives/org-info.js"></script>
+<script src="js/directives/cardealer-info.js"></script>
+<script src="js/directives/cardealer-name.js"></script>
+<script src="js/directives/dealergroup-name.js"></script>
+<script src="js/directives/dealersharing-status.js"></script>
+<script src="js/directives/sysrole-info.js"></script>
+<script src="js/directives/sysrole-list.js"></script>
+<script src="js/directives/org-list.js"></script>
+<script src="js/directives/business-contract-list.js"></script>
+<script src="js/directives/business-contract-block.js"></script>
+<script src="js/directives/sysresource-list.js"></script>
+<script src="js/directives/hide-on-click-outside.js"></script>
+<script src="js/directives/package-customerimage-block.js"></script>
+<script src="js/directives/flow-info.js"></script>
+<script src="js/directives/flow-getpresenttaskgroup.js"></script>
+<script src="js/directives/payment-info.js"></script>
+<script src="js/directives/payment-orderamount.js"></script>
+<script src="js/directives/exchange-amount.js"></script>
+<script src="js/directives/payment-demandamount.js"></script>
+<script src="js/directives/appointpayment-info.js"></script>
+<script src="js/directives/feeitem-loanservice.js"></script>
+<script src="js/directives/feeitem-exchange-loanservice.js"></script>
+<script src="js/directives/swipingcard-info.js"></script>
+<script src="js/directives/bankfee-info.js"></script>
+<script src="js/directives/bankfeeorder-info.js"></script>
+<script src="js/directives/bankfeeexchange-info.js"></script>
+<script src="js/directives/customertransaction-info.js"></script>
+<!--<script src="js/directives/flow-presenttask.js"></script>-->
+<!--<script src="js/directives/can-audit.js"></script>-->
+<!--<script src="js/directives/payment-can-audit.js"></script>-->
+<!--<script src="js/directives/flow-nodeproperty.js"></script>-->
+<script src="js/directives/customerimages-collection.js"></script>
+<script src="js/directives/enhancement-customerimage-block.js"></script>
+<script src="js/directives/customer-cell.js"></script>
+<script src="js/directives/customer-status.js"></script>
+<script src="js/directives/customer-carvaluation.js"></script>
+<script src="js/directives/query-form.js"></script>
+<script src="js/directives/export-form.js"></script>
+<script src="js/directives/loginuser-query-form.js"></script>
+<script src="js/directives/cardealer-query-form.js"></script>
+<script src="js/directives/chargefeeplan-query-form.js"></script>
+<script src="js/directives/employee-query-form.js"></script>
+<script src="js/directives/question-query-form.js"></script>
+<script src="js/directives/user-query-form.js"></script>
+<script src="js/directives/workflow-group-list.js"></script>
+<script src="js/directives/cardealer-cashsource-info.js"></script>
+<script src="js/directives/cardealer-cooperationcashsource-info.js"></script>
+<script src="js/directives/device-info.js"></script>
+<script src="js/directives/carbrand-info.js"></script>
+<script src="js/directives/carmodel-info.js"></script>
+<script src="js/directives/cartype-selector.js"></script>
+<script src="js/directives/customer-loan.js"></script>
+<script src="js/directives/customer-base.js"></script>
+<script src="js/directives/customer-car.js"></script>
+<script src="js/directives/customer-car-exchange.js"></script>
+<script src="js/directives/customer-carvaluation-exchange.js"></script>
+<script src="js/directives/customer-orderexchange-car.js"></script>
+<script src="js/directives/customer-orderexchange-loan.js"></script>
+<script src="js/directives/customer-loan-exchange.js"></script>
+<script src="js/directives/decompress-info.js"></script>
+<script src="js/directives/customer-order.js"></script>
+<script src="js/directives/sortable.js"></script>
+<script src="js/directives/business-info.js"></script>
+<script src="js/directives/business-man.js"></script>
+<script src="js/directives/business-mans.js"></script>
+<script src="js/directives/guarantee-way.js"></script>
+<script src="js/directives/feeitem-list.js"></script>
+<script src="js/directives/feeitem-info.js"></script>
+<script src="js/directives/re-audit-button.js"></script>
+<script src="js/directives/transaction-cashsource-info.js"></script>
+<script src="js/directives/transaction-cardealer-cooperationcashsource-info.js"></script>
+<script src="js/directives/transaction-status.js"></script>
+<script src="js/directives/vin-initialvaluationprice.js"></script>
+<script src="js/directives/vin-price.js"></script>
+<script src="js/directives/document-templateobject-info.js"></script>
+<script src="js/directives/msgsubscribe-info.js"></script>
+<script src="js/directives/sign-button.js"></script>
+<script src="js/directives/emailobject-templateobject-info.js"></script>
+<script src="js/directives/emailobject-documents-list.js"></script>
+<script src="js/directives/subsribesource-list.js"></script>
+<script src="js/directives/customer-fee.js"></script>
+<script src="js/directives/declaration-history-list.js"></script>
+<script src="js/directives/transaction-stage.js"></script>
+<script src="js/directives/order-marketing-info.js"></script>
+<script src="js/directives/declaration-contract-block.js"></script>
+<script src="js/directives/declaration-status.js"></script>
+<script src="js/directives/declaration-collection.js"></script>
+<script src="js/directives/approve-status.js"></script>
+<script src="js/directives/compare-data.js"></script>
+<script src="js/directives/compare-exchange-data.js"></script>
+<script src="js/directives/loginuser-employee-info.js"></script>
+<script src="js/directives/loginuser-employee-empinfo.js"></script>
+<script src="js/directives/loginuser-employee-infos.js"></script>
+<script src="js/directives/echarts-info.js"></script>
+<script src="js/directives/echarts-column-info.js"></script>
+<script src="js/directives/transaction-cardealer-info.js"></script>
+<script src="js/directives/transaction-cartype-info.js"></script>
+<script src="js/directives/carvaluation-query-form.js"></script>
+<script src="js/directives/carvaluationimage-block.js"></script>
+<script src="js/directives/msgsubscribe-query-form.js"></script>
+<script src="js/directives/cardemand-signinfo.js"></script>
+<script src="js/directives/customer-relation.js"></script>
+<script src="js/directives/superorg-info.js"></script>
+<script src="js/directives/pledge-customer-info.js"></script>
+<script src="js/directives/chargeplan-signinfo-list.js"></script>
+<script src="js/directives/fixed-columns.js"></script>
+<script src="js/directives/tem-sign-button.js"></script>
+<script src="js/directives/tem-signinfo-list.js"></script>
+
+<!--xeditable-->
+<script src="vendor/modules/angular-xeditable/xeditable.js"></script>
+
+<script src="vendor/modules/angular-schema-form/tv4.min.js"></script>
+<script src="vendor/modules/angular-schema-form/angular-schema-form.min.js"></script>
+<script src="vendor/modules/angular-schema-form/angular-schema-form-bootstrap.min.js"></script>
+
+
+<!--公共处理类-->
+<script src="js/app/common/filter.js"></script>
+<!-- Lazy loading -->
+
+
+
+<!--echarts做图表-->
+<script src="vendor/echarts/echarts.js"></script>
+<script src="vendor/echarts/echarts.min.js"></script>
+<script src="vendor/echarts/echarts.common.min.js"></script>
+<script src="vendor/echarts/echarts.simple.min.js"></script>
+
+</body>
+</html>

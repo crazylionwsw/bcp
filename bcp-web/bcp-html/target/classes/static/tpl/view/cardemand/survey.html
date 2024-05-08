@@ -1,0 +1,105 @@
+<div class="panel panel-default m-b-none">
+	<div class="panel-heading">
+		<button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+		<span class="h4">客户调查</span>
+	</div>
+	<div class="panel-body">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="col-lg-12">
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-4">
+							<label class="control-label">模板列表</label>
+							<ui-select ng-model="customersurveyresult.customerSurveyTemplateId" name="customerSurveyTemplateId" theme="bootstrap" ng-disabled="disabled" on-select="selectCustomerSurveyTemplate($item)">
+								<ui-select-match  placeholder="请选择调查问卷模板" >{{$select.selected.name}}</ui-select-match>
+								<ui-select-choices repeat="customersurveytemplate.id as customersurveytemplate in customersurveytemplates | filter: $select.search">
+									<div ng-bind-html="customersurveytemplate.name"></div>
+								</ui-select-choices>
+							</ui-select>
+						</div>
+						<div class="col-sm-8">
+							<label class="control-label">问题列表</label>
+							<ui-select multiple ng-model="customersurveyresult.questionIds" name="questionIds" theme="bootstrap" ng-disabled="disabled">
+								<ui-select-match  placeholder="请选择模板的问题" >{{$item.content}}</ui-select-match>
+								<ui-select-choices repeat="question.id as question in questions | filter: $select.search">
+									<div ng-bind-html="question.content"></div>
+								</ui-select-choices>
+							</ui-select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel-body">
+				<div class="col-lg-12">
+
+					<div class="form-group pull-in clearfix">
+						<div class="col-sm-4">
+							<select multiple ng-model="questionCategoryId" name="questionCategoryId"
+									ng-options="questioncategory.name for questioncategory in questioncategories track by questioncategory.id" ng-click="selectQuestionCategory()"
+									class="form-control">
+							</select>
+						</div>
+						<!--<div class="col-sm-4">
+							<ui-select ng-model="questionCategoryIds" name="questionCategoryIds" theme="bootstrap" ng-disabled="disabled" on-select="selectQuestionCategory($item, $model)">
+								<ui-select-match  placeholder="请选择问题分类" >{{$select.selected.name}}</ui-select-match>
+								<ui-select-choices repeat="questioncategory.id as questioncategory in questioncategories | filter: $select.search">
+									<div ng-bind-html="questioncategory.name"></div>
+								</ui-select-choices>
+							</ui-select>
+						</div>-->
+						<div class="col-sm-8">
+							<ui-select multiple ng-model="questionCategory.questionIds" name="cateGoryQuestionIds" theme="bootstrap" ng-disabled="disabled" on-select="selectQuestion($item, $model)">
+								<ui-select-match  placeholder="请选择问题" >{{$item.content}}</ui-select-match>
+								<ui-select-choices repeat="question.id as question in categoryquestions | filter: $select.search">
+									<div ng-bind-html="question.content"></div>
+								</ui-select-choices>
+							</ui-select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer class="text-right">
+			<button class="btn btn-primary" type="submit" ng-show="canAnotherSave"  ng-click="anotherSave()">另存为模板</button>
+			<button class="btn btn-primary" type="submit"  ng-click="saveSend()" ng-show="canSave">发  送</button>
+			<button class="btn btn-warning" type="button" ng-click="closeSurvey()">关  闭</button>
+		</footer>
+	</div>
+</div>
+
+<script type="text/ng-template" id="name.html">
+
+	<div class="panel panel-default m-b-none">
+		<div class="panel-heading">
+			<span class="h4">{{modalTitle}}</span>
+		</div>
+		<div class="panel-body">
+			<form name="userForm" class="form-validation">
+				<div class="form-group">
+					<label>模板名称</label>
+					<input type="text" class="form-control" placeholder="请输入模板名称"
+						   ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+						   ng-model="templateName" ng-model-options="{updateOn: 'blur'}"
+						   name="templateName" required>
+					<span ng-show="userForm.templateName.$dirty && userForm.templateName.$error.required" class="help-block text-danger">问卷调查模板编码是必须的!</span>
+					<span ng-show="userForm.templateName.$dirty && userForm.templateName.$error.notUnique" class="help-block text-danger">问卷调查模板编码不能重复！</span>
+				</div>
+				<div class="form-group">
+					<label>模板编码</label>
+					<input type="text" class="form-control" placeholder="请输入模板编码"
+						   ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+						   ng-model="templateCode" ng-model-options="{updateOn: 'blur'}"
+						   name="templateCode" required>
+					<span ng-show="userForm.templateCode.$dirty && userForm.templateCode.$error.required" class="help-block text-danger">问卷调查模板名称是必须的!</span>
+					<span ng-show="userForm.templateCode.$dirty && userForm.templateCode.$error.notUnique" class="help-block text-danger">问卷调查模板名称不能重复！</span>
+				</div>
+			</form>
+		</div>
+		<footer class="panel-footer text-right bg-light lter">
+			<button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+			<button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+		</footer>
+	</div>
+</script>

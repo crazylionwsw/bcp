@@ -1,0 +1,213 @@
+package com.fuze.bcp.api.bd.service;
+
+import com.fuze.bcp.api.bd.bean.*;
+import com.fuze.bcp.api.drools.bean.DroolsBaseBean
+import com.fuze.bcp.bean.PayAccount
+import java.util.List
+import java.util.regex.Pattern
+import java.util.regex.Matcher;
+
+rule "actSaveCarDealerSubmission"
+    dialect "java"
+    lock-on-active true
+    when
+        $droolsBeans:DroolsBaseBean(apiBaseBean != null, message: message);
+        $carDealerSubmissionBean : CarDealerSubmissionBean() from $droolsBeans.apiBaseBean;
+    then
+        // 提交经销商信息前，检查必填信息
+        //经销商所属区域
+        if($carDealerSubmissionBean.getDealerRegion() == null){
+            System.out.println("MSG_DEALER_REGION_NULL");
+            message.add("MSG_DEALER_REGION_NULL");
+        }
+        //  名称
+        if ($carDealerSubmissionBean.getName() == null || "".equals($carDealerSubmissionBean.getName())){
+            System.out.println("MSG_CARDEALER_NAME_NULL");
+            message.add("MSG_CARDEALER_NAME_NULL");
+        }
+        //  经销商来源
+        if ($carDealerSubmissionBean.getSourceDeals()==null){
+            System.out.println("MSG_CARDEALER_SOURCEDEALS_NULL");
+            message.add("MSG_CARDEALER_SOURCEDEALS_NULL");
+        }
+        //  地址
+        if ($carDealerSubmissionBean.getAddress() == null || "".equals($carDealerSubmissionBean.getAddress())){
+            System.out.println("MSG_CARDEALER_ADDRESS_NULL");
+            message.add("MSG_CARDEALER_ADDRESS_NULL");
+        }
+        //  经销商联系方式
+        if ($carDealerSubmissionBean.getCell() == null || "".equals($carDealerSubmissionBean.getCell())){
+            System.out.println("MSG_CARDEALER_CELL_NULL");
+            message.add("MSG_CARDEALER_CELL_NULL");
+        }else{
+            Pattern pcell = Pattern.compile("^1[3|4|5|7|8]\\d{9}$");
+            Matcher mcell = pcell.matcher($carDealerSubmissionBean.getCell());
+            if(mcell.matches() == false){
+               System.out.println("MSG_ERROR_CELLFORMAT");
+               message.add("MSG_ERROR_CELLFORMAT");
+            }
+        }
+        //  负责人
+        if ($carDealerSubmissionBean.getManager() == null || "".equals($carDealerSubmissionBean.getManager())){
+            System.out.println("MSG_CARDEALER_MANAGER_NULL");
+            message.add("MSG_CARDEALER_MANAGER_NULL");
+        }
+        //  分期经理
+        if ($carDealerSubmissionBean.getBusinessManId() == null || "".equals($carDealerSubmissionBean.getBusinessManId())){
+            System.out.println("MSG_CARDEALER_BUSINESSMANID_NULL");
+            message.add("MSG_CARDEALER_BUSINESSMANID_NULL");
+        }
+        //  限定经营品牌
+        if ($carDealerSubmissionBean.getBrandIsLimit() == null){
+            System.out.println("MSG_CARDEALER_BRANDISLIMIT_NULL");
+            message.add("MSG_CARDEALER_BRANDISLIMIT_NULL");
+        }else{
+            //如果选择限定经营品牌，经营品牌为必填
+            if($carDealerSubmissionBean.getBrandIsLimit() != 0){
+                if($carDealerSubmissionBean.getCarBrandIds() != null && $carDealerSubmissionBean.getCarBrandIds().size()>0 ){
+                }else{
+                    System.out.println("MSG_CARBRANDIDS_NULL");
+                    message.add("MSG_CARBRANDIDS_NULL");
+                }
+            }
+        }
+        //账户信息
+        if ($carDealerSubmissionBean.getPayAccounts() != null && $carDealerSubmissionBean.getPayAccounts().size()>0){
+            List<PayAccount> payAccounts = $carDealerSubmissionBean.getPayAccounts();
+            int count = 0;
+            for (PayAccount pa :payAccounts){
+                if (pa.getDefaultAccount() == 1){
+                     count ++;
+                }
+                //开户名称
+                if(pa.getAccountName() == null || "".equals(pa.getAccountName())){
+                    System.out.println("MSG_ACCOUNTNAME_NULL");
+                    message.add("MSG_ACCOUNTNAME_NULL");
+                }
+                //开户银行
+               if(pa.getBankName() == null || "".equals(pa.getBankName())){
+                    System.out.println("MSG_BANKNAME_NULL");
+                    message.add("MSG_BANKNAME_NULL");
+               }
+                //银行账户
+               if (pa.getAccountNumber() == null || "".equals(pa.getAccountNumber())){
+                    System.out.println("MSG_ACCOUNTNUMBER_NULL");
+                    message.add("MSG_ACCOUNTNUMBER_NULL");
+               }
+
+            }
+            if (count + 1 != payAccounts.size()){
+                System.out.println("MSG_CARDEALER_PAYACCOUNTS_NOT_DEFAULT");
+                message.add("MSG_CARDEALER_PAYACCOUNTS_NOT_DEFAULT");
+            }
+        } else {
+            System.out.println("MSG_CARDEALER_PAYACCOUNTS_NULL");
+            message.add("MSG_CARDEALER_PAYACCOUNTS_NULL");
+        }
+
+        //添加渠道员工
+          if($carDealerSubmissionBean.getEmployeeInfos() != null && $carDealerSubmissionBean.getEmployeeInfos().size()>0){
+               List<DealerEmployeeBean> dealerEmployeeBeans = $carDealerSubmissionBean.getEmployeeInfos();
+               for (DealerEmployeeBean dea : dealerEmployeeBeans){
+                   if(dea.getUsername() == null || "".equals(dea.getUsername())){
+                        System.out.println("MSG_USERNAME_NULL");
+                        message.add("MSG_USERNAME_NULL");
+                   }
+                   if(dea.getGender() == null){
+                       System.out.println("MSG_GENDER_NULL");
+                       message.add("MSG_GENDER_NULL");
+                   }
+                   if(dea.getCell() == null || "".equals(dea.getCell())){
+                       System.out.println("MSG_CELL_NULL");
+                       message.add("MSG_CELL_NULL");
+                   }else{
+                       Pattern p = Pattern.compile("^1[3|4|5|7|8]\\d{9}$");
+                       Matcher m = p.matcher(dea.getCell());
+                       if(m.matches() == false){
+                           System.out.println("MSG_ERROR_CELLFORMAT");
+                           message.add("MSG_ERROR_CELLFORMAT");
+                       }
+                   }
+                   if(dea.getEmail() == null || "".equals(dea.getEmail())){
+                       System.out.println("MSG_EMAIL_NULL");
+                       message.add("MSG_EMAIL_NULL");
+                   }else{
+                       Pattern pe = Pattern.compile("^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$");
+                       Matcher me = pe.matcher(dea.getEmail());
+                       if(me.matches() == false){
+                           System.out.println("MSG_ERROR_EMAILFORMAT");
+                           message.add("MSG_ERROR_EMAILFORMAT");
+                       }
+                   }
+               }
+          }else{
+              System.out.println("MSG_EMPLOYEE_INFO_NULL");
+              message.add("MSG_EMPLOYEE_INFO_NULL");
+          }
+
+        //经销商贴息占比
+        if ($carDealerSubmissionBean.getCompensatoryRatio() == null || "".equals($carDealerSubmissionBean.getCompensatoryRatio())){
+            System.out.println("MSG_CARDEALER_COMPENSATORYRATIO_NULL");
+            message.add("MSG_CARDEALER_COMPENSATORYRATIO_NULL");
+        }
+        //  经营业务
+        if($carDealerSubmissionBean.getBusinessType() == null || "".equals($carDealerSubmissionBean.getBusinessType())){
+            System.out.println("MSG_CARDEALER_BUSINESSTYPE_NULL");
+            message.add("MSG_CARDEALER_BUSINESSTYPE_NULL");
+        } else {
+        //新车垫资时间点、二手车垫资时间点
+            String businessType = $carDealerSubmissionBean.getBusinessType();
+            String[] split = businessType.split(":");
+            if (split.length > 1){
+                if (split[0].equals("1") && split[1].equals("0")){//新车业务
+                    if ( $carDealerSubmissionBean.getPaymentNewTime() == null){
+                        System.out.println("MSG_CARDEALER_NC_PAYMENTNEWTIME_NULL");
+                        message.add("MSG_CARDEALER_NC_PAYMENTNEWTIME_NULL");
+                    }
+                } else if (split[0].equals("0") && split[1].equals("1")){//二手车业务
+                    if ( $carDealerSubmissionBean.getPaymentOldTime() == null){
+                        System.out.println("MSG_CARDEALER_OC_PAYMENTOLDTIME_NULL");
+                        message.add("MSG_CARDEALER_OC_PAYMENTOLDTIME_NULL");
+                    }
+                } else if (split[0].equals("1") && split[1].equals("1")){//新车、二手车
+                    if ( $carDealerSubmissionBean.getPaymentNewTime() == null || $carDealerSubmissionBean.getPaymentOldTime() == null){
+                        System.out.println("MSG_CARDEALER_NC_PAYMENTNEWTIME_OR_OC_PAYMENTOLDTIME_NULL");
+                        message.add("MSG_CARDEALER_NC_PAYMENTNEWTIME_OR_OC_PAYMENTOLDTIME_NULL");
+                    }
+                }
+            } else {
+                System.out.println("MSG_CARDEALER_BUSINESSTYPE_PARAM_ERROR");
+                message.add("MSG_CARDEALER_BUSINESSTYPE_PARAM_ERROR");
+            }
+        }
+        //  保单行信息、渠道合作行信息
+        if ("".equals($carDealerSubmissionBean.getCashSourceId())|| $carDealerSubmissionBean.getCashSourceId() == null){
+            System.out.println("MSG_CARDEALER_CASHSOURCE_NULL");
+            message.add("MSG_CARDEALER_CASHSOURCE_NULL");
+        }
+        if ("".equals($carDealerSubmissionBean.getCooperationCashSourceId())|| $carDealerSubmissionBean.getCooperationCashSourceId() == null){
+            System.out.println("MSG_CARDEALER_COOPERATIONCASHSOURCE_NULL");
+            message.add("MSG_CARDEALER_COOPERATIONCASHSOURCE_NULL");
+        }
+        //  支付方式
+        if ($carDealerSubmissionBean.getPaymentMethod() == null){
+            System.out.println("MSG_CARDEALER_PAYMENTMETHOD_NULL");
+            message.add("MSG_CARDEALER_PAYMENTMETHOD_NULL");
+        }
+        //  销售政策
+        if ($carDealerSubmissionBean.getDealerRateTypes() != null && $carDealerSubmissionBean.getDealerRateTypes().size()>0){
+
+        } else {
+           System.out.println("MSG_CARDEALER_DEALERRATETYPES_NULL");
+           message.add("MSG_CARDEALER_DEALERRATETYPES_NULL");
+        }
+        //贷款服务费率
+        if ($carDealerSubmissionBean.getServiceFeeEntityList() != null && $carDealerSubmissionBean.getServiceFeeEntityList().size()>0){
+
+        } else {
+           System.out.println("MSG_CARDEALER_SERVICEFEEENTITYLIST_NULL");
+           message.add("MSG_CARDEALER_SERVICEFEEENTITYLIST_NULL");
+        }
+update($droolsBeans);
+end
+

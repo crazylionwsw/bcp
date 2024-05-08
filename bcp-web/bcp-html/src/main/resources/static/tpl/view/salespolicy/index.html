@@ -1,0 +1,169 @@
+<div class="hbox hbox-auto-xs bg-light">
+    <!-- column -->
+    <div class="col w-lg b-l">
+        <div class="vbox">
+            <div class="wrapper b-b">
+                <div class="font-thin h4">{{title}}</div>
+                <!--<small class="text-muted">with fluid height</small>-->
+            </div>
+            <div class="wrapper-xs b-b">
+                <div class="input-group m-b-xxs">
+                            <span class="input-group-addon input-sm no-border no-bg"><i
+                                    class="icon-magnifier text-md m-t-xxs"></i></span>
+                    <input type="text" class="form-control input-sm no-border no-bg text-md"
+                           placeholder="检索：销售政策" ng-model="key">
+                </div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="m-t-n-xxs">
+                            <div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+                                <a ng-repeat="item in salespolicys |  filter:{name:key} | orderBy:'first'"
+                                   class="list-group-item m-l" ng-class="{'select m-l-none': item.selected }"
+                                   ng-click="selectSalesPolicy(item)">
+                                          <span class="block text-ellipsis m-l-n" ng-class="{'m-l-none': item.selected, 'text-danger': item.dataStatus == 9}">
+                                            {{ item.name }}
+                                          </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="text-center pos-abt w-full" style="top:50%;"
+                             ng-hide="(salespolicys | filter:key).length">没有检索到</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-sm b-t b-light text-center">
+                <a role="button" class="btn btn-sm btn-default" data-toggle="modal"
+                   ng-click="add('')">添加销售政策</a>
+            </div>
+        </div>
+    </div>
+    <!-- /column -->
+
+    <div class="col lter">
+        <div class="vbox">
+            <div class="wrapper b-b b-light lt">
+                <div class="font-thin h4">{{modalTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="wrapper-md">
+                            <!--表单禁用-->
+                        <fieldset ng-disabled="disForm">
+                            <form name="userForm" class="form-validation">
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-4">
+                                        <label>编码</label>
+                                        <input class="form-control"
+                                               placeholder="如:BJ(代表北京)_20170808"
+                                               name="code" ng-model="salespolicy.code" ng-model-options="{updateOn: 'blur'}"
+                                               ng-pattern="/^[a-zA-Z0-9_]+$/"
+                                               ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                                               required type="text">
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">编码是必须的!</span>
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">编码不能重复！</span>
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">编码必须为地区(大写首字母)_开始日期!</span>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <label>名称</label>
+                                        <input class="form-control"
+                                               placeholder="请输入销售名称"
+                                               ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                                               name="name" required ng-model="salespolicy.name" ng-model-options="{updateOn: 'blur'}"
+                                               type="text">
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">销售名称是必须的!</span>
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">销售名称不能重复！</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>销售地区</label>
+                                    <ui-select multiple ng-model="salespolicy.provinces" theme="bootstrap" on-select="selectProvinces($item)">
+                                        <ui-select-match placeholder="选择销售地区" >{{$item.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="province.id as province in proVinces | filter: $select.search">
+                                            <small>
+                                                <span style="padding-left:{{province.depth*10}}px" ng-bind-html="province.name"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>经营业务</label>
+                                    <ui-select multiple ng-model="salespolicy.businessTypes" theme="bootstrap" on-select="selectBusinessType($item, $model)">
+                                        <ui-select-match placeholder="请选择经营业务" >{{$item.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="businessType in businessTypes | filter: $select.search">
+                                            <small>
+                                                <span>{{businessType.name}}（{{businessType.code}}）</span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+
+                                </div>
+                            </form>
+                        </fieldset>
+                            <!--利率-->
+                            <div class="form-group">
+                                <tabset justified="true" class="tab-container nav-tabs-alt no-borders m-b-none">
+                                    <tab ng-repeat="bt in salespolicy.businessTypes" heading="{{bt.name}}">
+                                        <tabset justified="true" class="tab-container nav-tabs-alt no-borders m-b-none">
+                                            <tab ng-repeat="sr in bt.sourceRates" heading="{{sr.name}}">
+
+                                                <fieldset ng-disabled="disForm">
+                                                <form name="rateForm{{bt.id}}_{{sr.id}}" editable-form>
+                                                    <div class="row wrapper-xs text-right">
+                                                        <button type="button" class="btn btn-sm btn-default" ng-show="!rateForm{{bt.id}}_{{sr.id}}.$visible" ng-click="rateForm{{bt.id}}_{{sr.id}}.$show()"><i class="fa fa-pencil text"></i></button>
+                                                        <button type="submit" ng-show="rateForm{{bt.id}}_{{sr.id}}.$visible" ng-disabled="rateForm{{bt.id}}_{{sr.id}}.$waiting" class="btn btn-primary btn-sm"><i class="fa fa-save text"></i></button>
+                                                        <button type="button" ng-show="rateForm{{bt.id}}_{{sr.id}}.$visible" ng-disabled="rateForm{{bt.id}}_{{sr.id}}.$waiting" ng-click="rateForm{{bt.id}}_{{sr.id}}.$cancel()" class="btn btn-default btn-sm"><i class="fa fa-close text"></i></button>
+                                                    </div>
+                                                    <!-- table -->
+                                                    <div class="row">
+                                                        <table class="table table-bordered table-hover table-condensed">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>期数(月)</th>
+                                                                <th>利率(%)</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr ng-repeat="ratetype in salespolicy.rates[bt.code][sr.id]">
+                                                                <td>
+                                                                    {{ratetype.months}}
+                                                                </td>
+                                                                <td>
+                                                                <span editable-text="ratetype.ratio100" e-form="rateForm{{bt.id}}_{{sr.id}}">
+                                                                    {{ratetype.ratio100 | number:2}}
+                                                                </span>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </form>
+                                                </fieldset>
+                                            </tab>
+                                        </tabset>
+                                    </tab>
+                                </tabset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wrapper-sm b-t b-light text-right lt">
+                <button class="btn btn-success" type="button" ng-click="saveform('')" ng-disabled="userForm.$invalid" ng-show="salespolicy.id != null && salespolicy.dataStatus != 9">保 存</button>
+                <button class="btn btn-info" type="button" ng-click="saveform('')" ng-disabled="userForm.$invalid || saved" ng-show="salespolicy.id == null">添 加</button>
+                <button class="btn btn-primary" type="button" ng-click="discard()" ng-show="salespolicy.dataStatus != 9 && salespolicy.id != null ">作 废</button>
+                <button class="btn btn-danger" type="button" ng-click="discard()" ng-show="salespolicy.dataStatus == 9 && salespolicy.id != null ">删 除</button>
+                <button class="btn btn-success" type="button" ng-click="renew()" ng-show="salespolicy.dataStatus == 9 && salespolicy.id != null ">恢 复</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+

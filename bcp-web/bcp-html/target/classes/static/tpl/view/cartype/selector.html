@@ -1,0 +1,133 @@
+<div class="input-group">
+    <input type="text" class="form-control" ng-model="cartype.fullName"/>
+    <span class="input-group-btn">
+         <button type="button" class="btn btn-default" ng-click="showSelector()"><i class="glyphicon glyphicon-search"></i></button>
+    </span>
+</div>
+<input type="hidden" ng-model="cartypeId"/>
+<script type="text/ng-template" id="selector.html">
+    <div class="panel panel-default m-b-none" dw-loading="signInfo" dw-loading-options="{text: ''}">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">选择车型</span>
+        </div>
+
+        <div class="hbox hbox-auto-xs bg-light" style="height:600px;">
+
+            <div class="col w b-r">
+                <div class="vbox">
+                    <div class="wrapper b-b">
+                        <div class="font-thin h4">品牌</div>
+                    </div>
+                    <div class="wrapper-xs b-b">
+                        <div class="input-group m-b-xxs">
+                            <span class="input-group-addon input-sm no-border no-bg"><i class="icon-magnifier text-md m-t-xxs"></i></span>
+                            <input type="text" class="form-control input-sm no-border no-bg text-md" placeholder="检索 {{group.name ? group.name : '品牌'}}" ng-model="carBrandQuery">
+                        </div>
+                    </div>
+                    <div class="row-row">
+                        <div class="cell">
+                            <div class="cell-inner">
+                                <div class="list-group no-radius no-border no-bg m-b-none">
+                                    <a ng-repeat="carbrand in carBrands | filter:{group:filter} | filter:carBrandQuery | orderBy:'first'"
+                                       class="list-group-item m-l hover-anchor b-a no-select"
+                                       ng-class="{'select m-l-none': carbrand.selected}"
+                                       ng-click="selectCarBrand(carbrand)">
+                                        <span class="block m-l-n" ng-class="{'m-n': carbrand.selected }">{{ carbrand.name ? carbrand.name : 'Untitled' }}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper-sm b-t text-center">
+                        <div class="font-thin h4">{{carBrand.name}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- column -->
+            <div class="col w b-r">
+                <div class="vbox">
+                    <div class="wrapper b-b">
+                        <div class="font-thin h4">车系</div>
+                    </div>
+                    <div class="wrapper-xs b-b">
+                        <div class="input-group m-b-xxs">
+                            <span class="input-group-addon input-sm no-border no-bg"><i class="icon-magnifier text-md m-t-xxs"></i></span>
+                            <input type="text" class="form-control input-sm no-border no-bg text-md" placeholder="检索 {{group.name ? group.name : '车系'}}" ng-model="carModelQuery">
+                        </div>
+                    </div>
+                    <div class="row-row">
+                        <div class="cell">
+                            <div class="cell-inner">
+                                <div class="m-t-n-xxs">
+                                    <div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+                                        <a ng-repeat="carmodel in carModels | filter:{group:filter} | filter:carModelQuery | orderBy:'first'"
+                                           class="list-group-item m-l"
+                                           ng-class="{'select m-l-none': carmodel.selected }"
+                                           ng-click="selectCarModel(carmodel)">
+                                            <span class="block m-l-n" ng-class="{'m-n': carmodel.selected }">{{ carmodel.name ? carmodel.name : "Untitled"}}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="text-center pos-abt w-full" style="top:50%;" ng-hide="(carModels | filter:{group:filter} | filter:carModelQuery).length">没有找到车系</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper-sm b-t text-center">
+                        <div class="font-thin h4">{{carModel.name}}</div>
+                    </div>
+                </div>
+            </div>
+            <!-- /column -->
+
+            <div class="col lter">
+                <div class="vbox">
+                    <div class="wrapper b-b b-light lt">
+                        <div class="font-thin h4">车型</div>
+                    </div>
+
+                    <div class="row-row">
+                        <div class="cell">
+                            <div class="cell-inner">
+                                <div class="row padder-v m-n lt">
+                                    <div class="col-sm-12 m-b-xs">
+                                        <input type="text" class="input-sm form-control" placeholder="过滤" ng-model="query">
+                                    </div>
+                                </div>
+                                <table class="table table-striped b-t b-light m-b-none m-b-none">
+                                    <thead>
+                                    <th>
+                                        名称
+                                    </th>
+                                    <th>
+                                        排量（ML）
+                                    </th>
+                                    <th>
+                                        官方定价（元）
+                                    </th>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="cartype in carTypes|filter:query" ng-click="selectCarType(cartype)" ng-class="{'success': cartype.selected }">
+                                        <td>{{cartype.name}}</td>
+                                        <td>{{cartype.ml}}</td>
+                                        <td>{{cartype.price.toFixed(2)}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper-sm b-t text-center">
+                        <div class="font-thin h4">{{carType.name}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-click="ok()" >确  定</button>
+            <button class="btn btn-warning" type="button" ng-click="close()">关  闭</button>
+        </footer>
+    </div>
+</script>

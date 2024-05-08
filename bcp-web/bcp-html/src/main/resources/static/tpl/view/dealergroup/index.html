@@ -1,0 +1,221 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                集团名称
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="dealerGroup in dealerGroups|filter:query" ng-class="{true:'danger'}[dealerGroup.dataStatus == 9]">
+                                <td>{{dealerGroup.name}}</td>
+                                <td>
+                                    {{dealerGroup.dataStatus|dataStatusFilter}}
+                                </td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(dealerGroup)" ng-show="dealerGroup.dataStatus != 9 && dealerGroup.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <!--<li>-->
+                                                <!--&lt;!&ndash;启用&ndash;&gt;-->
+                                                <!--<a ng-if="dealerGroup.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(dealerGroup, $index)" ng-show="dealerGroup.dataStatus == 9 && dealerGroup.id != null ">-->
+                                                    <!--启用-->
+                                                <!--</a>-->
+                                            <!--</li>-->
+                                            <!--<li>-->
+                                                <!--<a class="red" href ng-click="delete(dealerGroup, $index)" ng-show="dealerGroup.dataStatus != 9 && dealerGroup.id != null ">-->
+                                                   <!--作废-->
+                                                <!--</a>-->
+                                            <!--</li>-->
+                                            <!--<li>-->
+                                                <!--<a class="red" href ng-click="delete(dealerGroup, $index)" ng-show="dealerGroup.dataStatus == 9 && dealerGroup.id != null ">-->
+                                                    <!--删除-->
+                                                <!--</a>-->
+                                            <!--</li>-->
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="groupForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" editable-form class="form-validation" onaftersave="saveSharingRatio()">
+                <input type="hidden" ng-model="dealerGroup.id">
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label class="control-label">集团名称</label>
+                        <input type="text" class="form-control" placeholder="请输入集团名称"
+                               ng-model="dealerGroup.name" ng-model-options="{updateOn: 'blur'}"
+                               ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                               name="name" required>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">集团名称是必须的!</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">集团名称不能重复！</span>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                <!--<div class="form-group pull-in clearfix">-->
+                    <!--<div class="row wrapper">-->
+                        <!--<div class="col-md-6">-->
+                            <!--<ui-select ng-model="choosedRatio" theme="bootstrap" on-select="chooseSharingRatio($item, $model)">-->
+                                <!--<ui-select-match placeholder="请选择" >{{$select.selected.name}}</ui-select-match>-->
+                                <!--<ui-select-choices  repeat="ratio.id as ratio in sharingRatioList">-->
+                                    <!--<div ng-bind-html="ratio.name"></div>-->
+                                <!--</ui-select-choices>-->
+                            <!--</ui-select>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-6 text-right" ng-show="showEdit">-->
+                            <!--<button type="button" class="btn btn-sm btn-default" tooltip="编辑分成比例" ng-show="!userForm.$visible" ng-click="userForm.$show()"><i class="fa fa-pencil text"></i></button>-->
+                            <!--<button type="submit" ng-show="userForm.$visible" tooltip="保存分成比例" ng-disabled="userForm.$waiting" class="btn btn-primary btn-sm"><i class="fa fa-save text"></i></button>-->
+                            <!--<button type="button" ng-show="userForm.$visible"  tooltip="取消操作" ng-disabled="userForm.$waiting" ng-click="userForm.$cancel()" class="btn btn-default btn-sm"><i class="fa fa-close text"></i></button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash; table &ndash;&gt;-->
+                    <!--<div class="col-sm-12">-->
+                        <!--<table class="table table-bordered table-hover table-condensed">-->
+                            <!--<thead>-->
+                            <!--<tr>-->
+                                <!--<th>期数(月)</th>-->
+                                <!--<th>分成比例</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody>-->
+                            <!--<tr ng-repeat="ratio in sharingRatios">-->
+                                <!--<td>{{ratio.months}}</td>-->
+                                <!--<td>-->
+                                    <!--<span editable-text="ratio.ratio" e-form="userForm">-->
+                                        <!--{{ratio.ratio}}-->
+                                    <!--</span>-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+
+                <div class="form-group pull-in clearfix">
+                    <div class="row wrapper">
+                        <div class="col-sm-12">
+                            <label class="control-label">分成比例</label>
+                            <button type="button" class="btn btn-default pull-right" ng-show="!userForm.$visible" ng-click="userForm.$show()">
+                                编辑
+                            </button>
+                            <div>
+                                <form editable-form name="userForm" onaftersave="saveTable()" oncancel="cancel()">
+                                    <!-- table -->
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <tr style="font-weight: bold">
+                                            <th width="200px" style="text-align: center">期数(月)</th>
+                                            <th width="366px" style="text-align: center">分成比例</th>
+                                        </tr>
+                                        <tr ng-repeat="ratio in sharingRatios">
+                                            <td style="text-align: center">{{ratio.months}}</td>
+                                            <td style="text-align: center">
+                                                <span editable-text="ratio.ratio" e-form="userForm">
+                                                    {{ratio.ratio}}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div ng-show="ratioShow">
+                                        <ui-select ng-model="choosedRatio" theme="bootstrap" on-select="chooseSharingRatio($item, $model)">
+                                            <ui-select-match placeholder="请选择(标准分成比例仅供参考使用)" >{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices  repeat="ratio.id as ratio in sharingRatioList">
+                                                <div ng-bind-html="ratio.name"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    </br>
+                                    <div class="btn-form class=col-sm-12" ng-show="userForm.$visible">
+                                        <button type="button" ng-disabled="userForm.$waiting" ng-click="addRatio()" class="btn btn-default pull-right btn-sm">编辑分成比例</button>
+                                        <button type="submit" ng-disabled="userForm.$waiting" class="btn btn-success btn-sm">确认比例</button>
+                                        <button type="button" ng-disabled="userForm.$waiting" ng-click="userForm.$cancel()" class="btn btn-default btn-sm">取消</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button" ng-disabled="userForm.name.$invalid || userForm.choosedRatio.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

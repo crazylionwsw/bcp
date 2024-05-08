@@ -1,0 +1,13 @@
+com/fuze/bcp/api/sys/bean/APKUpgradeLogBean.class
+com/fuze/bcp/api/sys/SerializationOptimizerImpl.class
+com/fuze/bcp/api/sys/bean/TerminalDeviceBean.class
+com/fuze/bcp/api/sys/service/IAPKBizService.class
+com/fuze/bcp/api/sys/bean/TerminalBindBean.class
+com/fuze/bcp/api/sys/bean/APKReleaseBean.class
+com/fuze/bcp/api/sys/bean/SysParamBean.class
+com/fuze/bcp/api/sys/service/IParamBizService.class
+com/fuze/bcp/api/sys/bean/LoginLogBean.class
+com/fuze/bcp/api/sys/bean/DeviceUsageBean.class
+com/fuze/bcp/api/sys/service/ICalculateBizService.class
+com/fuze/bcp/api/sys/service/IDeviceBizService.class
+com/fuze/bcp/api/sys/service/ILogBizService.class

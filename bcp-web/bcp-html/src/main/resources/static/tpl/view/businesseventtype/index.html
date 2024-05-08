@@ -1,0 +1,147 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                事件类型编码
+                            </th>
+                            <th>
+                                备注信息
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="businessEventType in businessEventTypes|filter:query|orderBy:'eventTypeCode':false" ng-class="{true:'danger'}[businessEventType.dataStatus == 9]">
+                                <td>{{businessEventType.eventTypeCode}}</td>
+                                <td>{{businessEventType.comment}}</td>
+                                <td>
+                                    {{businessEventType.dataStatus|dataStatusFilter}}
+
+                                </td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(businessEventType)" ng-show="businessEventType.dataStatus != 9 && businessEventType.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <!--启用-->
+                                                <a ng-if="businessEventType.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(businessEventType, $index)" ng-show="businessEventType.dataStatus == 9 && businessEventType.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(businessEventType, $index)" ng-show="businessEventType.dataStatus != 9 && businessEventType.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(businessEventType, $index)"  ng-show="businessEventType.dataStatus == 9 && businessEventType.id != null ">
+                                                  删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="eventForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="businessEventType.id">
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label class="control-label">事件类型编码</label>
+                        <input type="text" class="form-control" placeholder="请输入事件类型编码"
+                               ng-model="businessEventType.eventTypeCode" ng-model-options="{updateOn: 'blur'}"
+                               ui-validate-async="{notUnique: 'checkUnique(\'eventTypeCode\', $value)'}"
+                               name="eventTypeCode" required >
+                        <span ng-show="userForm.eventTypeCode.$dirty && userForm.eventTypeCode.$error.required" class="help-block text-danger">事件类型编码是必须的!</span>
+                        <span ng-show="userForm.eventTypeCode.$dirty && userForm.eventTypeCode.$error.notUnique" class="help-block text-danger">事件类型编码不能重复！</span>
+
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                <div class="col-sm-12">
+                    <label>备注信息</label>
+                    <textarea class="form-control " rows="6" placeholder="请输入备注信息"
+                              ng-model="businessEventType.comment" name="name" ng-readonly="onlyread" required/>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">备注信息是必须的!</span>
+                </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

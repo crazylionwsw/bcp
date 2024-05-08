@@ -1,0 +1,12 @@
+com/fuze/bcp/api/msg/bean/FeedbackBean.class
+com/fuze/bcp/api/msg/bean/NoticeLookupBean.class
+com/fuze/bcp/api/msg/bean/MessageSubScribeBean.class
+com/fuze/bcp/api/msg/service/IMessageBizService.class
+com/fuze/bcp/api/msg/bean/Channels.class
+com/fuze/bcp/api/msg/bean/NoticeBean.class
+com/fuze/bcp/api/msg/bean/MessageSourceBean.class
+com/fuze/bcp/api/msg/bean/MessageTemplateBean.class
+com/fuze/bcp/api/msg/SerializationOptimizerImpl.class
+com/fuze/bcp/api/msg/bean/MessageLogBean.class
+com/fuze/bcp/api/msg/bean/SubSribeSourceBean.class
+com/fuze/bcp/api/msg/service/ISubscribeBizService.class

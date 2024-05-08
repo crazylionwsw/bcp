@@ -1,0 +1,228 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">
+        <span>贴息管理</span>
+    </h1>
+</div>
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>贴息信息</strong>
+                </div>
+                <div class="panel-body">
+                    <form name="userForm" class="form-horizontal form-validation">
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label class="col-sm-4 control-label">品牌</label>
+                                        <div class="col-sm-8">
+                                            <ui-select ng-model="compensatorypolicy.carBrandId" theme="bootstrap" on-select="selectCarBrand($item, $model)">
+                                                <ui-select-match placeholder="请选择品牌">{{$select.selected.name}}</ui-select-match>
+                                                <ui-select-choices  repeat="carbrand.id as carbrand in carbrands">
+                                                    <small>
+                                                        {{carbrand.name}}
+                                                    </small>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-sm-4 control-label">车系</label>
+                                        <div class="col-sm-8">
+                                            <ui-select multiple ng-model="compensatorypolicy.carModelIds" theme="bootstrap" on-select="selectCarModel($item, $model)">
+                                                <ui-select-match placeholder="请选择车系">{{$item.name}}</ui-select-match>
+                                                <ui-select-choices repeat="carmodel.id as carmodel in carmodels">
+                                                    <small>
+                                                        {{carmodel.name}}
+                                                    </small>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-4 control-label">车型</label>
+                                <div class="col-sm-8">
+                                    <ui-select multiple sortable="true" ng-model="compensatorypolicy.carTypeIds" theme="bootstrap">
+                                        <ui-select-match placeholder="请选择车型" >{{$item.carModel}} {{$item.name}}</ui-select-match>
+                                        <ui-select-choices group-by="'carModel'" repeat="cartype.id as cartype in cartypes">
+                                            <small>
+                                                <span ng-bind-html="cartype.name"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-6">
+                                <label class="col-sm-4 control-label">开始日期</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group" moment-picker="compensatorypolicy.startDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                                        <input type="text" class="form-control" ng-model="compensatorypolicy.startDate" name="startDate"/>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-4 control-label">截止日期</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group" moment-picker="compensatorypolicy.dueDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                                        <input type="text" class="form-control"
+                                               ui-validate="{enddateInvalid:'checkEndDate($value)'}"
+                                               ui-validate-watch="'compensatorypolicy.startDate'"
+                                               name="dueDate"
+                                               ng-model-options="{ updateOn: 'blur' }"
+                                               ng-model="compensatorypolicy.dueDate" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="userForm.dueDate.$error.enddateInvalid" class="help-block text-danger">截止日期必须大于开始日期!</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-6">
+                                <label class="col-sm-4 control-label">首付比例（上限）</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group bootstrap-touchspin">
+                                        <input type="number" class="form-control" placeholder="请输入首付比例上限"
+                                               ng-model="compensatorypolicy.maxDownParmentRatio" name="maxDownParmentRatio" ng-readonly="status">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-4 control-label">首付比例（下限）</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group bootstrap-touchspin">
+                                        <input type="number" class="form-control" placeholder="请输入首付比例下限"
+                                               ui-validate="{minDownParmentRatioInvalid:'checkMinDownParmentRatio($value)'}"
+                                               ui-validate-watch="'compensatorypolicy.maxDownParmentRatio'"
+                                               ng-model-options="{ updateOn: 'blur' }" name="minDownParmentRatio"
+                                               ng-model="compensatorypolicy.minDownParmentRatio" ng-readonly="status">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                    <span ng-show="userForm.minDownParmentRatio.$dirty &&userForm.minDownParmentRatio.$error.minDownParmentRatioInvalid" class="help-block text-danger">首付比例（下限）必须大于首付比例（上限）!</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-6">
+                                <label class="col-sm-4 control-label">贴息金额上限</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group bootstrap-touchspin">
+                                        <input type="text" class="form-control" placeholder="请输入贴息金额上限"
+                                               ng-model="compensatorypolicy.amount" ng-readonly="status">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="row">
+                            <tabset justified="true" class="tab-container" tabContentTransclude="openme()">
+                                <tab heading="贴息费率">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped b-t b-light m-b-none">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    期数
+                                                </th>
+                                                <th>
+                                                    总费率（%）
+                                                </th>
+                                                <th >
+                                                    贴息费率（%）
+                                                </th>
+                                                <th>
+                                                    操作
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody >
+                                            <tr ng-repeat="compensatoryRate in compensatorypolicy.compensatoryRates">
+                                                <td>{{compensatoryRate.months}}期</td>
+                                                <td>{{compensatoryRate.ratio}}%</td>
+                                                <td>{{compensatoryRate.compensatoryRatio}}%</td>
+                                                <td>
+                                                    <div class="hidden-sm hidden-xs action-buttons">
+                                                        <a class="red" href ng-click="deleteCompensatoryRate(compensatoryRate,$index)">
+                                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="row wrapper">
+                                            <div class="col-sm-6 text-left" >
+                                                <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="addCompensatoryRate('')"><i class="fa fa-plus"></i>添加</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tab>
+                            </tabset>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <footer class="panel-footer text-right bg-light lter">
+                <button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid" ng-click="saveform('')">保存</button>
+                <button class="btn btn-warning" type="button" ui-sref="app.business.compensatorypolicy">返 回</button>
+            </footer>
+        </div> </div> </div> </div> <!------输入对话框------> <script type="text/ng-template" id="compensatoryRateForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{title}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation" >
+                <input type="hidden" ng-model="compensatoryRate.id">
+                <div class="form-group">
+                    <label class="control-label">首付比例</label>
+                    <input type="text" class="form-control" placeholder="请输入首付比例" ng-model="compensatoryRate.downPaymentRatio"  >
+                </div>
+                <div class="form-group">
+                    <label class="control-label">期数</label>
+                    <input type="text" class="form-control" placeholder="请输入期数" ng-model="compensatoryRate.months" required >
+                </div>
+                <div class="form-group">
+                    <label class="control-label">总费率</label>
+                    <div class=" input-group bootstrap-touchspin">
+                        <input type="number" class="form-control" placeholder="请输入总费率" data-min="0" data-max="10" data-step="1" data-decimals="0" data-postfix="%" style="display: block;" ng-model="compensatoryRate.ratio" required >
+                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">贴息费率</label>
+                    <div class=" input-group bootstrap-touchspin">
+                        <input type="number" class="form-control" placeholder="请输入贴息费率" data-min="0" data-max="10" data-step="1" data-decimals="0" data-postfix="%" style="display: block;" ng-model="compensatoryRate.compensatoryRatio" required >
+                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">借款人承担的费率</label>
+                    <div class=" input-group bootstrap-touchspin">
+                        <input type="number" class="form-control" placeholder="请输入借款人承担的费率" data-min="0" data-max="10" data-step="1" data-decimals="0" data-postfix="%" style="display: block;" ng-model="compensatoryRate.customerRatio =compensatoryRate.ratio-compensatoryRate.compensatoryRatio " required >
+                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-click="save()" >保存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">关闭</button>
+        </footer>
+    </div>
+</script>

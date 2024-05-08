@@ -1,0 +1,11 @@
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/bean/ExecutionBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/bean/TaskBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/bean/SignInfoBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/SerializationOptimizerImpl.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/bean/GroupBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/bean/WorkFlowBillBean.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/bean/TEMSignInfo.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/bean/SignCondition.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/bean/SignInfo.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/service/IWorkflowBizService.java
+/Volumes/DEV/fzgitlab/bcp/bcp-api/bcp-api-workflow/src/main/java/com/fuze/bcp/api/workflow/bean/BillSignInfo.java

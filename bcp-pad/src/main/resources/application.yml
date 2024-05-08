@@ -1,0 +1,47 @@
+spring:
+  logging:
+    config: @logbackpath@
+  application:
+    name: FUZE Pad Application
+  profiles:
+    active: @profileActive@
+  swagger2:
+    title: FUZE API
+    description: FUZE API
+    version: 1.1
+    base-package: com.fuze.bcp.pad.controller
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 200MB
+  rabbitmq:
+    host: @rabbitmq.host@
+    port: @rabbitmq.port@
+    username: @rabbitmq.username@
+    password: @rabbitmq.password@
+    exchange: @rabbitmq.exchange@
+    routingKey-b: @rabbitmq.routingKey-b@
+    routingKey-l: @rabbitmq.routingKey-l@
+    routingKey-m: @rabbitmq.routingKey-m@
+
+dubbo:
+  zookeeper:
+    registry:
+      address: @fuze.bcp.dubbo.zookeeper.registry.address@
+      protocol: @fuze.bcp.dubbo.zookeeper.registry.protocol@
+
+
+banner:
+  charset: UTF-8
+
+server:
+  port: 8082
+  tomcat:
+    uri-encoding: UTF-8
+
+

@@ -1,0 +1,100 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <label>销售汇总月份</label>
+                                <div class="input-group" moment-picker="saleMonth" format="YYYY-MM"
+                                     locale="zh-cn" selectable="true">
+                                    <input type="text" class="form-control"
+                                           ng-model="saleMonth"
+                                           ng-change="search()"/>
+								<span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="downLoad()">下载</a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                公司经办人
+                            </th>
+                            <th>职务</th>
+                            <th>客户姓名</th>
+                            <th>客户身份证号</th>
+                            <th>银行放款金额</th>
+                            <th>贷款期限(月)</th>
+                            <th>签约时间</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="statistic in statistics">
+                                <td>{{statistic.employeeName}}</td>
+                                <td>{{statistic.duty}}</td>
+                                <td>{{statistic.customerName}}</td>
+                                <td>{{statistic.identifyNo}}</td>
+                                <td>{{statistic.limitAmount}}</td>
+                                <td>{{statistic.creditMonths }}</td>
+                                <td>{{statistic.creditTime | date : 'yyyy-MM-dd HH:mm'}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/ng-template" id="statisticDownLoad.html">
+    <div class="panel panel-default m-b-none" dw-loading="syncCar" dw-loading-options="{text: ''}">
+        <div class="panel-heading">
+            <span class="h4">销售人员提成汇总表</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <div class="form-group">
+                    <label class="control-label">选择要下载的月份</label>
+                    <div class="input-group" moment-picker="downSaleMonth" format="YYYY-MM"
+                         locale="zh-cn" selectable="true">
+                        <input type="text" class="form-control"
+                               ng-model="downSaleMonth"/>
+								<span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="button" ng-click="startDownLoad(downSaleMonth)" >确认下载</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取  消</button>
+        </footer>
+    </div>
+</script>
+

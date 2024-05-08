@@ -1,0 +1,78 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3">{{title}}</h1>
+    </div>
+    <div class="wrapper-md">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{tableTitle}}
+            </div>
+            <div class="row wrapper">
+                <div class="col-sm-4 m-b-xs ">
+                    <select class="form-control" ng-model="creditreportquery.approveStatus" ng-change="search()">
+                        <option value="0">全部</option>
+                        <option value="1">待审核</option>
+                        <option value="2">通过</option>
+                        <option value="8">驳回</option>
+                        <option value="9">拒绝</option>
+                    </select>
+                </div>
+                <div class="col-sm-8 m-b-xs text-right ">
+                    <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped b-t b-light m-b-none" data-filter="#filter" >
+                    <thead>
+                    <tr>
+                        <th>报单支行</th>
+                        <th>渠道支行</th>
+                        <th>业务类型</th>
+                        <th>客户姓名【身份证】</th>
+                        <th>分期经理【手机号】</th>
+                        <th>申请时间</th>
+                        <th>审核状态</th>
+                        <th>目前任务组</th>
+                        <th>是否当前任务</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="creditreportquery in creditreportquerys" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[creditreportquery.approveStatus]">
+                        <td><cashsource-info ng-if="creditreportquery.cashSourceId !== undefined" id="creditreportquery.cashSourceId"></cashsource-info></td>
+                        <td><cardealer-cooperationcashsource-info ng-if="creditreportquery.carDealerId !== undefined" id="creditreportquery.carDealerId"></cardealer-cooperationcashsource-info></td>
+                        <td>{{creditreportquery.businessTypeCode | BusinessTypeFilter}}</td>
+                        <td><customer-info ng-if="creditreportquery.customerId !== undefined" id="creditreportquery.customerId"></customer-info></td>
+                        <td><employee-info ng-if="creditreportquery.employeeId !== undefined" id="creditreportquery.employeeId"></employee-info></td>
+                        <td>{{creditreportquery.ts |date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <td>{{creditreportquery.approveStatus | approveStatusFilter}}</td>
+                        <td><flow-getpresenttaskgroup billtypecode="creditreportquery.billTypeCode" billid="creditreportquery.id"></flow-getpresenttaskgroup></td>
+                        <td><!--<flow-info ng-if="creditreportquery.id !== undefined"  billtypecode="creditreportquery.billTypeCode" billid="creditreportquery.id">--></flow-info></td>
+                        <td>
+                            <div class="hidden-sm hidden-xs action-buttons">
+                                <a class="blue" ng-click="edit(creditreportquery)" ng-show="true" href>
+                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <footer class="panel-footer" ng-show="!isReferenceDialog">
+                <div class="row">
+                    <div class="col-sm-4 text-left">
+                        <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                    </div>
+                    <div class="col-sm-8 text-right">
+                        <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="query.html">
+    <query-form customer="customerFilter" query="queryBill(customer)" clear="clearQuery()"></query-form>
+</script>

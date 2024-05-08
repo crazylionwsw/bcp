@@ -1,0 +1,87 @@
+spring:
+  cache:
+    type: redis
+  logging:
+    config: @logbackpath@
+  application:
+    name: FUZE Dubbox Service Provider
+  profiles:
+    active: @profileActive@
+  messages:
+    basename: msg
+    cacheSeconds: -1
+    encoding: UTF-8
+  data:
+    mongodb:
+      database: @fuze.bcp.mongodb.dbname@
+      uri: @fuze.bcp.mongodb.uri@
+  redis:
+    host: @redis.host@
+    port: @redis.port@
+    database: @redis.database@
+    password: @redis.password@
+    pool:
+      max-idle: @redis.pool.max-idle@
+      max-total: @redis.pool.max-total@
+      max-wait-millis : @redis.pool.max-wait-millis@
+    timeout: @redis.timeout@
+  rabbitmq:
+    host: @rabbitmq.host@
+    port: @rabbitmq.port@
+    username: @rabbitmq.username@
+    password: @rabbitmq.password@
+    exchange: @rabbitmq.exchange@
+    routingKey-b: @rabbitmq.routingKey-b@
+    routingKey-l: @rabbitmq.routingKey-l@
+    routingKey-m: @rabbitmq.routingKey-m@
+    routingKey-web3j: @rabbitmq.routingKey-web3j@
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+  datasource:
+    url: @fuze.bcp.mysql.url@
+    sqlScriptEncoding: @fuze.bcp.mysql.sqlScriptEncoding@
+    username: @fuze.bcp.mysql.username@
+    password: @fuze.bcp.mysql.password@
+    driver-class-name: @fuze.bcp.mysql.driver-class-name@
+#dubbo服务
+dubbo:
+  zookeeper:
+    registry:
+      address: @fuze.bcp.dubbo.zookeeper.registry.address@
+      protocol: @fuze.bcp.dubbo.zookeeper.registry.protocol@
+  timeout: @fuze.bcp.dubbo.timeout@
+#精真估
+jingzhengu:
+  server: @jingzhengu.server@
+  key: @jingzhengu.key@
+  partnerId: @jingzhengu.partnerId@
+#邮件系统
+email:
+  host: @email.host@
+  port: @email.port@
+  username: @email.username@
+  password: @email.password@
+  from: @email.from@
+  fromName: @email.fromName@
+jwt:
+  header: User-Token
+  secret: mySecret
+  expiration: 604800
+umeng:
+  appkey: 58ca67c5c62dca7258000da5
+  appMasterSecret: kdqpc5bjlwrfmnabltzvsykquem2n6ah
+fuze:
+  bcp:
+    wechat:
+      agentid: @fuze.bcp.wechat.agentid@
+      secret: @fuze.bcp.wechat.secret@
+      secretW: @fuze.bcp.wechat.secretW@
+      corpid: @fuze.bcp.wechat.corpid@
+      believeIp: @fuze.bcp.wechat.believeIp@
+    filePath: @fuze.bcp.filePath@
+    # Web端访问路径,主要用于文档下载中图片的加载功能、身份证合成
+    web:
+      server:
+        url: @fuze.bcp.web.server.url@

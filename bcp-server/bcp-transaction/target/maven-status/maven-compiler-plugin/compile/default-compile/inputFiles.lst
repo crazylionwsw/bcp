@@ -1,0 +1,8 @@
+E:\developer\bcp\bcp-server\bcp-transaction\src\main\java\com\fuze\bcp\transaction\service\ICustomerTransactionService.java
+E:\developer\bcp\bcp-server\bcp-transaction\src\main\java\com\fuze\bcp\transaction\service\impl\CustomerTransactionServiceImpl.java
+E:\developer\bcp\bcp-server\bcp-transaction\src\main\java\com\fuze\bcp\transaction\domain\CustomerTransaction.java
+E:\developer\bcp\bcp-server\bcp-transaction\src\main\java\com\fuze\bcp\transaction\starter\config\DubboConfig.java
+E:\developer\bcp\bcp-server\bcp-transaction\src\main\java\com\fuze\bcp\transaction\starter\config\RedisConfig.java
+E:\developer\bcp\bcp-server\bcp-transaction\src\main\java\com\fuze\bcp\transaction\starter\TransactionBootStarter.java
+E:\developer\bcp\bcp-server\bcp-transaction\src\main\java\com\fuze\bcp\transaction\business\BizCustomerTransactionService.java
+E:\developer\bcp\bcp-server\bcp-transaction\src\main\java\com\fuze\bcp\transaction\repository\CustomerTransactionRepository.java

@@ -1,0 +1,4 @@
+com/fuze/bcp/api/ocr/service/IOCRIdentifyCardService.class
+com/fuze/bcp/api/ocr/bean/IdentifyCardInfo.class
+com/fuze/bcp/api/ocr/bean/BankCardInfo.class
+com/fuze/bcp/api/ocr/service/IOCRBankCardService.class

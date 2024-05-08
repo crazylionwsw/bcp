@@ -1,0 +1,170 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                编码
+                            </th>
+                            <th>
+                                名称
+                            </th>
+                            <th>
+                                邮件标题
+                            </th>
+                            <th>
+                                邮件内容模版
+                            </th>
+                            <th>
+                                附件
+                            </th>
+                            <th>
+                                状态
+                            </th>
+
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="emailtemplate in emailtemplates|filter:query|orderBy:'code':false" ng-class="{true:'danger'}[emailtemplate.dataStatus == 9]">
+                                <td>{{emailtemplate.code}}</td>
+                                <td>{{emailtemplate.name}}</td>
+                                <td>
+                                    <div style="width: 150px;text-overflow: ellipsis;overflow: hidden;float: left">{{emailtemplate.subject}}</div>
+                                </td>
+                                <td><emailobject-templateobject-info ng-if="emailtemplate.contentTemplateId !== undefined" id="emailtemplate.contentTemplateId"></emailobject-templateobject-info></td>
+                                <td>
+                                    <emailobject-documents-list ids="emailtemplate.documentIds"></emailobject-documents-list>
+                                </td>
+                                <td>{{emailtemplate.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(emailtemplate)" ng-show="emailtemplate.dataStatus != 9 && emailtemplate.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-if="emailtemplate.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(emailtemplate, $index)" ng-show="emailtemplate.dataStatus == 9 && emailtemplate.id != null ">
+                                                   启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(emailtemplate, $index)" ng-show="emailtemplate.dataStatus != 9 && emailtemplate.id != null ">
+                                                   作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(emailtemplate, $index)" ng-show="emailtemplate.dataStatus == 9 && emailtemplate.id != null ">
+                                                   删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---->
+
+
+
+
+<!------输入对话框------>
+<script type="text/ng-template" id="emailTemplateModal.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <div class="form-group">
+                    <label class="control-label">编码</label>
+                    <input type="text" class="form-control" placeholder="请输入邮件模板编码"
+                           ng-model="emailtemplate.code" ng-model-options="{updateOn: 'blur'}"
+                           ng-pattern="/^[a-zA-Z0-9]{3,}$/"
+                           ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                           name="code" required >
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">邮件模板编码是必须的!</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">邮件模板编码不能重复！</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">邮件模板编码必须是为数字或字母且最小3位，如001!</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">名称</label>
+                    <input type="text" class="form-control" placeholder="请输入邮件模板名称"
+                           ng-model="emailtemplate.name" ng-model-options="{updateOn: 'blur'}"
+                           ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                           name="name" required >
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">邮件模板是必须的!</span>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">邮件模板不能重复！</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">邮件标题</label>
+                    <textarea class="form-control " rows="6" placeholder="请输入邮件标题"
+                              ng-model="emailtemplate.subject" name="subject"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">内容模板</label>
+                    <ui-select ng-model="emailtemplate.contentTemplateId" name="contentTemplateId" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match  placeholder="请选择内容模板" >{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="templateObject.id as templateObject in templateObjects | filter: $select.search">
+                            <div ng-bind-html="templateObject.name"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">附件模版</label>
+                    <ui-select multiple ng-model="emailtemplate.documentIds" name="documentIds" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match  placeholder="请选择附件模板" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices repeat="document.id as document in documents | filter: $select.search">
+                            <div ng-bind-html="document.name"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="submit" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

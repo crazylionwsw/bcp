@@ -1,0 +1,24 @@
+package com.fuze.bcp.api.creditcar.service.IDealerRepaymentService;
+
+import com.fuze.bcp.api.drools.bean.DroolsBaseBean;
+import com.fuze.bcp.api.creditcar.bean.dealerrepayment.DealerRepaymentSubmissionBean;
+
+rule "actSaveDealerRepayment"
+    dialect  "java"
+    lock-on-active true
+when
+    $droolsBeans : DroolsBaseBean(apiBaseBean != null, message:message);
+    $dealerRepaymentSubmissionBean : DealerRepaymentSubmissionBean() from $droolsBeans.apiBaseBean;
+then
+    //还款时间
+    if($dealerRepaymentSubmissionBean.getRepaymentTime() == null || "".equals($dealerRepaymentSubmissionBean.getRepaymentTime())){
+        System.out.println("MSG_NO_REPAYMENT_TIME");
+        message.add("MSG_NO_REPAYMENT_TIME");
+    }
+    //还款方式（交易方式）
+    if($dealerRepaymentSubmissionBean.getTradeWay() == null || "".equals($dealerRepaymentSubmissionBean.getTradeWay())){
+        System.out.println("MSG_NO_TRADEWAY");
+        message.add("MSG_NO_TRADEWAY");
+    }
+update($droolsBeans)
+end

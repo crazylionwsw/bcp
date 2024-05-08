@@ -1,0 +1,42 @@
+<div class="panel panel-default m-b-none">
+    <div class="panel-heading">
+        <span class="h4">{{modalTitle}}</span>
+    </div>
+    <form name="userForm" class="form-validation">
+        <div class="panel-body">
+            <div class="col-lg-12">
+                    <div class="form-group pull-in clearfix">
+                        <label>车辆品牌 </label>
+                        <input class="form-control"
+                               placeholder="请输入车辆品牌" ng-model="carvaluation.carType"
+                               ng-change="updateQueryString()"
+                               type="text">
+                    </div>
+                    <div class="form-group pull-in clearfix">
+                        <label>车架号</label>
+                        <input class="form-control"
+                               placeholder="请输入车架号" ng-model="carvaluation.vin"
+                               ng-change="updateQueryString()"
+                               type="text">
+                    </div>
+                    <div class="form-group pull-in clearfix">
+                        <label>车牌号码</label>
+                        <input class="form-control"
+                               placeholder="请输入车牌号码" ng-model="carvaluation.licenceNumber"
+                               ng-change="updateQueryString()"
+                               type="text">
+                    </div>
+
+            </div>
+
+        </div>
+
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid" ng-click="doQuery(carvaluation)">查  询</button>
+            <button class="btn btn-primary" type="button" ng-click="clearQuery()">清  除</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">关  闭</button>
+        </footer>
+    </form>
+</div>
+
+

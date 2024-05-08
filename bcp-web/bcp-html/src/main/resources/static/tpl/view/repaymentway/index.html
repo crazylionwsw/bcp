@@ -1,0 +1,170 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <!--头部标题-->
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+            <!--过滤处-->
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+                        <!--表单-->
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                编码
+                            </th>
+                            <th>
+                                名称
+                            </th>
+                            <th>
+                                借款期数
+                            </th>
+                            <th>
+                                还款周期(月)
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="repaymentway in repaymentways|filter:query|orderBy:'code':false" ng-class="{true:'danger'}[repaymentway.dataStatus == 9]">
+                                <td>{{repaymentway.code}}</td>
+                                <td>{{repaymentway.name}}</td>
+                                <td>{{repaymentway.months}}期</td>
+                                <td>{{repaymentway.count}}个月</td>
+                                <td>{{repaymentway.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(repaymentway)" ng-show="repaymentway.dataStatus != 9 && repaymentway.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <!--启用-->
+                                                <a ng-if="repaymentway.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(repaymentway, $index)" ng-show="repaymentway.dataStatus == 9 && repaymentway.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(repaymentway, $index)" ng-show="repaymentway.dataStatus != 9 && repaymentway.id != null ">
+                                                   作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(repaymentway, $index)" ng-show="repaymentway.dataStatus == 9 && repaymentway.id != null " >
+                                                   删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!------输入对话框------>
+<script type="text/ng-template" id="repaymentwayModal.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+
+                <input type="hidden" ng-model="repaymentway.id">
+
+                <div class="form-group">
+                    <label class="control-label">编码</label>
+                    <input type="text" class="form-control" placeholder="请输入还款方式编码"
+                           ng-model="repaymentway.code" ng-model-options="{updateOn: 'blur'}"
+                           ng-pattern="/^[a-zA-Z0-9]{5,}$/"
+                           ui-validate-async="{notUnique:'checkUnique(\'code\',$value)'}"
+                           name="code" required >
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">还款方式编码是必须的!</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">还款方式编码不能重复！</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">还款方式编码为数字或字母且最小5位，如00001！</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">名称</label>
+                    <input type="text" class="form-control" placeholder="请输入还款方式名称"
+                           ng-model="repaymentway.name" ng-model-options="{updateOn: 'blur'}"
+                           ui-validate-async="{notUnique:'checkUnique(\'name\',$value)'}"
+                           name="name" required >
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">还款方式是必须的!</span>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">还款方式不能重复！</span>
+                </div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label class="control-label">借款期数</label>
+                        <input type="number" class="form-control" placeholder="请输入借款期数" ng-model="repaymentway.months" ng-model-options="{updateOn: 'blur'}" name="months" required >
+                        <span ng-show="userForm.months.$dirty && userForm.months.$error.required" class="help-block text-danger">借款期数是必须的!</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">还款周期</label>
+                        <input type="number" class="form-control" placeholder="请输入还款周期" ng-model="repaymentway.count" ng-model-options="{updateOn: 'blur'}" name="count" required >
+                        <span ng-show="userForm.months.$dirty && userForm.count.$error.required" class="help-block text-danger">还款周期是必须的!</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">还款比例</label>
+                    <tags-input ng-model="repaymentway.ratioTags" placeholder="请输入还款比例" min-length="1" popover="请正确添加数据,只可添加数字"></tags-input>
+                </div>
+
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="submit" ng-disabled="!userForm.$valid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

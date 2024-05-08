@@ -1,0 +1,11 @@
+com\fuze\bcp\workflow\starter\config\DubboConfig.class
+com\fuze\bcp\workflow\service\IWorkFlowBillService.class
+com\fuze\bcp\workflow\starter\config\RedisConfig.class
+com\fuze\bcp\workflow\service\impl\BusinessFlowServiceImpl.class
+com\fuze\bcp\workflow\service\IBusinessFlowService.class
+com\fuze\bcp\workflow\domain\WorkFlowBill.class
+com\fuze\bcp\workflow\starter\config\ActivitiConfig.class
+com\fuze\bcp\workflow\repository\WorkFlowBillRepository.class
+com\fuze\bcp\workflow\service\impl\WorkFlowBillServiceImpl.class
+com\fuze\bcp\workflow\starter\WorkflowBootStarter.class
+com\fuze\bcp\workflow\business\BizWorkflowService.class

@@ -1,0 +1,39 @@
+<div class="panel panel-default m-b-none" dw-loading="signInfo" dw-loading-options="{text: ''}">
+    <div class="panel-heading">
+        <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+        <span class="h4">{{modalTitle}}</span>
+    </div>
+    <form name="userForm">
+        <div class="panel-body">
+            <label>银行对账 </label>
+            <div class="form-group">
+                <label>年份 </label>
+                <div class="input-group" moment-picker="balanceaccount.year" format="YYYY"
+                     locale="zh-cn" selectable="true">
+                    <input type="text" class="form-control"
+                           placeholder="请输入您要结算的年份（年）"
+                           ng-model="balanceaccount.year"
+                           ng-model-options="{ updateOn: 'blur' }"/>
+                            <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                </div>
+                <label>月份 </label>
+                <div class="input-group" moment-picker="balanceaccount.month" format="MM"
+                     locale="zh-cn" selectable="true">
+                    <input type="text" class="form-control"
+                           placeholder="请输入您要结算的月份（月）"
+                           ng-model="balanceaccount.month"
+                           ng-model-options="{ updateOn: 'blur' }"/>
+                            <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                </div>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn progress-bar-success" type="button"  ng-disabled="balanceaccount.year == undefined || balanceaccount.month == undefined" ng-click="counts(balanceaccount)">结  算</button>
+            <button class="btn btn-warning" type="button" ng-click="close()">关  闭</button>
+        </footer>
+    </form>
+</div>

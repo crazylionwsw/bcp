@@ -1,0 +1,518 @@
+<div class="hbox hbox-auto-xs bg-light">
+    <!-- column -->
+    <div class="col w-lg b-r">
+        <div class="vbox">
+            <div class="wrapper b-b lt">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="wrapper-xs">
+                            <abn-tree
+                                    tree-data         = "cashsources"
+                                    tree-control      = "cashsourceTree"
+                                    on-select         = "selectSource(branch)"
+                                    expand-level      = "5"
+                                    initial-selection = "Granny Smith"
+                                    icon-leaf         = "fa fa-file-o"
+                                    icon-expand       = "fa fa-plus"
+                                    icon-collapse     = "fa fa-minus"
+                            >
+                            </abn-tree>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-sm b-t lt text-center">
+                <a role="button" class="btn btn-sm btn-default" data-toggle="modal" ng-click="editCashSource(0)" ng-show="selectBranch"><i class="ace-icon fa fa-plus bigger-130"></i></a>
+                <a role="button" ng-show="selectedCashsource" class="btn btn-sm btn-default" data-toggle="modal" ng-click="editCashSource(1)"><i class="ace-icon fa fa-pencil bigger-130"></i></a>
+                <a role="button" ng-show="selectedCashsource" class="btn btn-sm btn-default" ng-click="removeCashSource()"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- /column -->
+
+    <div class="col lter">
+        <div class="vbox">
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <tabset justified="true" class="tab-container nav-tabs-alt no-borders m-b-none">
+                            <tab active="checked1" heading="资金利率" ng-show="showSource">
+                                <div class="panel panel-default no-borders m-b-none no-shadow">
+                                    <div class="panel-heading">
+                                        {{selectLabel}}
+                                    </div>
+                                    <div class="row wrapper">
+                                        <div class="col-sm-4 m-b-xs">
+                                            <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="ratequery">
+                                        </div>
+                                        <div class="col-sm-8 m-b-xs text-right ">
+                                            <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="editSourceRate('')">
+                                                添加</a></div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped b-t b-light m-b-none">
+                                            <thead>
+                                            <th >
+                                                资金编码
+                                            </th>
+                                            <th>
+                                                名称
+                                            </th>
+                                            <th data-toggle="true">
+                                                生效日期
+                                            </th>
+                                            <th>
+                                                截止日期
+                                            </th>
+                                            <th>
+                                                数据状态
+                                            </th>
+                                            <th>操作</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="sourcerate in sourcerates|filter:ratequery" ng-class="{true:'danger'}[sourcerate.dataStatus == 9]">
+                                                <td>{{sourcerate.code}}</td>
+                                                <td>{{sourcerate.name}}</td>
+                                                <td>{{sourcerate.startDate|date:'yyyy-MM-dd'}}</td>
+                                                <td>{{sourcerate.endDate|date:'yyyy-MM-dd'}}</td>
+                                                <td>{{sourcerate.dataStatus|dataStatusFilter}}</td>
+                                                <td>
+                                                    <div class="btn-group dropdown" dropdown>
+                                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                                        <ul class="dropdown-menu">
+                                                            <li> <!--编辑-->
+                                                                <a class="green" role="button" data-toggle="modal"
+                                                                   ng-click="editSourceRate(sourcerate,$index)" ng-show="sourcerate.dataStatus != 9 && sourcerate.id != null">
+                                                                    编辑
+                                                                </a>
+                                                            </li>
+                                                            <li><!--启用-->
+                                                                <a ng-if="sourcerate.dataStatus == 9" role="button" data-toggle="modal" ng-click="renewSourcerate(sourcerate, $index)" ng-show="sourcerate.dataStatus == 9 && sourcerate.id != null">
+                                                                    启用
+                                                                </a>
+                                                            </li>
+                                                            <li> <!--删除-->
+                                                                <a class="red" href ng-click="deleteSourceRate(sourcerate,$index)">
+                                                                    删除
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </tab>
+                            <tab active="checked2" heading="协作用户">
+                                <div class="panel panel-default no-borders m-b-none no-shadow">
+                                    <div class="panel-heading">
+                                        {{selectLabel}}{{tableTitle}}
+                                    </div>
+                                    <div class="row wrapper">
+                                        <div class="col-sm-4 m-b-xs">
+                                            <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="employeeQuery">
+                                        </div>
+                                        <div class="col-sm-8 m-b-xs text-right ">
+                                            <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="editEmployee('')">
+                                                添加</a></div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped b-t b-light m-b-none">
+                                            <thead>
+                                            <th >
+                                                姓名
+                                            </th>
+                                            <th>
+                                                性别
+                                            </th>
+                                            <th>
+                                                邮箱
+                                            </th>
+                                            <th>
+                                                手机/电话号码
+                                            </th>
+                                            <th>
+                                                角色
+                                            </th>
+                                            <th>
+                                                数据状态
+                                            </th>
+                                            <th>操作</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="employee in employees|filter: employeeQuery" ng-class="{true:'danger'}[employee.dataStatus == 9]">
+                                                <td>{{employee.username}}</td>
+                                                <td>{{employee.gender | gender}}</td>
+                                                <td>{{employee.email}}</td>
+                                                <td>{{employee.cell}}</td>
+                                                <td>
+                                                    <span ng-repeat="eRole in employee.employeeRoles">
+                                                    {{eRole|employeelFilter}}
+                                                </span>
+                                                </td>
+                                                <td>{{employee.dataStatus | dataStatusFilter}}</td>
+                                                <td>
+                                                    <div class="btn-group dropdown" dropdown>
+                                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                                        <ul class="dropdown-menu">
+                                                            <li> <!--编辑-->
+                                                                <a class="green" role="button" data-toggle="modal"
+                                                                   ng-click="editEmployee(employee)" ng-show="employee.dataStatus != 9 && employee.id != null">
+                                                                   编辑
+                                                                </a>
+                                                            </li>
+                                                            <li><!--启用-->
+                                                                <!--协作用户数据恢复功能-->
+                                                                <a ng-if="employee.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(employee, $index)" tooltip="启用" ng-show="employee.dataStatus == 9 && employee.id != null">
+                                                                    启用
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="red" href ng-click="deleteEmployee(employee,$index)" ng-show="employee.dataStatus != 9 && employee.id != null">
+                                                                   作废
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="red" href ng-click="deleteEmployee(employee,$index)" ng-show="employee.dataStatus == 9 && employee.id != null">
+                                                                   删除
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/ng-template" id="sourcerateForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancelMo()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+
+        <div class="panel-body">
+            <form name="userForm" class="form-validation" editable-form onaftersave="saveTable()" oncancel="cancel()">
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label>所属机构</label>
+                        <p class="form-control-static">
+                            {{selectedCashsource.name}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>编码</label>
+                        <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required"
+                               placeholder="请输入资金利率编码" name="code"
+                               ng-model="sourcerate.code" ng-model-options="{updateOn: 'blur'}"
+                               ng-pattern="/^[a-zA-Z0-9]{5,10}$/"
+                               ui-validate-async="{notUnique: 'checkUniqueSourceRate(\'code\', $value)'}"
+                               required type="text">
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">资金利率编码是必须的!</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">资金利率编码不能重复！</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">资金利率编码为数字或字母且5-10位！</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>名称</label>
+                        <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required"
+                               placeholder="请输入资金利率名称" name="name"
+                               ng-model="sourcerate.name" ng-model-options="{updateOn: 'blur'}"
+                               ui-validate-async="{notUnique: 'checkUniqueSourceRate(\'name\', $value)'}"
+                               required  type="text">
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">资金利率名称是必须的!</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">资金利率名称不能重复！</span>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>生效日期</label>
+                        <div class="input-group" moment-picker="sourcerate.startDate" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control"
+                                   ng-model="sourcerate.startDate"
+                                   ng-model-options="{ updateOn: 'blur' }"/>
+								<span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>截止日期</label>
+                        <div class="input-group" moment-picker="sourcerate.endDate" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input name="endDate" type="text" class="form-control"
+                                   ui-validate="{enddateInvalid:'checkEndDate($value)'}"
+                                   ui-validate-watch="'sourcerate.startDate'"
+                                   ng-model="sourcerate.endDate"
+                                   ng-model-options="{ updateOn: 'blur' }"/>
+								<span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                        </div>
+                        <span ng-show="userForm.endDate.$error.enddateInvalid" class="help-block text-danger">截止日期必须大于生效日期!</span>
+                        <span ng-show="userForm.endDate.$dirty && userForm.endDate.$error.queryInvalid" class="help-block text-danger">请输入查询条件!</span>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>资金总金额</label>
+                        <div class=" input-group bootstrap-touchspin">
+                            <input class="form-control ng-pristine ng-untouched ng-valid-validator ng-invalid ng-invalid-required" placeholder="请输入资金总金额,必须为数字" name="amount" required ng-model="sourcerate.amount" ng-model-options="{updateOn: 'blur'}" type="number">
+                            <span ng-show="userForm.amount.$dirty && userForm.amount.$error.required" class="help-block text-danger">资金总金额是必须的!</span>
+                            <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>资金所属银行账户</label>
+                        <input class="form-control ng-pristine ng-untouched ng-valid-validator ng-invalid ng-invalid-required"  placeholder="请输入资金所属银行账户" name="accountNumber" ng-model="sourcerate.payAccount.accountNumber" ng-model-options="{updateOn: 'blur'}" type="text">
+                    </div>
+                    <div class="col-sm-6">
+                        <label>资金账户所属银行名称</label>
+                        <input class="form-control ng-pristine ng-untouched ng-valid-validator ng-invalid ng-invalid-required" placeholder="请输入资金账户所属银行名称" name="capital_bank_name" ng-model="sourcerate.payAccount.bankName" ng-model-options="{updateOn: 'blur'}" type="text">
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label>资金账户开户行地址</label>
+                        <input class="form-control ng-pristine ng-untouched ng-valid-validator ng-invalid ng-invalid-required"
+                               placeholder="请输入资金账户开户行地址" name="address" required="" ng-model="sourcerate.cashSource.address" type="text">
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>允许的还款方式</label>
+                        <ui-select multiple ng-model="sourcerate.repaymentWayIds" theme="bootstrap">
+                            <ui-select-match placeholder="请选择还款方式" >{{$item.name}}</ui-select-match>
+                            <ui-select-choices  repeat="repaymentway.id as repaymentway in repaymentways ">
+                                <small>
+                                    编码: {{repaymentway.code}}
+                                    名称: <span ng-bind-html="''+ repaymentway.name"></span>
+                                </small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>使用条件</label>
+                        <tags-input ng-model="sourcerate.limitsString" placeholder="请输入使用条件" min-length="1"></tags-input>
+                    </div>
+                </div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label class="control-label">利率明细</label>
+                        <button type="button" class="btn btn-default pull-right btn-sm" ng-show="!userForm.$visible" ng-click="userForm.$show()">
+                            <i class="fa fa-pencil text"></i>
+                        </button>
+
+                        <!-- table -->
+                        <table class="table table-bordered table-hover table-condensed">
+                            <tr style="font-weight: bold">
+                                <td>期数(月)</td>
+                                <td>利率(%)</td>
+                                <td><span ng-show="userForm.$visible">操作</span></td>
+                            </tr>
+                            <tr ng-repeat="ratetype in rateTypes">
+                                <td>
+                                    <span editable-text="ratetype.months" e-form="userForm">
+                                        {{ratetype.months}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span editable-text="ratetype.ratio" e-form="userForm">
+                                        {{ratetype.ratio | number:2}}
+                                    </span>
+                                </td>
+                                <td><button type="button" ng-show="userForm.$visible" ng-click="removeRate($index)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o text"></i></button></td>
+                            </tr>
+                        </table>
+                        <div class="btn-edit">
+
+                        </div>
+                        <div class="btn-form" ng-show="userForm.$visible">
+                            <button type="button" ng-disabled="userForm.$waiting" ng-click="addRate()" class="btn btn-default pull-right btn-sm"><i class="fa fa-plus text"></i></button>
+                            <button type="submit" ng-disabled="userForm.$waiting" class="btn btn-primary btn-sm"><i class="fa fa-save text"></i></button>
+                            <button type="button" ng-disabled="userForm.$waiting" ng-click="userForm.$cancel()" class="btn btn-default btn-sm"><i class="fa fa-close text"></i></button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit"  ng-disabled="userForm.$invalid" ng-click="save()" >保  存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancelMo()">取  消</button>
+        </footer>
+    </div>
+</script>
+
+<script type="text/ng-template" id="cashsourceForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation" >
+
+                <div class="form-group">
+                    <label>资金来源渠道</label>
+                    <p class="form-control-static">
+                        {{selectedCashsource.sourceType|cashSourceFilter}}
+                    </p>
+                    <!--<select ng-model="cashsource.sourceType" class="form-control" >-->
+                        <!--<option value="0">银行</option>-->
+                        <!--<option value="1">金融公司</option>-->
+                        <!--<option value="2">P2P产品</option>-->
+                        <!--<option value="3">个人资金</option>-->
+                        <!--<option value="9">自有资金</option>-->
+                    <!--</select>-->
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>机构编码</label>
+                        <input type="text" class="form-control" placeholder="请输入机构编码"
+                               ng-model="cashsource.code"
+                               ui-validate-async="{notUnique: 'checkUniqueCashSource(\'code\', $value)'}"
+                               name="code" required >
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">机构编码是必须的!</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">机构编码不能重复！</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>机构简称</label>
+                        <input type="text" class="form-control" placeholder="请输入机构简称"
+                               ng-model="cashsource.shortName"
+                               ui-validate-async="{notUnique: 'checkUniqueCashSource(\'shortName\', $value)'}"
+                               name="shortName" required >
+                        <span ng-show="userForm.shortName.$dirty && userForm.shortName.$error.required" class="help-block text-danger">机构简称是必须的!</span>
+                        <span ng-show="userForm.shortName.$dirty && userForm.shortName.$error.notUnique" class="help-block text-danger">机构简称不能重复！</span>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label>机构名称</label>
+                        <input type="text" class="form-control" placeholder="请输入机构名称"
+                               ng-model="cashsource.name"
+                               ui-validate-async="{notUnique: 'checkUniqueCashSource(\'name\', $value)'}"
+                               name="name" required >
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">机构名称是必须的!</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">机构名称不能重复！</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>所在地址</label>
+                    <input class="form-control" placeholder="请输入所在地址" ng-model="cashsource.address" name="address" required type="text"/>
+                    <span ng-show="userForm.address.$dirty && userForm.address.$error.required" class="help-block text-danger">所在地址是必须的!</span>
+                </div>
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>联系人</label>
+                        <input type="text" class="form-control" placeholder="请输入联系人姓名" ng-model="cashsource.contacts" ng-model-options="{updateOn: 'blur'}" name="contacts" >
+                    </div>
+                    <div class="col-sm-6">
+                        <label>联系电话</label>
+                        <input type="text" class="form-control" placeholder="请输入联系人电话" ng-model="cashsource.cell"
+                               ng-model-options="{updateOn: 'blur'}" name="cell"
+                               ng-pattern="/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{5,11}$/"required>
+                        <span ng-show="userForm.cell.$dirty && userForm.cell.$error.pattern" class="help-block text-danger">联系人电话格式不正确！</span>
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label class="control-label">支行营销代码</label>
+                        <tags-input ng-model="cashsource.marketingCodeString" placeholder="支行营销代码"></tags-input>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="button" ng-disabled="userForm.$invalid" ng-click="save()" >保  存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取  消</button>
+        </footer>
+    </div>
+</script>
+
+<script type="text/ng-template" id="employeeForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation" >
+                <div class="form-group pull-in clearfix">
+                <div class="form-group col-sm-6">
+                    <label>姓名</label>
+                    <input type="text" class="form-control" placeholder=""
+                           ng-model="employee.username"
+                           name="username" required >
+                </div>
+
+                    <div class="col-sm-6">
+                        <label class="control-label">性别</label>
+                        <div>
+                            <label class="checkbox-inline i-checks">
+                                <input value="0" ng-model="employee.gender" type="radio"><i></i>男
+                            </label>
+                            <label class="checkbox-inline i-checks">
+                                <input value="1" ng-model="employee.gender" type="radio"><i></i>女
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">邮箱</label>
+                    <input type="text" class="form-control" placeholder="请输入Email"
+                           popover="如输入多个邮箱,请用逗号区分!"
+                           ng-model="employee.email" ng-model-options="{updateOn: 'blur'}"
+                           name="email" required >
+                    <span ng-show="userForm.email.$dirty && userForm.email.$error.required" class="help-block text-danger">邮箱是必须的!</span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">手机号码</label>
+                    <input type="text" class="form-control" placeholder="请输入手机号"
+                           popover="如输入多个手机号码,请用逗号区分!"
+                           ng-model="employee.cell" ng-model-options="{updateOn: 'blur'}"
+                           name="cell" required >
+                    <span ng-show="userForm.cell.$dirty && userForm.cell.$error.required" class="help-block text-danger">手机号码是必须的!</span>
+                </div>
+                <div class="form-group">
+                    <label>角色</label>
+                    <ui-select multiple sortable="true" ng-model="employee.employeeRoles" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match placeholder="请选择角色" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices  repeat="eRole.id as eRole in bankEmployeeRoles | filter: $select.search">
+                            <div ng-bind-html="eRole.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid" ng-click="save()" >保  存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取  消</button>
+        </footer>
+    </div>
+</script>

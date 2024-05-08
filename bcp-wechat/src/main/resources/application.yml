@@ -1,0 +1,67 @@
+spring:
+  cache:
+    type: redis
+  logging:
+    config: @logbackpath@
+  application:
+    name: FUZE WeXin Public And Enterpeise Application
+  profiles:
+    active: @profileActive@
+  data:
+    mongodb:
+      database: @fuze.mongodb.dbname@
+      uri: @fuze.mongodb.uri@
+  redis:
+    host: @redis.host@
+    port: @redis.port@
+    database: @redis.database@
+    password: @redis.password@
+    pool:
+      max-idle: @redis.pool.max-idle@
+      max-total: @redis.pool.max-total@
+      max-wait-millis : @redis.pool.max-wait-millis@
+    timeout: @redis.timeout@
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 200MB
+  rabbitmq:
+    host: @rabbitmq.host@
+    port: @rabbitmq.port@
+    username: @rabbitmq.username@
+    password: @rabbitmq.password@
+    exchange: @rabbitmq.exchange@
+    routingKey-b: @rabbitmq.routingKey-b@
+    routingKey-l: @rabbitmq.routingKey-l@
+    routingKey-m: @rabbitmq.routingKey-m@
+server:
+    port: 8086
+    tomcat:
+      uri-encoding: UTF-8
+#    ssl:
+#      key-store: mydomain.jks
+#      key-password: fuzefenqi
+
+fuze:
+  wechat:
+    # 微信企业号配置
+    enterprise:
+      agentid: @fuze.wechat.enterprise.agentid@
+      secret: @fuze.wechat.enterprise.secret@
+      secretW: @fuze.wechat.enterprise.secretW@
+      corpid: @fuze.wechat.enterprise.corpid@
+    # 微信公众号配置
+    public:
+      appid: @fuze.wechat.public.appid@
+      secret: @fuze.wechat.public.secret@
+    miniprogram:
+      appid: @fuze.wechat.miniprogram.appid@
+      secret: @fuze.wechat.miniprogram.secret@
+    # 微信公众平台信任域名
+    believeIp: @fuze.wechat.believeIp@
+

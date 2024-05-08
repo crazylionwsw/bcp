@@ -1,0 +1,58 @@
+package com.fuze.bcp.api.creditcar.service.IAppointPaymentService;
+
+import com.fuze.bcp.api.drools.bean.DroolsBaseBean;
+import com.fuze.bcp.api.creditcar.bean.appointpayment.AppointPaymentSubmissionBean;
+import com.fuze.bcp.utils.DateTimeUtils;
+
+
+rule "actSaveAppointPayment"
+    dialect "java"
+    lock-on-active true
+when
+    $droolsBeans:DroolsBaseBean(apiBaseBean != null,message:message);
+    $appointPaymentSubmissionBean : AppointPaymentSubmissionBean() from $droolsBeans.apiBaseBean;
+then
+    //垫资申请：预计刷卡时间appointPayTime、预计提车时间pickupDate
+    //缴费信息：付款账户paymentAccount、付款人drawee、付款时间(汇款日期)paymentDate，（其他收费项可填可不填）
+
+
+    String  newPattern = "yyyy-MM-dd";
+    String  oldPattern = "yyyy年MM月dd日";
+
+    //预计刷卡时间
+    if($appointPaymentSubmissionBean.getAppointPayTime() == null || "".equals($appointPaymentSubmissionBean.getAppointPayTime())){
+        System.out.println("MSG_NO_APPOINT_PAYTIME");
+        message.add("MSG_NO_APPOINT_PAYTIME");
+    }
+    //预计提车时间
+    if($appointPaymentSubmissionBean.getPickupDate() != null){
+        if(!DateTimeUtils.compareTwoTs(DateTimeUtils.StringPattern($appointPaymentSubmissionBean.getAppointPayTime(),oldPattern,newPattern),DateTimeUtils.StringPattern($appointPaymentSubmissionBean.getPickupDate(),oldPattern,newPattern))){
+            System.out.println("MSG_PICKUPDATE_BEFORE_APPOINTPAYTIME");
+            message.add("MSG_PICKUPDATE_BEFORE_APPOINTPAYTIME");
+        }
+    }else{
+        System.out.println("MSG_NO_PICKUP_DATE");
+        message.add("MSG_NO_PICKUP_DATE");
+    }
+
+    if($appointPaymentSubmissionBean.getCustomerFeeBean() != null){
+        //付款账户
+        if($appointPaymentSubmissionBean.getCustomerFeeBean().getPaymentAccount() == null || "".equals($appointPaymentSubmissionBean.getCustomerFeeBean().getPaymentAccount())){
+            System.out.println("MSG_NO_PAY_ACCOUNT");
+            message.add("MSG_NO_PAY_ACCOUNT");
+        }
+        //付款人
+        if($appointPaymentSubmissionBean.getCustomerFeeBean().getDrawee() == null || "".equals($appointPaymentSubmissionBean.getCustomerFeeBean().getDrawee())){
+            System.out.println("MSG_NO_DRAWEE");
+            message.add("MSG_NO_DRAWEE");
+        }
+        //付款时间
+        if($appointPaymentSubmissionBean.getCustomerFeeBean().getPaymentDate() == null || "".equals($appointPaymentSubmissionBean.getCustomerFeeBean().getPaymentDate())){
+            System.out.println("MSG_NO_PAYMENT_DATE");
+            message.add("MSG_NO_PAYMENT_DATE");
+        }
+    }
+
+
+update($droolsBeans)
+end

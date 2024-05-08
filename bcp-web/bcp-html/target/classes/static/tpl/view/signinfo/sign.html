@@ -1,0 +1,29 @@
+
+<button class="btn btn-primary" type="button" ng-click="showSignModal()" ng-show="canSign" ng-disabled="canAudit">{{buttonText}}</button>
+
+<script type="text/ng-template" id="signForm.html">
+	<div class="panel panel-default m-b-none" dw-loading="signInfo" dw-loading-options="{text: ''}">
+		<div class="panel-heading">
+			<button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+			<span class="h4">{{modalTitle}}</span>
+		</div>
+		<form name="userForm">
+			<div class="panel-body">
+				<div class="form-group" ng-if="tipComment != ''">
+					<label>审批提示 </label>
+					<textarea class="form-control" rows="6" data-ng-model="tipComment" name="tipComment" disabled></textarea>
+				</div>
+				<div class="form-group">
+					<label>审批说明 </label>
+					<textarea class="form-control" rows="6" data-ng-model="signinfo.comment" placeholder="{{commmentTip}}" name="comment"></textarea>
+				</div>
+			</div>
+			<footer class="panel-footer text-right bg-light lter">
+				<button class="btn btn-success" type="submit" ng-click="pass()" ng-show="passshow == 1" >{{passButton}}</button>
+				<button class="btn btn-primary" type="button" ng-click="reapply()" ng-show="reapplyshow == 1" >{{reapplyButton}}</button>
+				<button class="btn btn-danger" type="button" ng-click="reject()" ng-show="rejectshow == 1" >{{rejectButton}}</button>
+				<button class="btn btn-warning" type="button" ng-click="close()">关  闭</button>
+			</footer>
+		</form>
+	</div>
+</script>

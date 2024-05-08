@@ -1,0 +1,357 @@
+<div class="hbox hbox-auto-xs bg-light">
+    <!-- column -->
+    <div class="col w-lg lter b-r">
+        <div class="vbox">
+            <div class="wrapper b-b lt">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="wrapper-xs">
+                           <abn-tree
+                                    tree-data         = "questioncategorys"
+                                    tree-control      = "questioncategoryTree"
+                                    on-select         = "selectQuestioncategory(branch)"
+                                    expand-level      = "3"
+                                    initial-selection = "Granny Smith"
+                                    icon-leaf         = "fa fa-file-o"
+                                    icon-expand       = "fa fa-plus"
+                                    icon-collapse     = "fa fa-minus"
+                            >
+                            </abn-tree>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-sm b-t b-light text-center">
+                <a role="button" class="btn btn-sm btn-default" data-toggle="modal" ng-click="editQuestionType(0)"><i class="ace-icon fa fa-plus bigger-130"></i></a>
+                <a role="button" ng-show="selectedQuestioncategory" class="btn btn-sm btn-default" data-toggle="modal" ng-click="editQuestionType(1)"><i class="ace-icon fa fa-pencil bigger-130"></i></a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col">
+        <div class="vbox">
+            <div class="wrapper b-b lt">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-success"  ng-click="showQuery()">查询</a>
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="editOptions('')" ng-show="!isReferenceDialog">添加问题 </a>
+                            </div>
+                        </div>
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                编码
+                            </th>
+                            <th>
+                                显示顺序
+                            </th>
+                            <th>
+                                问题
+                            </th>
+                            <th>
+                                问题类型
+                            </th>
+                            <th>
+                                是否必填
+                            </th>
+                            <th>
+                                数据状态
+                            </th>
+                            <th>操作</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="question in questions|filter:query|orderBy:'code':false" ng-class="{true:'danger'}[ question.dataStatus == 9]">
+                                <td>{{question.code }}</td>
+                                <td>{{question.displayOrder}}</td>
+                                <td>{{question.content}}</td>
+                                <td>{{question.questionType | typeFilter}}</td>
+                                <td>
+                                    <element ng-show="question.required">是</element>
+                                    <element ng-hide="question.required">否</element>
+                                </td>
+                                <td>{{question.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="editOptions(question,$index)" ng-show="question.dataStatus != 9 && question.id != null ">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="deleteQuestion(question,$index)" ng-show="question.dataStatus != 9 && question.id != null ">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-if="question.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(question, $index)" ng-show="question.dataStatus == 9 && question.id != null ">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="deleteQuestion(question,$index)" ng-show="question.dataStatus == 9 && question.id != null ">
+                                                    删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="m-n b-t lt row">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                        <pagination boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changeQuestionPage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalPages"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<!--问题列表   编辑/新增 页-->
+<pageslide ps-open="checked" ps-zindex="1350" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper b-b b-light">
+                    <div class="font-thin h4">{{modalTitle}}</div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner padder">
+                            <div class="wrapper row m-n">
+                            <form name="userForm" class="form-horizontal form-validation">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><span class="h4">问题详情</span></div>
+                                    <div class="panel-body">
+                                        <div class="form-group pull-in clearfix">
+                                            <div class="col-sm-4">
+                                                <label class="col-lg-4 control-label">所属分类</label>
+                                                <div class="col-lg-8">
+                                                    <ui-select ng-model="question.questionCategoryId" theme="bootstrap" ng-disabled="disabled">
+                                                        <ui-select-match placeholder="请选择分类" >{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices  repeat="question.id as question in availableQuestionCategorys| filter: $select.search">
+                                                            <div style="padding-left:{{question.depth*10}}px" ng-bind-html="question.name  | highlight: $select.search"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="col-lg-4 control-label">问题编码</label>
+                                                <div class="col-lg-8">
+                                                    <input type="text" class="form-control"
+                                                           ng-model="question.code" ng-readonly="status" required
+                                                           placeholder="如:ZX001"
+                                                           ng-pattern="/^[A-Z0-9]{5,}$/"
+                                                           ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}" name="code" ng-disabled="noCode">
+                                                    <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">问题编码是必须的!</span>
+                                                    <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">问题编码不能重复！</span>
+                                                    <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">问题编码为大写字母和数字且最小为5位，如ZX001！</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="col-lg-4 control-label">问题类型</label>
+                                                <div class="col-lg-8">
+                                                    <label class="checkbox-inline i-checks">
+                                                        <input value="radio" ng-model="question.questionType" name="questionType" type="radio" required ng-change="Change(question.questionType)"><i></i>单选题
+                                                    </label>
+                                                    <label class="checkbox-inline i-checks">
+                                                        <input value="checklist"  ng-model="question.questionType" name="questionType" type="radio" required ng-change="Change(question.questionType)"><i></i>多选题
+                                                    </label>
+                                                    <label class="checkbox-inline i-checks">
+                                                        <input value="text"  ng-model="question.questionType" name="questionType" type="radio" required ng-change="Change(question.questionType)"><i></i>填空题
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group pull-in clearfix">
+                                            <div class="col-sm-4">
+                                                <label class="col-lg-4 control-label">必填</label>
+                                                <div class="col-lg-8">
+                                                    <!--<div class="checkbox">
+                                                        <label class="i-checks">
+                                                            <input type="checkbox" ng-model="question.required" name="required" value="true"><i></i>
+                                                        </label>
+                                                    </div>-->
+                                                    <label class="checkbox-inline i-checks">
+                                                        <input value="1" ng-model="question.required" name="required" type="radio"><i></i>是
+                                                    </label>
+                                                    <label class="checkbox-inline i-checks">
+                                                        <input value="0"  ng-model="question.required" name="required" type="radio"><i></i>否
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="col-lg-4 control-label">可选答案数量</label>
+                                                <div class="col-lg-8">
+                                                    <input type="number" class="form-control"
+                                                           ng-model="question.optionalAnswersQuantity" ng-readonly="status" required ng-disabled="one">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="col-lg-4 control-label">显示顺序</label>
+                                                <div class="col-lg-8">
+                                                    <input type="number" class="form-control"
+                                                           ng-model="question.displayOrder" ng-readonly="status"
+                                                           ui-validate-async="{notUnique: 'checkUnique(\'displayOrder\', $value)'}" name="displayOrder">
+                                                    <span ng-show="userForm.displayOrder.$dirty && userForm.displayOrder.$error.notUnique" class="help-block text-danger">显示顺序不能重复！</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group pull-in clearfix">
+                                            <div class="col-lg-12">
+                                                <label class="col-lg-1 control-label">问题内容</label>
+                                                <div class="col-lg-11">
+                                                    <textarea class="form-control " rows="3" placeholder="请输入问题" ui-validate-async="{notUnique: 'checkUnique(\'content\', $value)'}"
+                                                              ng-model="question.content" name="content" ng-readonly="status" required/>
+                                                    <span ng-show="userForm.content.$dirty && userForm.content.$error.required" class="help-block text-danger">问题内容是必须的!</span>
+                                                    <span ng-show="userForm.content.$dirty && userForm.content.$error.notUnique" class="help-block text-danger">问题内容不能重复！</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                                <!--答案详情-->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <span class="h4">答案详情</span>
+                                        <button type="button" class="btn btn-success pull-right" ng-click="addOption()">添加答案</button>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-sm-12">
+                                            <div>
+                                                <table class="table table-bordered table-hover table-condensed">
+                                                    <tr style="font-weight: bold">
+                                                        <td hidden>ID</td>
+                                                        <td>答案内容</td>
+                                                        <td>显示顺序</td>
+                                                        <td>操作</td>
+                                                    </tr>
+                                                    <tr ng-repeat="option in options">
+                                                        <td hidden>
+                                                            <span editable-text="option.id" e-form="tableform" e-name="id">
+                                                                {{option.id}}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span editable-text="option.content" e-form="tableform" e-name="content" onbeforesave="checkContent($data)" e-required>
+                                                                {{option.content}}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span editable-text="option.displayOrder" e-form="tableform" e-name="displayOrder" onbeforesave="checkDisplayOrder($data)" e-required>
+                                                                {{option.displayOrder}}
+                                                            </span>
+                                                        </td>
+                                                        <td style="white-space: nowrap">
+                                                            <!-- form -->
+                                                            <form editable-form name="tableform" ng-show="tableform.$visible" class="form-buttons form-inline" shown="inserted == option">
+                                                                <button type="submit" ng-disabled="tableform.$waiting" class="btn btn-primary">
+                                                                    保  存
+                                                                </button>
+                                                                <button type="button" ng-disabled="tableform.$waiting" ng-click="removeOption($index)" class="btn btn-default">
+                                                                    取  消
+                                                                </button>
+                                                            </form>
+                                                            <div class="buttons" ng-show="!tableform.$visible">
+                                                                <!--<button type="button" class="btn btn-primary" ng-click="tableform.$show()">编  辑</button>-->
+                                                                <button type="button" class="btn btn-danger" ng-click="removeOption($index)">删  除</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-success" type="button" ng-disabled="userForm.$invalid || saved" ng-click="saveform($index)">保 存</button>
+                    <button class="btn btn-primary text-right" type="button" ng-click="closeTan()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+
+
+<!--问题分类页面-->
+<script type="text/ng-template" id="questionCategoryForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancelQuestionType()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm">
+                <input type="hidden" ng-model="questioncategory.id">
+                <input type="hidden" ng-model="questioncategory.parent"/>
+                <div class="form-group">
+                    <label>编码</label>
+                    <input type="text" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-pattern" placeholder="请输入编码"
+                           ng-model="questioncategory.code" ng-model-options="{updateOn: 'blur'}"
+                           ui-validate-async="{notUnique: 'checkUniqueQueCategory(\'code\', $value)'}"
+                           name="code" required />
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">问题分类编码是必须的！</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">问题分类编码不能重复！</span>
+                </div>
+                <div class="form-group">
+                    <label>名称</label>
+                    <input type="text" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-pattern" placeholder="请输入名称"
+                           ng-model="questioncategory.name" ng-model-options="{updateOn: 'blur'}"
+                           ui-validate-async="{notUnique: 'checkUniqueQueCategory(\'name\', $value)'}"
+                           required name="name" />
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">问题分类是必须的！</span>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">问题分类不能重复！</span>
+                </div>
+                <div class="form-group">
+                    <label>显示顺序</label>
+                    <input type="number" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-pattern" placeholder="请输入名称"
+                           ng-model="questioncategory.displayOrder" ng-model-options="{updateOn: 'blur'}" ui-validate-async="{notUnique: 'checkUniqueQueCategory(\'displayOrder\', $value)'}"
+                           required name="displayOrder" />
+                    <span ng-show="userForm.displayOrder.$dirty && userForm.displayOrder.$error.required" class="help-block text-danger">问题分类的显示顺序是必须的！</span>
+                    <span ng-show="userForm.displayOrder.$dirty && userForm.displayOrder.$error.notUnique" class="help-block text-danger">显示顺序不能重复！</span>
+                </div>
+
+            </form>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid" ng-click="saveQuestionType()" >保  存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancelQuestionType()">取  消</button>
+        </footer>
+    </div>
+</script>
+
+
+<!--指令-->
+<script type="text/ng-template" id="query.html">
+    <question-query-form question="questionFilter" query="queryBill(question)" clear="clearQuery()"></question-query-form>
+</script>

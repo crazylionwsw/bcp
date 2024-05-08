@@ -1,0 +1,276 @@
+<div class="panel panel-default m-b-none">
+    <div class="panel-heading">
+        <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+        <span class="h4">报批资料</span>
+    </div>
+    <div class="panel-body">
+        <form editable-form name="userForm" class="form-validation">
+        </form>
+        <tabset class="tab-container">
+                <tab heading="客户的基础信息">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-6">
+                                        <label class="control-label">客户类别</label>
+                                        <ui-select ng-model="declaration.customerClass" name="customerClass" theme="bootstrap" ng-disabled="disabled"  on-select="customerClass(declaration,$item)">
+                                            <ui-select-match  placeholder="请选择客户类别" >{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices repeat="customerclass.code as customerclass in customerclasses | filter: $select.search">
+                                                <div ng-bind-html="customerclass.name"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="control-label">单位属性</label>
+                                        <ui-select ng-model="declaration.nature" name="nature" theme="bootstrap" ng-disabled="disabled">
+                                            <ui-select-match  placeholder="请选择客户的单位属性" >{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices repeat="nature.code as nature in natures | filter: $select.search">
+                                                <div ng-bind-html="nature.name"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-4">
+                                        <label>申请人手机号是否核实</label>
+                                        <label class="i-checks">
+                                            <input ng-model="declaration.customerCellVerify"  type="checkbox"/><i></i>
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>配偶手机号是否核实</label>
+                                        <label class="i-checks">
+                                            <input ng-model="declaration.mateCellVerify"  type="checkbox"/><i></i>
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>抵押人手机号是否核实</label>
+                                        <label class="i-checks">
+                                            <input ng-model="declaration.pledgeCellVerify"  type="checkbox"/><i></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="银行流水">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-4">
+                                            <label>近12个月信用记录</label>
+                                            <label class="checkbox-inline i-checks">
+                                                <input value="1" ng-model="declaration.creditInfo.credit12Month" type="radio" name="credit12Month" ng-click="checkCredit12Month()"><i></i>有
+                                            </label>
+                                            <label class="checkbox-inline i-checks">
+                                                <input value="0" ng-model="declaration.creditInfo.credit12Month" type="radio" name="credit12Month" ng-click="quitCredit12Month()"><i></i>无
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-4" ng-show="credit12Month">
+                                            <div>
+                                                <label>信用卡记录</label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="1" ng-model="declaration.creditInfo.credit12MonthCard" type="radio" name="credit12MonthCard" ng-click="checkCredit12MonthCard()"><i></i>有
+                                                </label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="0" ng-model="declaration.creditInfo.credit12MonthCard" type="radio" name="credit12MonthCard" ng-click="quitCredit12MonthCard()"><i></i>无
+                                                </label>
+                                            </div>
+                                            <div style="height: 20px"></div>
+                                            <div>
+                                                <label>贷款记录</label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="1" ng-model="declaration.creditInfo.credit12MonthLoan" type="radio" name="credit12MonthLoan" ng-click="checkCredit12MonthLoan()"><i></i>有
+                                                </label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="0" ng-model="declaration.creditInfo.credit12MonthLoan" type="radio" name="credit12MonthLoan" ng-click="quitCredit12MonthLoan()"><i></i>无
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4" ng-show="credit12Month">
+                                            <p class="form-control-static" ng-show="credit12MonthCard">连&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit12MonthCardMonth" e-label="">{{declaration.creditInfo.credit12MonthCardMonth|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;累&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit12MonthCardCount" e-label="">{{declaration.creditInfo.credit12MonthCardCount|| "0" }}</span></p>
+                                            <div style="height: 10px"></div>
+                                            <p class="form-control-static" ng-show="credit12MonthLoan">连&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit12MonthLoanMonth" e-label="">{{declaration.creditInfo.credit12MonthLoanMonth|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;累&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit12MonthLoanCount" e-label="">{{declaration.creditInfo.credit12MonthLoanCount|| "0" }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-4">
+                                            <label>近24个月信用记录</label>
+                                            <label class="checkbox-inline i-checks">
+                                                <input value="1" ng-model="declaration.creditInfo.credit24Month" type="radio" name="credit24Month" ng-click="checkCredit24Month()"><i></i>有
+                                            </label>
+                                            <label class="checkbox-inline i-checks">
+                                                <input value="0" ng-model="declaration.creditInfo.credit24Month" type="radio" name="credit24Month" ng-click="quitCredit24Month()"><i></i>无
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-4" ng-show="credit24Month">
+                                            <div>
+                                                <label>信用卡记录</label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="1" ng-model="declaration.creditInfo.credit24MonthCard" type="radio" name="credit24MonthCard"ng-click="checkCredit24MonthCard()"><i></i>有
+                                                </label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="0" ng-model="declaration.creditInfo.credit24MonthCard" type="radio" name="credit24MonthCard" ng-click="quitCredit24MonthCard()"><i></i>无
+                                                </label>
+                                            </div>
+                                            <div style="height: 20px"></div>
+                                            <div>
+                                                <label>贷款记录</label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="1" ng-model="declaration.creditInfo.credit24MonthLoan" type="radio" name="credit24MonthLoan" ng-click="checkCredit24MonthLoan()"><i></i>有
+                                                </label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="0" ng-model="declaration.creditInfo.credit24MonthLoan" type="radio" name="credit24MonthLoan" ng-click="quitCredit24MonthLoan()"><i></i>无
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4" ng-show="credit24Month">
+                                            <p class="form-control-static" ng-show="credit24MonthCard">连&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit24MonthCardMonth" e-label="">{{declaration.creditInfo.credit24MonthCardMonth|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;累&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit24MonthCardCount" e-label="">{{declaration.creditInfo.credit24MonthCardCount|| "0" }}</span></p>
+                                            <div style="height: 10px"></div>
+                                            <p class="form-control-static" ng-show="credit24MonthLoan">连&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit24MonthLoanMonth" e-label="">{{declaration.creditInfo.credit24MonthLoanMonth|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;累&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit24MonthLoanCount" e-label="">{{declaration.creditInfo.credit24MonthLoanCount|| "0" }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-4">
+                                            <label>近36个月信用记录</label>
+                                            <label class="checkbox-inline i-checks">
+                                                <input value="1" ng-model="declaration.creditInfo.credit36Month" type="radio" name="credit36Month" ng-click="checkCredit36Month()"><i></i>有
+                                            </label>
+                                            <label class="checkbox-inline i-checks">
+                                                <input value="0" ng-model="declaration.creditInfo.credit36Month" type="radio" name="credit36Month" ng-click="quitCredit36Month()"><i></i>无
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-4" ng-show="credit36Month">
+                                            <div>
+                                                <label>信用卡记录</label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="1" ng-model="declaration.creditInfo.credit36MonthCard" type="radio" name="credit36MonthCard"ng-click="checkCredit36MonthCard()"><i></i>有
+                                                </label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="0" ng-model="declaration.creditInfo.credit36MonthCard" type="radio" name="credit36MonthCard" ng-click="quitCredit36MonthCard()"><i></i>无
+                                                </label>
+                                            </div>
+                                            <div style="height: 20px"></div>
+                                            <div>
+                                                <label>贷款记录</label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="1" ng-model="declaration.creditInfo.credit36MonthLoan" type="radio" name="credit36MonthLoan" ng-click="checkCredit36MonthLoan()"><i></i>有
+                                                </label>
+                                                <label class="checkbox-inline i-checks">
+                                                    <input value="0" ng-model="declaration.creditInfo.credit36MonthLoan" type="radio" name="credit36MonthLoan" ng-click="quitCredit36MonthLoan()"><i></i>无
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div  class="col-sm-4" ng-show="credit36Month">
+                                            <p class="form-control-static" ng-show="credit36MonthCard">连&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit36MonthCardMonth" e-label="">{{declaration.creditInfo.credit36MonthCardMonth|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;累&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit36MonthCardCount" e-label="">{{declaration.creditInfo.credit36MonthCardCount|| "0" }}</span></p>
+                                            <div style="height: 10px"></div>
+                                            <p class="form-control-static" ng-show="credit36MonthLoan">连&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit36MonthLoanMonth" e-label="">{{declaration.creditInfo.credit36MonthLoanMonth|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;累&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.credit36MonthLoanCount" e-label="">{{declaration.creditInfo.credit36MonthLoanCount|| "0" }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-6">
+                                            <label>本人名下未结清车贷</label>
+                                            <p class="form-control-static">&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.carLoanCount" e-label="">{{declaration.creditInfo.carLoanCount|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;笔&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.carLoanAmount" e-label="">{{declaration.creditInfo.carLoanAmount|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;元</p>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>近10天被查询次数</label>
+                                            <p class="form-control-static">&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.query10Count" e-label="">{{declaration.creditInfo.query10Count|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;次</p>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>近20天被查询次数</label>
+                                            <p class="form-control-static">&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.query20Count" e-label="">{{declaration.creditInfo.query20Count|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;次</p>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>近30天被查询次数</label>
+                                            <p class="form-control-static">&nbsp;&nbsp;&nbsp;&nbsp;<span editable-text="declaration.creditInfo.query30Count" e-label="">{{declaration.creditInfo.query30Count|| "0" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;次</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-12">
+                                            <label>异常征信情况说明</label>
+                                            <textarea rows="3" cols="12" class="form-control" placeholder="输入异常情况说明" ng-model="declaration.creditInfo.specialComment"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </tab>
+                <tab heading="工商信息" ng-show="declaration.customerClass == 4">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-6">
+                                            <label class="control-label">企业经营年限（年）</label>
+                                            <input type="number" class="form-control" placeholder="请输入企业经营年限"
+                                                   ng-model="declaration.icbcQueryComment.businessLife" ng-model-options="{updateOn: 'blur'}"
+                                                   name="businessLife">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="control-label">占股比例（%）</label>
+                                            <input type="number" class="form-control" placeholder="请输入占股比例" ui-validate=" '$value <= 100' "
+                                                   ng-model="declaration.icbcQueryComment.proportion">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-6">
+                                            <label>是否企业法人代表</label>
+                                            <label class="i-checks">
+                                                <input ng-model="declaration.icbcQueryComment.legalPerson"  type="checkbox"/><i></i>
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>是否企业法人股东</label>
+                                            <label class="i-checks">
+                                                <input ng-model="declaration.icbcQueryComment.shareholder"  type="checkbox"/><i></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-12">
+                                            <label>经营情况</label>
+                                            <textarea rows="3" class="form-control" placeholder="输入经营情况" ng-model="declaration.icbcQueryComment.businessCase"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-12">
+                                            <label>法院查询信息（个人）</label>
+                                            <textarea class="form-control" rows="3" placeholder="这里填写备注信息" ng-model="declaration.fayuanQueryComment"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-primary" type="button" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+    </div>
+</div>

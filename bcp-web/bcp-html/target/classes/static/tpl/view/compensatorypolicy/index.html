@@ -1,0 +1,337 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤：请输入过滤条件" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')" ng-show="!isReferenceDialog"> 添加 </a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <th data-toggle="true">
+                                名称
+                            </th>
+                            <td>厂商</td>
+                            <th>
+                                开始日期
+                            </th>
+                            <th>
+                                截止日期
+                            </th>
+                            <th>
+                                状态
+                            </th>
+                            <th>操作</th>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="compensatorypolicy in compensatorypolicys|filter:query" ng-class="{true:'danger'}[compensatorypolicy.dataStatus == 9]">
+                                <td>{{compensatorypolicy.name}}</td>
+                                <td><carbrand-info id="compensatorypolicy.carBrandId"></carbrand-info></td>
+                                <td>{{compensatorypolicy.startDate|date:'yyyy-MM-dd'}}</td>
+                                <td>{{compensatorypolicy.endDate|date:'yyyy-MM-dd'}}</td>
+                                <td>{{compensatorypolicy.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(compensatorypolicy)" ng-show="compensatorypolicy.dataStatus != 9 && compensatorypolicy.id != null">
+                                                    编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <!--启用-->
+                                                <a ng-if="compensatorypolicy.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(compensatorypolicy, $index)" ng-show="compensatorypolicy.dataStatus == 9 && compensatorypolicy.id != null">
+                                                    启用
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(compensatorypolicy,$index)" ng-show="compensatorypolicy.dataStatus != 9 && compensatorypolicy.id != null">
+                                                    作废
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(compensatorypolicy,$index)" ng-show="compensatorypolicy.dataStatus == 9 && compensatorypolicy.id != null">
+                                                    删除
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------输入对话框------>
+<script type="text/ng-template" id="compensatoryPolicyModal.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation">
+                <input type="hidden" ng-model="compensatorypolicy.id">
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>编码</label>
+                        <input class="form-control"
+                               placeholder="如:BJ(代表北京)_20170808"
+                               name="code" ng-model="compensatorypolicy.code" ng-model-options="{updateOn: 'blur'}"
+                               ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                               ng-pattern="/^[A-Z0-9_]+$/"
+                               required type="text">
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">贴息编码是必须的!</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">贴息编码不能重复！</span>
+                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">编码必须为地区(大写首字母)_开始日期！</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>名称</label>
+                        <input class="form-control"
+                               placeholder="请输入名称"
+                               name="name" required ng-model="compensatorypolicy.name" ng-model-options="{updateOn: 'blur'}"
+                               ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                               type="text">
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">贴息名称是必须的!</span>
+                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">贴息名称不能重复！</span>
+
+                    </div>
+                </div>
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-6">
+                        <label>开始日期</label>
+                        <div class="input-group" moment-picker="compensatorypolicy.startDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control" ng-model="compensatorypolicy.startDate" name="startDate"/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>截止日期</label>
+                        <div class="input-group" moment-picker="compensatorypolicy.endDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control"
+                                   ui-validate="{enddateInvalid:'checkEndDate($value)'}"
+                                   ui-validate-watch="'compensatorypolicy.startDate'"
+                                   name="endDate"
+                                   ng-model-options="{ updateOn: 'blur' }"
+                                   ng-model="compensatorypolicy.endDate" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                        </div>
+                        <span ng-show="userForm.endDate.$error.enddateInvalid" class="help-block text-danger">截止日期必须大于开始日期!</span>
+                    </div>
+                </div>
+
+                <!--<div class="form-group">-->
+                    <!--<label>规则公式</label>-->
+                    <!--<textarea class="form-control" rows="6" placeholder="请输入规则公式" ng-model="compensatorypolicy.formula"></textarea>-->
+                <!--</div>-->
+
+                <div class="form-group pull-in clearfix">
+                    <div class="col-sm-12">
+                        <label>贴息政策说明</label>
+                        <div lazy-load="textAngular">
+                            <div text-angular ng-model="compensatorypolicy.comment" class="btn-groups" placeholder="请输入说明信息"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>贴息公式</label>
+                    <ui-select  sortable="true" ng-model="compensatorypolicy.templateId" theme="bootstrap" ng-disabled="disabled" on-select="selectFormula($item)">
+                        <ui-select-match  placeholder="请选择贴息公式" >{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="formula.id as formula in formulas | filter: $select.search">
+                            <div ng-bind-html="formula.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group"  ng-show="selectFlg">
+                    <label>键值对</label>
+                    <div class="col-md-12">
+                        <div ng-repeat="reply in fchat.replies">
+                                <div class="col-md-12">
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="请输入模板键" class="form-control" readonly ng-model="reply.value.key"
+                                               id="reply{{$index + 1}}key" name="reply{{$index + 1}}key" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" placeholder="{{reply.value.value}}" class="form-control" ng-model="reply.value.valueR"
+                                               id="reply{{$index + R}}value1" name="reply{{$index + 1}}valueR" />
+                                    </div>
+                                </div>
+                        </div>
+                        <input type="hidden" id="replies" name="replies" value="{{fchat.combineReplies()}}" />
+                    </div>
+                    <div style="float: none;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>品牌</label>
+                    <ui-select  sortable="true" ng-model="compensatorypolicy.carBrandId" theme="bootstrap" ng-disabled="disabled">
+                        <ui-select-match  placeholder="请选择品牌" >{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="carbrand.id as carbrand in carbrands | filter: $select.search">
+                            <div ng-bind-html="carbrand.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </form>
+            <!--<div class="form-group pull-in clearfix">-->
+                <!--<div class="col-sm-12">-->
+                    <!--<label class="col-lg-4 control-label">贴息类型</label>-->
+                    <!--<div class="col-lg-8">-->
+                        <!--<label class="checkbox-inline i-checks">-->
+                            <!--<input value="radio" ng-model="compensatorypolicy.type" name="type" type="radio" required ng-change="changeType(compensatorypolicy.type)"><i></i>品牌-->
+                        <!--</label>-->
+                        <!--<label class="checkbox-inline i-checks">-->
+                            <!--<input value="checklist"  ng-model="compensatorypolicy.type" name="type" type="radio" required ng-change="changeType(compensatorypolicy.type)"><i></i>车系-->
+                        <!--</label>-->
+                        <!--<label class="checkbox-inline i-checks">-->
+                            <!--<input value="text"  ng-model="compensatorypolicy.type" name="type" type="radio" required ng-change="changeType(compensatorypolicy.type)"><i></i>车型-->
+                        <!--</label>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-4">-->
+                    <!--<label>品牌</label>-->
+                    <!--<div>-->
+                        <!--<ui-select ng-model="compensatorypolicy.carBrandId" theme="bootstrap" on-select="selectCarBrand($item, $model)">-->
+                            <!--<ui-select-match placeholder="请选择品牌">{{$select.selected.name}}</ui-select-match>-->
+                            <!--<ui-select-choices  repeat="carbrand.id as carbrand in carbrands | filter: $select.search">-->
+                                <!--<div ng-bind-html="carbrand.name | highlight: $select.search"></div>-->
+                            <!--</ui-select-choices>-->
+                        <!--</ui-select>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-sm-4">-->
+                    <!--<label>车系</label>-->
+                    <!--<div>-->
+                        <!--<ui-select ng-model="compensatorypolicy.carModelId" theme="bootstrap" on-select="selectCarModel($item, $model)">-->
+                            <!--<ui-select-match placeholder="请选择车系">{{$select.selected.name}}</ui-select-match>-->
+                            <!--<ui-select-choices  repeat="carmodel.id as carmodel in carmodels | filter: $select.search">-->
+                                <!--<div ng-bind-html="carmodel.name | highlight: $select.search"></div>-->
+                            <!--</ui-select-choices>-->
+                        <!--</ui-select>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-sm-4">-->
+                    <!--<label>车型</label>-->
+                    <!--<div>-->
+                        <!--<ui-select ng-model="compensatorypolicy.carTypeId" theme="bootstrap" on-select="selectCarType($item, $model)">-->
+                            <!--<ui-select-match placeholder="请选择车型">{{$select.selected.name}}</ui-select-match>-->
+                            <!--<ui-select-choices  repeat="cartype.id as cartype in cartypes | filter: $select.search">-->
+                                <!--<div ng-bind-html="cartype.name | highlight: $select.search"></div>-->
+                            <!--</ui-select-choices>-->
+                        <!--</ui-select>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="form-group pull-in clearfix">-->
+                <!--<div class="col-sm-12">-->
+                    <!--<label>贷款期限</label>-->
+                    <!--<ui-select multiple ng-model="compensatorypolicy.months" theme="bootstrap" on-select="selectMonths($item, $model)" on-remove="removeMonth($item, $model)">-->
+                        <!--<ui-select-match placeholder="请选择贷款期限" >{{$item.name}}</ui-select-match>-->
+                        <!--<ui-select-choices  repeat="month.code as month in months | filter: $select.search">-->
+                            <!--<div ng-bind-html="month.name | highlight: $select.search"></div>-->
+                        <!--</ui-select-choices>-->
+                    <!--</ui-select>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="form-group pull-in clearfix">-->
+                <!--{{compensatorypolicy.formulaMap}}-->
+            <!--</div>-->
+
+            <!--<div class="form-group pull-in clearfix">-->
+                <!--<tabset justified="true" class="tab-container nav-tabs-alt no-borders m-b-none">-->
+                    <!--<tab ng-repeat="(month,compensatoryPolicyFormulaObjs) in compensatorypolicy.formulaMap" heading="【{{month}}】期">-->
+                        <!--<div>-->
+                            <!--<form editable-form name="mapForm{{month}}">-->
+                                <!--<div class="row wrapper-xs text-right">-->
+                                    <!--<button type="button" class="btn btn-sm btn-default pull-right" ng-show="!mapForm{{month}}.$visible" ng-click="mapForm{{month}}.$show()">编辑</button>-->
+                                    <!--<button type="button" ng-show="mapForm{{month}}.$visible" ng-disabled="mapForm{{month}}.$waiting" class="btn btn-default btn-sm" ng-click="addCompensatoryPolicyFormulaObj(month)">添加方案</button>-->
+                                    <!--<button type="submit" ng-show="mapForm{{month}}.$visible" ng-disabled="mapForm{{month}}.$waiting" class="btn btn-primary btn-sm">保存</button>-->
+                                    <!--<button type="button" ng-show="mapForm{{month}}.$visible" ng-disabled="mapForm{{month}}.$waiting" ng-click="mapForm{{month}}.$cancel()" class="btn btn-default btn-sm">取消</button>-->
+                                <!--</div>-->
+                                <!--<div class="row">-->
+                                    <!--<table class="table table-bordered table-hover table-condensed">-->
+                                        <!--<thead>-->
+                                        <!--<tr>-->
+                                            <!--<th>最小首付比例</th>-->
+                                            <!--<th>最大首付比例</th>-->
+                                            <!--<th>贴息利率</th>-->
+                                            <!--<th>操作</th>-->
+                                        <!--</tr>-->
+                                        <!--</thead>-->
+                                        <!--<tbody>-->
+                                        <!--<tr ng-repeat="compensatoryPolicyFormulaObj in compensatoryPolicyFormulaObjs">-->
+                                            <!--<td>-->
+                                                    <!--<span editable-text="compensatoryPolicyFormulaObj.downPaymentRatioStart" e-form="mapForm{{month}}">-->
+                                                        <!--{{ compensatoryPolicyFormulaObj.downPaymentRatioStart  }}-->
+                                                    <!--</span>-->
+                                            <!--</td>-->
+                                            <!--<td>-->
+                                                    <!--<span editable-text="compensatoryPolicyFormulaObj.downPaymentRatioEnd" e-form="mapForm{{month}}">-->
+                                                        <!--{{ compensatoryPolicyFormulaObj.downPaymentRatioEnd }}-->
+                                                    <!--</span>-->
+                                            <!--</td>-->
+                                            <!--<td>-->
+                                                    <!--<span editable-text="compensatoryPolicyFormulaObj.compensatoryRatio" e-form="mapForm{{month}}">-->
+                                                        <!--{{ compensatoryPolicyFormulaObj.compensatoryRatio }}-->
+                                                    <!--</span>-->
+                                            <!--</td>-->
+                                            <!--<td>-->
+                                                <!--<button type="button" ng-show="mapForm{{month}}.$visible"-->
+                                                        <!--ng-click="removeCompensatoryPolicyFormulaObj($index,month)"-->
+                                                        <!--class="btn btn-danger pull-right btn-sm">-->
+                                                    <!--删除-->
+                                                <!--</button>-->
+                                            <!--</td>-->
+                                        <!--</tr>-->
+                                        <!--</tbody>-->
+                                    <!--</table>-->
+                                <!--</div>-->
+                            <!--</form>-->
+                        <!--</div>-->
+                    <!--</tab>-->
+                <!--</tabset>-->
+            <!--</div>-->
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="submit" ng-disabled="userForm.$invalid" ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

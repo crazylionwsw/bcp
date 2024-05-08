@@ -1,0 +1,147 @@
+<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+
+<div class="hbox hbox-auto-xs bg-light">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{tableTitle}}</div>
+            </div>
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤:请输入角色名称" ng-model="key">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="edit('')">添加</a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none">
+                            <thead>
+                            <tr>
+                                <th>
+                                    编码
+                                </th>
+                                <th>
+                                    角色名称
+                                </th>
+                                <th>
+                                    已分配操作权限
+                                </th>
+                                <th>
+                                    状态
+                                </th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="sysrole in sysroles|filter:{name:key}" ng-class="{true:'danger'}[sysrole.dataStatus == 9]">
+                                <td>{{sysrole.code}}</td>
+                                <td>{{sysrole.name}}</td>
+                                <td>
+                                    <div style="
+                                    width: 100px;
+                                     overflow: hidden;
+                                     text-overflow: ellipsis;
+                                     ">
+                                    <sysresource-list ids="sysrole.sysResourceIds"></sysresource-list>
+                                    </div>
+                                </td>
+                                <td>{{sysrole.dataStatus|dataStatusFilter}}</td>
+                                <td>
+                                    <div class="btn-group dropdown" dropdown>
+                                        <button class="btn-xs btn btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(sysrole)" ng-show="sysrole.dataStatus != 9 && sysrole.id != null" >
+                                                    <!--<i class="ace-icon fa fa-pencil bigger-130"></i>-->编辑
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(sysrole,$index)" ng-show="sysrole.dataStatus != 9 && sysrole.id != null">
+                                                    <!--<i class="ace-icon fa fa-trash-o bigger-130"></i>-->作废
+                                                </a>
+                                                </li>
+                                            <li>
+                                                <!--启用-->
+                                                <a ng-if="sysrole.dataStatus == 9" role="button" data-toggle="modal" ng-click="renew(sysrole, $index)" ng-show="sysrole.dataStatus == 9 && sysrole.id != null ">
+                                                    <!--<i class="ace-icon fa fa-undo bigger-130"></i>-->启用
+                                                </a>
+                                                </li>
+                                            <li>
+                                                <a class="red" href ng-click="delete(sysrole,$index)" ng-show="sysrole.dataStatus == 9 && sysrole.id != null">
+                                                    <!--<i class="ace-icon fa fa-trash-o bigger-130"></i>-->删除
+                                                </a>
+                                            </li>
+                                        </ul>
+
+
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="m-n b-t b-light row lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--模态框-->
+<script type="text/ng-template" id="sysroleinsert.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <form name="userForm" class="form-validation"  >
+                <div class="form-group">
+                    <label>编码 </label>
+                    <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-pattern"
+                           ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                           placeholder="请输入角色编码" ng-model="sysrole.code"  required name="code" type="text">
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">角色编码是必须的!</span>
+                    <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">角色编码不能重复！</span>
+                </div>
+                <div class="form-group">
+                    <label>角色名称 </label>
+                    <input class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-pattern"
+                           ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                           placeholder="请输入角色名称" ng-model="sysrole.name"  required name="name" type="text">
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">角色名称是必须的!</span>
+                    <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">角色名称不能重复！</span>
+                </div>
+                <div class="form-group">
+                    <label>访问权限</label>
+                    <ui-select multiple ng-model="sysrole.sysResourceIds" theme="bootstrap" ng-disabled="disabled" on-select="selectSysResource($item)" >
+                        <ui-select-match placeholder="请选择访问权限" >{{$item.name}}</ui-select-match>
+                        <ui-select-choices  repeat="sysResource.id as sysResource in sysResources | filter: $select.search">
+                            <div style="padding-left:{{sysResource.depth*10}}px" ng-bind-html="sysResource.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </form>
+        </div>
+
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" type="submit" ng-disabled="userForm.$invalid" ng-click="save()" >保  存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取  消</button>
+        </footer>
+    </div>
+</script>

@@ -1,0 +1,11 @@
+com\fuze\bcp\mqreceiver\service\impl\MessageReceiverServiceImpl.class
+com\fuze\bcp\mqreceiver\starter\MqReceiverBootStarter.class
+com\fuze\bcp\mqreceiver\service\SpringDynamicService.class
+com\fuze\bcp\mqreceiver\service\impl\FuzeLogReceiverImpl.class
+com\fuze\bcp\mqreceiver\starter\config\RedisConfig.class
+com\fuze\bcp\mqreceiver\service\IBusinessReceiverService.class
+com\fuze\bcp\mqreceiver\service\impl\FuzeFirstBusinessReceiverImpl.class
+com\fuze\bcp\mqreceiver\starter\config\DubboConfig.class
+com\fuze\bcp\mqreceiver\service\ILogReceiverService.class
+com\fuze\bcp\mqreceiver\starter\config\AmqpConfig.class
+com\fuze\bcp\mqreceiver\service\IMessageReceiverService.class

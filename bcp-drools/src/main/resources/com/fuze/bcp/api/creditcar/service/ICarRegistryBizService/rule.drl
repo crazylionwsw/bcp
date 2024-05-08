@@ -1,0 +1,49 @@
+package com.fuze.bcp.api.bd.service.ICarRegistryBizService;
+
+import com.fuze.bcp.api.drools.bean.DroolsBaseBean;
+import com.fuze.bcp.api.creditcar.bean.carregistry.CarRegistrySubmissionBean;
+
+rule "actSaveCarRegistry"
+    dialect  "java"
+    lock-on-active true
+    when
+        $droolsBeans:DroolsBaseBean(apiBaseBean != null, message: message);
+        $carRegistrySubmissionBean : CarRegistrySubmissionBean() from $droolsBeans.apiBaseBean;
+    then
+        //提车日期
+        if ($carRegistrySubmissionBean.getPickDate() == null || "".equals($carRegistrySubmissionBean.getPickDate())){
+            System.out.println("MSG_CARREGISTRY_PICKDATE_NULL");
+            message.add("MSG_CARREGISTRY_PICKDATE_NULL");
+        }
+        //车辆日期
+        if ($carRegistrySubmissionBean.getRegistryDate() == null || "".equals($carRegistrySubmissionBean.getRegistryDate())){
+            System.out.println("MSG_CARREGISTRY_REGISTRYDATE_NULL");
+            message.add("MSG_CARREGISTRY_REGISTRYDATE_NULL");
+        }
+        //车牌号码
+        if ($carRegistrySubmissionBean.getLicenseNumber() == null || "".equals($carRegistrySubmissionBean.getLicenseNumber())){
+            System.out.println("MSG_CARREGISTRY_LICENSENUMBER_NULL");
+            message.add("MSG_CARREGISTRY_LICENSENUMBER_NULL");
+        }
+        //VIN
+        if ($carRegistrySubmissionBean.getVin() == null || "".equals($carRegistrySubmissionBean.getVin())){
+            System.out.println("MSG_CARREGISTRY_VIN_NULL");
+            message.add("MSG_CARREGISTRY_VIN_NULL");
+        }
+        //车辆型号 (国标型号)
+         if ($carRegistrySubmissionBean.getCarModelNumber() == null || "".equals($carRegistrySubmissionBean.getCarModelNumber())){
+             System.out.println("MSG_CARREGISTRY_CARMODELNUMBER_NULL");
+             message.add("MSG_CARREGISTRY_CARMODELNUMBER_NULL");
+         }
+         //车辆登记证号码（终身唯一）  车辆铭牌
+         if ($carRegistrySubmissionBean.getRegistryNumber() == null || "".equals($carRegistrySubmissionBean.getRegistryNumber())){
+             System.out.println("MSG_CARREGISTRY_REGISTRYNUMBER_NULL");
+             message.add("MSG_CARREGISTRY_REGISTRYNUMBER_NULL");
+         }
+         //发动机号
+          if ($carRegistrySubmissionBean.getMotorNumber() == null || "".equals($carRegistrySubmissionBean.getMotorNumber())){
+              System.out.println("MSG_CARREGISTRY_MOTORNUMBER_NULL");
+              message.add("MSG_CARREGISTRY_MOTORNUMBER_NULL");
+          }
+    update($droolsBeans);
+end

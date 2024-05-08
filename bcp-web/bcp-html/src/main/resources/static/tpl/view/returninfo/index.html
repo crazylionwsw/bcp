@@ -1,0 +1,239 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤" ng-model="query">
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped b-t b-light m-b-none" data-filter="#filter" >
+                            <thead>
+                            <tr>
+                                <th>
+                                    报单支行
+                                </th>
+                                <th>
+                                    渠道支行
+                                </th>
+                                <th>
+                                    业务类型
+                                </th>
+                                <th>
+                                    客户姓名【身份证号码】
+                                </th>
+                                <th>
+                                    分期经理【手机号码】
+                                </th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="returninfo in returninfos|filter:query | orderBy:'ts':true">
+                                <td><transaction-cashsource-info ng-if="returninfo.customerTransactionId !== undefined" id="returninfo.customerTransactionId"></transaction-cashsource-info></td>
+                                <td><transaction-cardealer-cooperationcashsource-info ng-if="returninfo.customerTransactionId !== undefined" id="returninfo.customerTransactionId"></transaction-cardealer-cooperationcashsource-info></td>
+                                <td>{{returninfo.businessTypeCode|BusinessTypeFilter}}</td>
+                                <td><customer-info ng-if="returninfo.customerId !== undefined" id="returninfo.customerId"></customer-info></td>
+                                <td><employee-info ng-if="returninfo.employeeId !== undefined" id="returninfo.employeeId"></employee-info></td>
+                                <td>
+                                    <div class="hidden-sm hidden-xs action-buttons">
+                                        <a class="blue" ng-click="edit(returninfo,$index)" ng-show="true" href>
+                                            <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="wrapper row m-n">
+                                <div class="col-lg-9">
+                                    <!--客户信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">客户信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-block id="returninfo.customerId"></customer-block>
+                                        </div>
+                                    </div>
+                                    <!--资料归还-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">资料归还</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-4">
+                                                    <label>归还时间</label>
+                                                    <div class="input-group" moment-picker="returninfo.returnTime" format="YYYY-MM-DD HH:mm"
+                                                         locale="zh-cn" selectable="true">
+                                                        <input type="text" class="form-control" ng-model="returninfo.returnTime" name="returnTime"/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--档案资料-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">档案资料</span></div>
+                                        <div class="panel-body">
+                                            <customerimage-block ng-if="returninfo != null" bill="returninfo" save="save(bill)"></customerimage-block>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <!--当前业务分期经理 -->
+                                    <div class="panel b-success b-light clearfix">
+                                        <div class="panel-body">
+                                            <a href="" class="thumb avatar pull-left m-r">
+                                                <employee-avatar ng-if="returninfo.employeeId !== undefined" id="returninfo.employeeId"></employee-avatar>
+                                                <i class="on b-white bottom"></i>
+                                            </a>
+                                            <div class="clear">
+                                                <employee-info ng-if="returninfo.employeeId !== undefined" id="returninfo.employeeId"></employee-info>
+                                                <br/><br/>
+                                                <small class="block text-muted text-xs"><i class="icon-action-redo"></i>当前业务分期经理</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--弹出层页面foot-->
+                <div class="wrapper-sm b-t b-light text-right">
+                    <!--<button class="btn btn-success" type="submit" ng-click="confirm()">确 认</button>-->
+                    <button class="btn btn-primary" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--弹出层页面内容-->
+    <!--<div class="bg-light lter b-b wrapper-md">-->
+        <!--<h1 class="m-n font-thin h3">{{formTitle}}&#45;&#45;{{returninfo.businessType.name}}</h1>-->
+    <!--</div>-->
+    <!--<div class="wrapper-md">-->
+
+        <!--<div class="row">-->
+            <!--<div class="col-lg-9">-->
+
+                <!--<div class="panel panel-default">-->
+                    <!--<div class="panel-heading"><span class="h4">客户信息</span></div>-->
+                    <!--<div class="panel-body">-->
+                        <!--<customer-block id="returninfo.customerId"></customer-block>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="panel panel-default">-->
+                    <!--<div class="panel-heading">-->
+                        <!--<span class="h4">资料归还</span>-->
+                    <!--</div>-->
+                    <!--<div class="panel-body">-->
+                        <!--<div class="form-group pull-in clearfix">-->
+                            <!--<div class="col-sm-4">-->
+                                <!--<label>归还时间</label>-->
+                                <!--<div class="input-group" moment-picker="returninfo.returnTime" format="YYYY-MM-DD HH:mm"-->
+                                     <!--locale="zh-cn" selectable="true">-->
+                                    <!--<input type="text" class="form-control" ng-model="returninfo.returnTime" name="returnTime"/>-->
+									<!--<span class="input-group-btn">-->
+										<!--<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>-->
+									<!--</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+
+
+                <!--<footer class="text-right">-->
+                    <!--<button class="btn btn-success" type="submit" ng-click="saveFrom('')">保 存</button>-->
+                    <!--<button class="btn btn-warning" type="button" ng-click="close()">关闭</button>-->
+                <!--</footer>-->
+
+            <!--</div>-->
+
+            <!--<div class="col-lg-3">-->
+
+
+
+            <!--</div>-->
+
+        <!--</div>-->
+    <!--</div>-->
+
+
+
+
+
+
+</pageslide>
+<!------查询输入框-->
+<script type="text/ng-template" id="query.html">
+    <query-form customer="customerFilter" query="queryBill(customer)" clear="clearQuery()"></query-form>
+</script>
+<!------签批对话框------>
+<script type="text/ng-template" id="audit.html">
+    <signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>
+<!------特殊情况信息录入------>
+<script type="text/ng-template" id="commentForm.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <textarea class="form-control" rows="6" placeholder="输入特殊情况说明" ng-model="returninfo.comment"></textarea>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-primary" type="button"  ng-click="save()">保 存</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取 消</button>
+        </footer>
+    </div>
+</script>

@@ -1,0 +1,341 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">
+        <span>{{title}}</span>
+    </h1>
+</div>
+
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>{{formtitle}}</strong>
+                </div>
+                <div class="panel-body">
+                    <form name="userForm" class="form-horizontal form-validation">
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">编码</label>
+                                <div class="col-sm-8">
+                                    <!--需要唯一性验证-->
+                                    <input type="text" class="form-control" placeholder="请输入编码"
+
+                                           ng-model="creditproduct.code" ng-model-options="{updateOn: 'blur'}"
+                                           name="code" required>
+                                    <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">编码是必须的!</span>
+                                    <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">编码不能重复！</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">名称</label>
+                                <div class="col-sm-8">
+                                    <!--需要唯一性验证-->
+                                    <input type="text" class="form-control" placeholder="请输入名称"
+
+                                           ng-model="creditproduct.name" ng-model-options="{updateOn: 'blur'}"
+                                           name="name" required>
+                                    <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">名称是必须的!</span>
+                                    <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">名称不能重复！</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">开始日期</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group" moment-picker="creditproduct.startDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                                        <input type="text" class="form-control" ng-model="creditproduct.startDate" name="startDate"/>
+                                        <span class="input-group-btn">
+                                             <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">结束日期</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group" moment-picker="creditproduct.endDate" format="YYYY-MM-DD" locale="zh-cn" selectable="true">
+                                        <input type="text" class="form-control"
+                                               ui-validate="{enddateInvalid:'checkEndDate($value)'}"
+                                               ui-validate-watch="'creditproduct.startDate'"
+                                               name="endDate"
+                                               ng-model-options="{ updateOn: 'blur' }"
+                                               ng-model="creditproduct.endDate" name="startDate"/>
+                                        <span class="input-group-btn">
+                                             <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="userForm.endDate.$error.enddateInvalid" class="help-block text-danger">结束日期必须大于开始日期!</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-6">
+                                <label class="col-sm-2 control-label">限售地区</label>
+                                <div class="col-sm-10">
+                                    <ui-select multiple ng-model="creditproduct.provinceIds" theme="bootstrap" ng-disabled="disabled">
+                                        <ui-select-match placeholder="请选择地区" >{{$item.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="region.id as region in regions | filter: $select.search">
+                                            <small>
+                                                <span style="padding-left:{{region.depth*10}}px" ng-bind-html="region.name"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 pull-right">
+                                <label class="col-sm-2 control-label">是否贴息？</label>
+                                <div class="col-sm-10">
+                                    <div class="checkbox">
+                                        <label class="i-checks">
+                                            <input ng-model="creditproduct.compensatoryInterest" type="checkbox"><i></i> 是
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group pull-in clearfix" ng-show="creditproduct.compensatoryInterest">
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">贴息月数</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input class="form-control" data-min="0" data-step="1" style="display: block;" type="number" ng-model="creditproduct.compensatory.months">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">月</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">贴息比例</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" data-max="100" style="display: block;" type="number"
+                                                ng-model="creditproduct.compensatory.ratio">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">贴息金额</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group bootstrap-touchspin">
+                                        <input type="number" class="form-control" data-min="0" style="..." ng-model="creditproduct.compensatory.amount">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">贷款限额</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group bootstrap-touchspin">
+                                        <input type="number" class="form-control" data-min="0" style="..." ng-model="creditproduct.compensatory.creditAmount">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">首付比例</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input class="form-control" data-min="0" style="display: block;" type="number"
+                                               ng-model="creditproduct.salePrice.downPaymentRatio">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">贷款比例</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0"
+                                                ui-validate="{creditRatioInvalid:'checkRatio($value)'}"
+                                                name="creditRatio"
+                                                style="display: block;" type="number"
+                                                ng-model="creditproduct.salePrice.creditRatio">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                    <span ng-show="userForm.creditRatio.$dirty && userForm.creditRatio.$error.creditRatioInvalid" class="help-block text-danger">首付比例+贷款比例+贴息比例=100%!</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">贷款限额</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" style="display: block;" type="number" ng-model="creditproduct.salePrice.limitAmount">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">贷款月数</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input class="form-control" data-min="0" style="display: block;" type="number" ng-model="creditproduct.salePrice.creditMonths">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">月</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">手续费率</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" style="display: block;" type="number" ng-model="creditproduct.salePrice.chargeRatio">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">手续费</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" style="display: block;" type="number" ng-model="creditproduct.salePrice.charge">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">银行利率</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" style="display: block;" type="number" ng-model="creditproduct.salePrice.bankChargeRatio">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">富择利率</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" style="display: block;" type="number" ng-model="creditproduct.salePrice.fuzeChargeRatio">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">担保方式</label>
+                                <div class="col-sm-8">
+                                    <ui-select multiple ng-model="creditproduct.guaranteeWays" theme="bootstrap" ng-disabled="disabled">
+                                        <ui-select-match placeholder="请选择担保方式" >{{$item.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="guaranteeway in guaranteeways">
+                                            <small>
+                                                <span ng-bind-html="guaranteeway.name"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">担保费</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" style="display: block;" type="number" ng-model="creditproduct.salePrice.guaranteeFee">
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">服务费</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" style="display: block;" type="number" ng-model="creditproduct.salePrice.serviceFee"/>
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">其它费用</label>
+                                <div class="col-sm-8">
+                                    <div class=" input-group bootstrap-touchspin">
+                                        <input  class="form-control" data-min="0" style="display: block;" type="number" ng-model="creditproduct.salePrice.serviceFee"/>
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">资金来源</label>
+                                <div class="col-sm-8">
+                                    <ui-select ng-model="creditproduct.sourcerateId" theme="bootstrap" ng-disabled="disabled">
+                                        <ui-select-match placeholder="请选择资金来源">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="sourcerate.id as sourcerate in sourcerates">
+                                            <small>
+                                                {{sourcerate.name}}
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">业务类型</label>
+                                <div class="col-sm-8">
+                                    <ui-select multiple ng-model="creditproduct.businessTypeIds" theme="bootstrap" ng-disabled="disabled">
+                                        <ui-select-match placeholder="请选择业务类型" >{{$item.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="businessType.id as businessType in businessTypeIds">
+                                            <small>
+                                                <span ng-bind-html="businessType.name"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">车辆用途</label>
+                                <div class="col-sm-8">
+                                    <ui-select multiple ng-model="creditproduct.creditUsages" theme="bootstrap" ng-disabled="disabled">
+                                        <ui-select-match placeholder="请选择车辆用途">{{$item.name}} &lt;{{$item.code}}&gt;</ui-select-match>
+                                        <ui-select-choices repeat="creditusage in creditusages ">
+                                            <small>
+                                                <span ng-bind-html="''+ creditusage.name"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="col-sm-4 control-label">还款方式</label>
+                                <div class="col-sm-8">
+                                    <ui-select multiple ng-model="creditproduct.repaymentWays" theme="bootstrap" ng-disabled="disabled">
+                                        <ui-select-match placeholder="请选择还款方式" >{{$item.name}}</ui-select-match>
+                                        <ui-select-choices  repeat="repaymentway in repaymentways">
+                                            <small>
+                                                <span ng-bind-html="repaymentway.name"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="row">
+                            <tabset justified="true" class="tab-container" tabContentTransclude="openme()">
+                                <tab heading="适用车型">
+                                    <div class="table-responsive">
+                                        <cartype-list ng-if="creditproduct.carTypeIds !== undefined" object="creditproduct" ids="creditproduct.carTypeIds" save="saveCarTypes(ids)"></cartype-list>
+                                        <div class="row wrapper">
+                                            <div class="col-sm-6 text-left" >
+                                                <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="assignCarType('')"><i class="fa fa-plus"></i>添加</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tab>
+                            </tabset>
+                        </div>
+                    </form>
+                </div>
+                <footer class="panel-footer text-right bg-light lter">
+                    <button class="btn btn-primary" type="button"  ng-click="saveform('')">保存</button>
+                    <button class="btn btn-warning" type="button" ui-sref="app.business.creditproduct">返 回</button>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>

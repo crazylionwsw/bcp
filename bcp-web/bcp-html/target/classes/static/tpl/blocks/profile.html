@@ -1,0 +1,99 @@
+<!-- profile -->
+<button class="btn btn-default no-shadow pos-abt"  ui-toggle-class="active" target=".profile" tooltip="帐户信息" tooltip-placement="left">
+    <i class="icon-user"></i>
+</button>
+<div class="panel-heading bg-success">
+    帐户信息
+</div>
+<div class="wrapper b-t b-light bg-light lter r-b">
+    <input type="file" name="myAvatar" id="myAvatar" nv-file-select="" uploader="avatarUploader" auto-upload="true" class="hidden"/>
+    <a ng-click="changeAvatar()" style="display:inline-block;width: 100%;text-align: center" title="单击更换头像">
+    <span class="thumb-lg w-auto-folded avatar m-t-sm">
+        <img ng-src="{{user.employee.avatar}}" alt="..."/>
+    </span>
+    </a>
+
+<span class="clear">
+    <span class="block m-t-sm" style="text-align: center">
+        <strong class="font-bold text-lt ng-binding">{{user.username}}</strong>
+    </span>
+</span>
+</div>
+<div class="panel-body">
+    <form class="form-horizontal">
+        <div class="form-group pull-in clearfix">
+            <div class="col-sm-12">
+                <label class="col-sm-4 control-label">密码：</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control"
+                           ng-model="user.password" placeholder="修改密码"/>
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg"></div>
+        <div class="form-group pull-in clearfix">
+            <div class="col-sm-12">
+                <label class="col-sm-4 control-label">姓名：</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"
+                           ng-model="user.employee.username"/>
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg"></div>
+        <div class="form-group pull-in clearfix">
+            <div class="col-sm-12">
+                <label class="col-sm-4 control-label">生日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group bootstrap-touchspin">
+                        <input class="form-control" ng-model="user.employee.birthday" ng-focus="startDateOpended=true" name="birthday" datepicker-popup="{{format}}"  is-open="startDateOpended"  datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="关闭" type="text">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openDateDialogBirthday($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg"></div>
+        <div class="form-group pull-in clearfix">
+            <div class="col-sm-12">
+                <label class="col-sm-4 control-label">性别：</label>
+                <div class="col-sm-8 checkbox">
+                    <label class="checkbox-inline i-checks">
+                        <input value="0" ng-model="user.employee.gender" type="radio"><i></i>男
+                    </label>
+                    <label class="checkbox-inline i-checks">
+                        <input value="1" ng-model="user.employee.gender" type="radio"><i></i>女
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg"></div>
+        <div class="form-group pull-in clearfix">
+            <div class="col-sm-12">
+                <label class="col-sm-4 control-label">Email：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" name="email" ng-model="user.employee.email" type="email"/>
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg"></div>
+        <div class="form-group pull-in clearfix">
+            <div class="col-sm-12">
+                <label class="col-sm-4 control-label">手机：</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="cell"
+                           ng-model="user.employee.cell"
+                           name="cell">
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg"></div>
+        <div class="form-group pull-in clearfix">
+            <div class="col-sm-12">
+                <button ng-click="saveAccount()" class="btn btn-block btn-success">修改</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- /profile -->

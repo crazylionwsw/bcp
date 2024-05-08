@@ -1,0 +1,248 @@
+package com.fuze.bcp.server.creditcar.IOrderBizService;
+
+import com.fuze.bcp.api.drools.bean.DroolsBaseBean;
+import com.fuze.bcp.api.creditcar.bean.OrderSubmissionBean;
+import com.fuze.bcp.api.customer.bean.CustomerBean
+
+rule "actSaveOrder"
+    dialect "java"
+    lock-on-active true
+when
+    $droolsBeans:DroolsBaseBean(apiBaseBean != null, message: message);
+    $orderSubmissionBean : OrderSubmissionBean() from $droolsBeans.apiBaseBean;
+then
+    //提交前检查反担保人
+    if($orderSubmissionBean.getNeedCounterGuarantor() == 1){    //默认是1
+        //客户与反担保人身份证号相同
+       if($orderSubmissionBean.getCounterGuarantor().getIdentifyNo().equals($orderSubmissionBean.getCreditMaster().getIdentifyNo())){
+            System.out.println("MSG_SAME_IDENTIFYNO_CUSTOMER_COUNTERGUARANTOR");
+            message.add("MSG_SAME_IDENTIFYNO_CUSTOMER_COUNTERGUARANTOR");
+       }
+       //检查反担保人姓名
+       if($orderSubmissionBean.getCounterGuarantor().getName() == null || "".equals($orderSubmissionBean.getCounterGuarantor().getName())){
+            System.out.println("MSG_NO_COUNTERGUARANTOR_NAME");
+            message.add("MSG_NO_COUNTERGUARANTOR_NAME");
+       }
+       //检查反担保人性别
+      if($orderSubmissionBean.getCounterGuarantor().getGender() == null){
+           System.out.println("MSG_NO_COUNTERGUARANTOR_GENDER");
+           message.add("MSG_NO_COUNTERGUARANTOR_GENDER");
+      }
+      //检查反担保人民族
+      if($orderSubmissionBean.getCounterGuarantor().getNationality() == null || "".equals($orderSubmissionBean.getCounterGuarantor().getNationality())){
+          System.out.println("MSG_NO_COUNTERGUARANTOR_NATIONALITY");
+          message.add("MSG_NO_COUNTERGUARANTOR_NATIONALITY");
+     }
+     //检查反担保人身份证号
+     if($orderSubmissionBean.getCounterGuarantor().getIdentifyNo() == null || "".equals($orderSubmissionBean.getCounterGuarantor().getIdentifyNo())){
+          System.out.println("MSG_NO_COUNTERGUARANTOR_IDENTIFYNO");
+          message.add("MSG_NO_COUNTERGUARANTOR_IDENTIFYNO");
+     }
+     //检查反担保人身份证住址
+     if($orderSubmissionBean.getCounterGuarantor().getAddress() == null || "".equals($orderSubmissionBean.getCounterGuarantor().getAddress())){
+           System.out.println("MSG_NO_COUNTERGUARANTOR_ADDRESS");
+           message.add("MSG_NO_COUNTERGUARANTOR_ADDRESS");
+      }
+      //检查反担保人签发机关
+      if($orderSubmissionBean.getCounterGuarantor().getAuthorizeBy() == null || "".equals($orderSubmissionBean.getCounterGuarantor().getAuthorizeBy())){
+         System.out.println("MSG_NO_COUNTERGUARANTOR_AUTHORIZEBY");
+         message.add("MSG_NO_COUNTERGUARANTOR_AUTHORIZEBY");
+      }
+      //检查反担保人身份证有效期
+      if($orderSubmissionBean.getCounterGuarantor().getIdentifyValid() == null){
+         System.out.println("MSG_NO_COUNTERGUARANTOR_IDENTIFYVALID");
+         message.add("MSG_NO_COUNTERGUARANTOR_IDENTIFYVALID");
+      }
+      //检查反担保人单位名称
+      if($orderSubmissionBean.getCounterGuarantor().getCustomerJob().getCompanyName() == null || "".equals($orderSubmissionBean.getCounterGuarantor().getCustomerJob().getCompanyName())){
+        System.out.println("MSG_NO_COUNTERGUARANTOR_JOB_COMPANYNAME");
+        message.add("MSG_NO_COUNTERGUARANTOR_JOB_COMPANYNAME");
+      }
+      //检查反担保人单位地址
+      if($orderSubmissionBean.getCounterGuarantor().getCustomerJob().getCompanyAddress() == null || "".equals($orderSubmissionBean.getCounterGuarantor().getCustomerJob().getCompanyAddress())){
+              System.out.println("MSG_NO_COUNTERGUARANTOR_JOB_COMPANYADDRESS");
+              message.add("MSG_NO_COUNTERGUARANTOR_JOB_COMPANYADDRESS");
+      }
+    }
+    //检查指标人
+    if ($orderSubmissionBean.getRelation().equals("0")) { //指标人关系为本人
+        if ($orderSubmissionBean.getPledgeCustomer() != null) {
+            //指标人和贷款主体身份证号不同
+            if (!$orderSubmissionBean.getPledgeCustomer().getIdentifyNo().equals($orderSubmissionBean.getCreditMaster().getIdentifyNo())) {
+                System.out.println("INCORRECT_RELATIONSHIP");
+                message.add("INCORRECT_RELATIONSHIP");
+            }
+        }
+    } else {
+            //检查抵押人
+            if ($orderSubmissionBean.getPledgeCustomer() != null) {
+    //            姓名
+                if($orderSubmissionBean.getPledgeCustomer().getName() == null || "".equals($orderSubmissionBean.getPledgeCustomer().getName())){
+                    System.out.println("NO_PLEDGE_CUSTOMER_NAME");
+                    message.add("NO_PLEDGE_CUSTOMER_NAME");
+                }
+    //            民族
+                if($orderSubmissionBean.getPledgeCustomer().getNationality()== null || "".equals($orderSubmissionBean.getPledgeCustomer().getNationality())){
+                    System.out.println("MSG_NO_NATIONALITY");
+                    message.add("MSG_NO_NATIONALITY");
+                 }
+    //            身份证号
+                if($orderSubmissionBean.getPledgeCustomer().getIdentifyNo() == null || "".equals($orderSubmissionBean.getPledgeCustomer().getIdentifyNo())){
+                    System.out.println("NO_PLEDGE_CUSTOMER_IDENTIFYNO");
+                    message.add("NO_PLEDGE_CUSTOMER_IDENTIFYNO");
+                }
+    //            签发机关
+                if($orderSubmissionBean.getPledgeCustomer().getAuthorizeBy() == null || "".equals($orderSubmissionBean.getPledgeCustomer().getAuthorizeBy())){
+                    System.out.println("NO_PLEDGE_CUSTOMER_AUTHORIZEBY");
+                    message.add("NO_PLEDGE_CUSTOMER_AUTHORIZEBY");
+                }
+    //          身份证住址
+                if($orderSubmissionBean.getPledgeCustomer().getAddress() == null || "".equals($orderSubmissionBean.getPledgeCustomer().getAddress())){
+                    System.out.println("NO_PLEDGE_CUSTOMER_ADDRESS");
+                    message.add("NO_PLEDGE_CUSTOMER_ADDRESS");
+                }
+    //            身份证有效期
+                if($orderSubmissionBean.getPledgeCustomer().getIdentifyValid() == null){
+                    System.out.println("NO_PLEDGE_CUSTOMER_IDENTIFYVALID");
+                    message.add("NO_PLEDGE_CUSTOMER_IDENTIFYVALID");
+                }
+            }else{
+                System.out.println("NO_PLEDGE_CUSTOMER");
+                message.add("NO_PLEDGE_CUSTOMER");
+            }
+      }
+
+    //检查还款信息   总还款金额 = 首月还款金额 + 每月还款金额 * 11
+    if(Integer.parseInt($orderSubmissionBean.getRepaymentAmountSum()) != Integer.parseInt($orderSubmissionBean.getRepaymentAmountFirstMonth()) + Integer.parseInt($orderSubmissionBean.getRepaymentAmountMonthly()) * ($orderSubmissionBean.getCustomerLoan().getRateType().getMonths() -1)){
+       System.out.println("MSG_ERROR_REPAYMENTCOUNT");
+       message.add("MSG_ERROR_REPAYMENTCOUNT");
+    }
+
+    //检查开票价
+    if($orderSubmissionBean.getCustomerCar().getReceiptPrice() == null || "".equals($orderSubmissionBean.getCustomerCar().getReceiptPrice())){
+        System.out.println("MSG_NO_CUSTOMERCAR_RECEIPTPRICE");
+        message.add("MSG_NO_CUSTOMERCAR_RECEIPTPRICE");
+    }
+    //检查车辆成交价
+    if($orderSubmissionBean.getCustomerCar().getRealPrice() == null || "".equals($orderSubmissionBean.getCustomerCar().getRealPrice())){
+        System.out.println("MSG_NO_CUSTOMERCAR_REALPRICE");
+        message.add("MSG_NO_CUSTOMERCAR_REALPRICE");
+    }
+
+    if($orderSubmissionBean.getCustomerLoan() != null){
+        //检查贷款金额(贷款金额不能少于四万)
+            if($orderSubmissionBean.getCustomerLoan().getCreditAmount() != null){
+                if($orderSubmissionBean.getCustomerLoan().getRealityBankFeeAmount() < 40000){
+                    System.out.println("MSG_CUSTOMERLOAN_REALITYBANKFEEAMOUNT_LESSSIWAN");
+                    message.add("MSG_CUSTOMERLOAN_REALITYBANKFEEAMOUNT_LESSSIWAN");
+                }
+            }else{
+                System.out.println("MSG_NO_CUSTOMERLOAN_CREDITAMOUNT");
+                message.add("MSG_NO_CUSTOMERLOAN_CREDITAMOUNT");
+            }
+            //检查贷款比例
+            if($orderSubmissionBean.getCustomerLoan().getCreditRatio() == null || "".equals($orderSubmissionBean.getCustomerLoan().getCreditRatio())){
+                System.out.println("MSG_NO_CUSTOMERLOAN_CREDITRATIO");
+                message.add("MSG_NO_CUSTOMERLOAN_CREDITRATIO");
+            }
+            //检查首付金额
+            if($orderSubmissionBean.getCustomerLoan().getDownPayment() == null || "".equals($orderSubmissionBean.getCustomerLoan().getDownPayment())){
+                System.out.println("MSG_NO_CUSTOMERLOAN_DOWNPAYMENT");
+                message.add("MSG_NO_CUSTOMERLOAN_DOWNPAYMENT");
+            }
+            //检查首付比例
+            if($orderSubmissionBean.getCustomerLoan().getDownPaymentRatio() != null){
+                if($orderSubmissionBean.getBusinessTypeCode().equals("NC")){
+                    if($orderSubmissionBean.getCustomerLoan().getDownPaymentRatio()<20){
+                        System.out.println("MSG_ERROR_CUSTOMERLOAN_NC_DOWNPAYMENTRATIO");
+                        message.add("MSG_ERROR_CUSTOMERLOAN_NC_DOWNPAYMENTRATIO");
+                    }
+                }
+                if($orderSubmissionBean.getBusinessTypeCode().equals("OC")){
+                    if($orderSubmissionBean.getCustomerLoan().getDownPaymentRatio()<30){
+                        System.out.println("MSG_ERROR_CUSTOMERLOAN_OC_DOWNPAYMENTRATIO");
+                        message.add("MSG_ERROR_CUSTOMERLOAN_OC_DOWNPAYMENTRATIO");
+                    }
+                }
+            }else{
+                System.out.println("MSG_NO_CUSTOMERLOAN_DOWNPAYMENTRATIO");
+                message.add("MSG_NO_CUSTOMERLOAN_DOWNPAYMENTRATIO");
+            }
+
+            //检查首付比例+贷款比例是否正确
+            if(100 != $orderSubmissionBean.getCustomerLoan().getDownPaymentRatio() + $orderSubmissionBean.getCustomerLoan().getCreditRatio()){
+                System.out.println("MSG_ERROR_DOWNPAYMENTRATIONANDCREDITRATIO");
+                message.add("MSG_ERROR_DOWNPAYMENTRATIONANDCREDITRATIO");
+            }
+
+            //检查贷款期数
+            if($orderSubmissionBean.getCustomerLoan().getRateType().getMonths() ==null){
+                System.out.println("MSG_NO_CUSTOMERLOAN_RATETYPEMONTH");
+                message.add("MSG_NO_CUSTOMERLOAN_RATETYPEMONTH");
+            }
+
+            //检查银行手续费
+            if($orderSubmissionBean.getCustomerLoan().getBankFeeAmount() != null){
+                if($orderSubmissionBean.getCustomerLoan().getBankFeeAmount() != $orderSubmissionBean.getCustomerLoan().getCreditAmount() * ($orderSubmissionBean.getCustomerLoan().getRateType().getMonths()*$orderSubmissionBean.getCustomerLoan().getRateType().getRatio())){
+                    System.out.println("MSG_ERROR_CUSTOMERLOAN_BANKFEEAMOUNT");
+                    message.add("MSG_ERROR_CUSTOMERLOAN_BANKFEEAMOUNT");
+                }
+            }else{
+                System.out.println("MSG_NO_CUSTOMERLOAN_BANKFEEAMOUNT");
+                message.add("MSG_NO_CUSTOMERLOAN_BANKFEEAMOUNT");
+            }
+    }
+
+    //检查贷款人详细信息
+    if($orderSubmissionBean.getPrintNeedEarningProof() == 1){
+        //检查贷款人家庭住址
+        if($orderSubmissionBean.getCreditMaster().getAddress() == null || "".equals($orderSubmissionBean.getCreditMaster().getAddress())){
+            System.out.println("MSG_NO_CUSTOMER_ADDRESS");
+            message.add("MSG_NO_CUSTOMER_ADDRESS");
+        }
+        //检查贷款人人事姓名
+        if($orderSubmissionBean.getCreditMaster().getCustomerJob().getHrName() == null || "".equals($orderSubmissionBean.getCreditMaster().getCustomerJob().getHrName())){
+            System.out.println("MSG_NO_CUSTOMER_JOB_HRNAME");
+            message.add("MSG_NO_CUSTOMER_JOB_HRNAME");
+        }
+        //检查贷款人人事电话
+        if($orderSubmissionBean.getCreditMaster().getCustomerJob().getHrCell() == null || "".equals($orderSubmissionBean.getCreditMaster().getCustomerJob().getHrCell())){
+            System.out.println("MSG_NO_CUSTOMER_JOB_HRCELL");
+            message.add("MSG_NO_CUSTOMER_JOB_HRCELL");
+        }
+        //检查贷款人单位地址
+        if($orderSubmissionBean.getCreditMaster().getCustomerJob().getCompanyAddress() == null || "".equals($orderSubmissionBean.getCreditMaster().getCustomerJob().getCompanyAddress())){
+            System.out.println("MSG_NO_CUSTOMER_JOB_COMPANYADDRESS");
+            message.add("MSG_NO_CUSTOMER_JOB_COMPANYADDRESS");
+        }
+        //检查贷款人单位职务
+        if($orderSubmissionBean.getCreditMaster().getCustomerJob().getJob() == null || "".equals($orderSubmissionBean.getCreditMaster().getCustomerJob().getJob())){
+            System.out.println("MSG_NO_CUSTOMER_JOB_JOB");
+            message.add("MSG_NO_CUSTOMER_JOB_JOB");
+        }
+        //检查贷款人工作年限
+        if($orderSubmissionBean.getCreditMaster().getCustomerJob().getWorkDate() == null || "".equals($orderSubmissionBean.getCreditMaster().getCustomerJob().getWorkDate())){
+            System.out.println("MSG_NO_CUSTOMER_JOB_WORKDATE");
+            message.add("MSG_NO_CUSTOMER_JOB_WORKDATE");
+        }
+        //检查贷款人年收入
+        if($orderSubmissionBean.getCreditMaster().getCustomerJob().getSalary() == null || "".equals($orderSubmissionBean.getCreditMaster().getCustomerJob().getSalary())){
+            System.out.println("MSG_NO_CUSTOMER_JOB_SALARY");
+            message.add("MSG_NO_CUSTOMER_JOB_SALARY");
+        }
+
+    }
+
+    //检查是否平行进口车
+    if($orderSubmissionBean.getCustomerCar().getParallelImport().equals("1")){//1代表平行进口车
+        if($orderSubmissionBean.getCustomerCar().getConfigures() == null){
+            System.out.println("MSG_NO_CUSTOMER_CAR_CONFIGURES");
+            message.add("MSG_NO_CUSTOMER_CAR_CONFIGURES");
+        }
+        if($orderSubmissionBean.getCustomerCar().getMl() == null){
+            System.out.println("MSG_NO_CUSTOMER_CAR_ML");
+            message.add("MSG_NO_CUSTOMER_CAR_ML");
+        }
+    }
+    update($droolsBeans);
+end

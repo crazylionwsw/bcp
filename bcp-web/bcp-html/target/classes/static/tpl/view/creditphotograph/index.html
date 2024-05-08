@@ -1,0 +1,69 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3">{{title}}</h1>
+    </div>
+    <div class="wrapper-md">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{tableTitle}}
+            </div>
+            <div class="row wrapper">
+                <div class="col-sm-4 m-b-xs ">
+                    <select class="form-control" ng-model="creditphotograph.uploadFinish" ng-change="search()">
+                        <option value = "false">待上传</option>
+                        <option value = "true">已上传</option>
+                    </select>
+                </div>
+                <div class="col-sm-8 m-b-xs text-right ">
+                    <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped b-t b-light m-b-none" data-filter="#filter" >
+                    <thead>
+                    <tr>
+                        <th>支行</th>
+                        <th>客户姓名【身份证】</th>
+                        <th>提交时间</th>
+                        <th>征信状态</th>
+                        <th ng-show="creditphotograph.uploadFinish == 'true'">PDF状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="creditphotograph in creditphotographs" >
+                        <td><cashsource-info ng-if="creditphotograph.cashSourceId !== undefined" id="creditphotograph.cashSourceId"></cashsource-info></td>
+                        <td><customer-info ng-if="creditphotograph.customerId !== undefined" id="creditphotograph.customerId"></customer-info></td>
+                        <td>{{creditphotograph.ts |date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <td>{{creditphotograph.uploadFinish | creditphotographFilter}}</td>
+                        <!--<td ng-if="creditphotograph.imageFileIds.length==0" ng-show="creditphotograph.uploadFinish == true && creditphotograph.imageFileIds.length == 0">已生成</td>
+                        <td ng-if="creditphotograph.imageFileIds.length>0" ng-show="creditphotograph.uploadFinish == true && creditphotograph.imageFileIds.length>0">未生成</td>-->
+                        <td ng-show="creditphotograph.uploadFinish == true">{{creditphotograph.status | creditphotographStatus}}</td>
+                        <td>
+                            <div class="hidden-sm hidden-xs action-buttons">
+                                <a class="blue" ng-click="edit(creditphotograph)" ng-show="true" href>
+                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <footer class="panel-footer" ng-show="!isReferenceDialog">
+                <div class="row">
+                    <div class="col-sm-4 text-left">
+                        <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                    </div>
+                    <div class="col-sm-8 text-right">
+                        <pagination max-size="10" more="true"  boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="query.html">
+    <query-form customer="customerFilter" query="queryBill(customer)" clear="clearQuery()"></query-form>
+</script>

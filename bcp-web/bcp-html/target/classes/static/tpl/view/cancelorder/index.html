@@ -1,0 +1,294 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell" style="overflow-x: hidden;overflow-y: auto">
+                    <div class="cell-inner">
+
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs ">
+                                <select ng-model="searchFilter.statusValue" class="form-control" ng-change="search()">
+                                    <option value="-1">全部</option>
+                                    <option value="100">待处理</option>
+                                    <option value="0">待审核</option>
+                                    <option value="1">审核中</option>
+                                    <option value="2">审核通过</option>
+                                    <option value="9">拒绝</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1 text-left">
+                                <select class="form-control" ng-model="pageSize" ng-change="changePageSize()">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="1000">1000</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                            <div class="col-sm-1 m-b-xs text-right "></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <table class="table table-striped b-t b-light m-b-none" data-filter="#filter" >
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                序号
+                                            </th>
+                                            <th>
+                                                报单支行
+                                            </th>
+                                            <th data-toggle="true">
+                                                客户姓名【身份证】
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr style="height: 40px" ng-repeat="cancelorder in cancelorders|filter:query" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[cancelorder.approveStatus]">
+                                        <td>{{$index+1}}</td>
+                                        <td><transaction-cashsource-info ng-if="cancelorder.transaction !== undefined" transaction="cancelorder.transaction"></transaction-cashsource-info></td>
+                                        <td><customer-info id="cancelorder.customerId"></customer-info></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-lg-7" style="margin-left:-40px;overflow: scroll;overflow-y: hidden;">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                渠道支行
+                                            </th>
+                                            <th>
+                                                业务类型
+                                            </th>
+                                            <th>
+                                                分期经理【手机号码】
+                                            </th>
+                                            <th class="text-right">
+                                                贷款金额【期限-类型】
+                                            </th>
+                                            <th>
+                                                取消原因
+                                            </th>
+                                            <th>
+                                                审核状态
+                                            </th>
+                                            <th>
+                                                当前任务
+                                            </th>
+                                            <th>
+                                                提交时间
+                                            </th>
+                                            <th>
+                                                业务处理时间
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height: 40px" ng-repeat="cancelorder in cancelorders|filter:query" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[cancelorder.approveStatus]">
+                                            <td><transaction-cardealer-cooperationcashsource-info ng-if="cancelorder.transaction !== undefined" transaction="cancelorder.transaction"></transaction-cardealer-cooperationcashsource-info></td>
+                                            <td>{{cancelorder.businessTypeCode | BusinessTypeFilter}}</td>
+                                            <td><employee-info ng-if="cancelorder.employeeId !== undefined" id="cancelorder.employeeId"></employee-info></td>
+                                            <td class="text-right"><payment-orderamount id="cancelorder.customerTransactionId"></payment-orderamount></td>
+                                            <td>{{cancelorder.reason}}</td>
+                                            <td>{{cancelorder.approveStatus | approveStatusFilter}}</td>
+                                            <td><flow-getpresenttaskgroup billtypecode="cancelorder.billTypeCode" billid="cancelorder.id" ng-if="cancelorder.transaction !== undefined" transaction="cancelorder.transaction"></flow-getpresenttaskgroup></td>
+                                            <td>{{cancelorder.ts|momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                            <td>{{cancelorder.approveDate | momentDate: 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-center">本页合计：</td>
+                                            <td class="text-left">{{totalCreditAmount | currency:"￥"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-1" style="margin-left:-25px;">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <th>
+                                            我的任务
+                                        </th>
+                                        <th>
+                                            操作
+                                        </th>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height: 40px" ng-repeat="cancelorder in cancelorders|filter:query" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[cancelorder.approveStatus]">
+                                            <td><flow-info ng-if="cancelorder.id !== undefined"  billtypecode="cancelorder.billTypeCode" billid="cancelorder.id"></flow-info></td>
+                                            <td>
+                                                <div class=" btn-group dropdown" dropdown>
+                                                    <button class="btn btn-success btn-xs" dropdown-toggle> 操作 <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="green" role="button" data-toggle="modal" ng-click="edit(cancelorder,$index)">
+                                                                浏览
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-2 text-left">
+                        <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                    </div>
+                    <div class="col-sm-9 text-right">
+                        <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                    </div>
+                    <div class="col-sm-1 text-right"></div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<pageslide  ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">{{title}}--{{cancelorder.businessTypeCode |BusinessTypeFilter}}
+                            <span ng-class="{1:'text-info',2: 'text-success', 8: 'text-warning', 9: 'text-danger'}[cancelorder.approveStatus]">({{cancelorder.approveStatus | approveStatusFilter}})</span></h1>
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="padder-v row m-n">
+                                <div class="col-lg-9">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">来源渠道</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <cardealer-block ng-if="cancelorder.carDealerId != undefined" id="cancelorder.carDealerId"></cardealer-block>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款人身份证信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-base id="cancelorder.customerId"></customer-base>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">购买车辆信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <customer-car ng-if="order.customerCarId !== undefined" id="order.customerCarId" billtypecode="cancelorder.billTypeCode" businesstypecode="cancelorder.businessTypeCode"></customer-car>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group pull-in clearfix">
+                                                        <customer-loan ng-if="cancelorder.customerTransactionId !== undefined" transactionid="cancelorder.customerTransactionId" billtypecode="cancelorder.billTypeCode" businesstypecode="cancelorder.businessTypeCode"></customer-loan>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">取消原因</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-12">
+                                                    <div class="input-group w-md">
+                                                        <p class="form-control-static b-b">{{cancelorder.reason}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--右边栏-->
+                                <div class="col-lg-3">
+                                    <div style="position: fixed;" ng-show="checked">
+                                        <div style="height:850px;overflow-y:scroll;">
+                                            <!--当前业务分期经理 -->
+                                            <div class="panel b-success b-light clearfix">
+                                                <div class="panel-body">
+                                                    <a href="" class="thumb avatar pull-left m-r">
+                                                        <employee-avatar ng-if="cancelorder.employeeId !== undefined" id="cancelorder.employeeId"></employee-avatar>
+                                                        <i class="on b-white bottom"></i>
+                                                    </a>
+                                                    <div class="clear">
+                                                        <employee-info ng-if="cancelorder.employeeId !== undefined" id="cancelorder.employeeId"></employee-info>
+                                                        <br/><br/>
+                                                        <small class="block text-muted text-xs"><i class="icon-action-redo"></i>当前业务分期经理</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="m-b-md clearfix" ng-show="cancelorder.id != null">
+                                                <signinfo-list ng-if="cancelorder.id !== undefined" id="cancelorder.id"></signinfo-list>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-sm b-t b-light text-right">
+                    <sign-button ng-if="cancelorder.id" billid="cancelorder.id" billtypecode="cancelorder.billTypeCode" buttonshow="101"></sign-button>
+                    <button class="btn btn-primary" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+<!--             模糊查询模态框           -->
+<script type="text/ng-template" id="query.html">
+    <query-form search="searchFilter" query="queryBill(search)" clear="clearQuery()"></query-form>
+</script>
+<!--             审查、审核页面   -->
+<script type="text/ng-template" id="audit.html">
+    <signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>

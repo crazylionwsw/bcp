@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="bcp-api-timertask" />
+        <module name="bcp-api-statistics" />
+        <module name="bcp-api-bd" />
+        <module name="bcp-api-mq" />
+        <module name="bcp-api-auth" />
+        <module name="bcp-api-customer" />
+        <module name="bcp-api-push" />
+        <module name="bcp-base" />
+        <module name="bcp-api-transaction" />
+        <module name="bcp-api-workflow" />
+        <module name="bcp-api-task" />
+        <module name="bcp-api-wechat" />
+        <module name="bcp-api-cardealer" />
+        <module name="bcp-api-drools" />
+        <module name="bcp-api-file" />
+        <module name="bcp-api-system" />
+        <module name="bcp-api-credithome" />
+        <module name="bcp-api-creditcar" />
+        <module name="bcp-api-dubbo" />
+        <module name="bcp-api-ocr" />
+        <module name="bcp-api-message" />
+        <module name="bcp-api-blockchain" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

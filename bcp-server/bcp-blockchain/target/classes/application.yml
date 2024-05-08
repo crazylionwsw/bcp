@@ -1,0 +1,34 @@
+spring:
+  logging:
+    config: bcp-blockchain/src/main/resources/logback.xml
+  application:
+    name: FUZE Dubbox Service Provider
+  profiles:
+    active: dev
+  messages:
+    basename: msg
+    cacheSeconds: -1
+    encoding: UTF-8
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    exchange: fuze-exchange
+    routingKey-b: business-routingKey
+    routingKey-l: log-routingKey
+    routingKey-m: message-routingKey
+    routingKey-web3j: web3j-routingKey
+web3j:
+  ip: http://localhost:8545/
+  file: E:/OtherData/Dataworksapce/geth/privatechain/data0/keystore/UTC--2018-03-19T09-45-49.541403700Z--d61e555371bbff704eded4a9ede69e0b37e0ab92
+  password: 123456
+  address: "0x463ba3a330368536a4d3cc207ea83c3dc6dafc37"
+server:
+    port: 8988
+    tomcat:
+      uri-encoding: UTF-8
+  #web3j:
+    #ip:http://localhost:8545/
+    #password:123456
+    #address:E:/OtherData/Dataworksapce/geth/privatechain/data0/keystore/UTC--2018-03-19T09-45-49.541403700Z--d61e555371bbff704eded4a9ede69e0b37e0ab92

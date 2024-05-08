@@ -1,0 +1,3 @@
+amqp=com.fuze.bcp.dubbo.filter.AMQPFilter
+syslog=com.fuze.bcp.dubbo.filter.SysLogFilter
+drools=com.fuze.bcp.dubbo.filter.DroolsFilter

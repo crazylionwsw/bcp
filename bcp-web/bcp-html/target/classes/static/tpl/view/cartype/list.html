@@ -1,0 +1,36 @@
+<table class="table table-striped b-t b-light m-b-none">
+    <thead>
+    <tr>
+        <th>
+            品牌
+        </th>
+        <th>
+            型号
+        </th>
+        <th >
+            排量
+        </th>
+        <th >
+            官方定价
+        </th>
+        <th>
+            操作
+        </th>
+    </tr>
+    </thead>
+    <tbody >
+    <tr ng-repeat="cartype in selectedCarTypes">
+        <td>{{cartype.carBrand.name}}</td>
+        <td>{{cartype.model}}</td>
+        <td>{{cartype.ml}}</td>
+        <td>{{cartype.price}}</td>
+        <td>
+            <div class="hidden-sm hidden-xs action-buttons">
+                <a class="red" href ng-click="delete($index)">
+                    <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                </a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>

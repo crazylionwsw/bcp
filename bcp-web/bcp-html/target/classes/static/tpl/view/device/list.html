@@ -1,0 +1,31 @@
+<div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <span class="h4">{{tableTitle}}</span>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>使用人</th>
+                    <th>使用类型</th>
+                    <th>时间</th>
+                </tr>
+                </thead>
+                <tbody >
+                <tr ng-repeat="deviceUsage in deviceUsages|orderBy: 'ts': true">
+                    <td><employee-info  id="deviceUsage.employeeId"></employee-info></td>
+                    <td>{{deviceUsage.usageType|usageTypeFilter}}</td>
+                    <td>{{deviceUsage.ts}}</td>
+                </tr>
+                </tbody>
+            </table>
+         </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-warning" type="button" ng-click="cancel()">关  闭</button>
+        </footer>
+</div>
+
+
+
+
+

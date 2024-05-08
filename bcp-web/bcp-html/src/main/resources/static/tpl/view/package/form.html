@@ -1,0 +1,58 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">{{formTitle}}</h1>
+</div>
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-lg-9">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="h4">客户信息</span>
+                </div>
+                <div class="panel-body">
+                    <customer-block ng-if="order.customerId != undefined" id="order.customerId"></customer-block>
+                </div>
+            </div>
+
+            <element ng-repeat="cashSource in order.cashSources">
+                <package-customerimage-block cashsource="cashSource" order="order" orderid="order.id" customerid="order.customerId"></package-customerimage-block>
+            </element>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="h4">打包记录</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped b-t b-light m-b-none">
+                        <thead>
+                            <tr>
+                                <th>资金来源</th>
+                                <th>打包时间</th>
+                                <th>操作</th>
+                            </tr>
+                        <thead>
+                        <tr>
+                            <tbody >
+                            <tr ng-repeat="customerPackage in order.customerPackages">
+                                <td>
+                                    <cashsource-info ng-if="customerPackage.cashSourceId !=undefined" id="customerPackage.cashSourceId"></cashsource-info>
+                                </td>
+                                <td>{{customerPackage.ts|date: 'yyyy-MM-dd HH:mm'}}</td>
+                                <td>
+                                    <div class="hidden-sm hidden-xs action-buttons">
+                                        <a class="green" role="button" data-toggle="modal" ng-click="download(customerPackage.id)" tooltip="下载资料包">
+                                            <i class="ace-icon fa fa-download bigger-130"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

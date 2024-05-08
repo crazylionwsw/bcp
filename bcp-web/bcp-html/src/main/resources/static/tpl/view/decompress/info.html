@@ -1,0 +1,56 @@
+<div class="col-lg-12">
+    <div class="form-group pull-in clearfix">
+        <div class="col-lg-3">
+            <label>解押费用</label>
+            <input type="text" class="form-control" placeholder="请选择解押费用"
+                   ng-model="decompress.decompressAmount" name="decompressAmount">
+        </div>
+        <div class="col-lg-3">
+            <label>解押时间</label>
+            <div class="input-group" moment-picker="decompress.decompressTime" format="YYYY-MM-DD HH:mm:ss"
+                 locale="zh-cn" selectable="true" min-date="thisDate">
+                <input type="text" class="form-control" placeholder="请选择解押时间"
+                       ng-model="decompress.decompressTime"
+                       ng-model-options="{ updateOn: 'blur' }"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-3 has-warning">
+            <label>解押类型</label>
+            <ui-select ng-model="decompress.decompressType" theme="bootstrap">
+                <ui-select-match placeholder="请选择解押类型" >{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices  repeat="decompressType.code as decompressType in decompressTypes">
+                    <div ng-bind-html="decompressType.name"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-lg-3 has-warning">
+            <label>支付方式</label>
+            <ui-select ng-model="decompress.paymentType" theme="bootstrap">
+                <ui-select-match placeholder="请选择支付方式" >{{$select.selected}}</ui-select-match>
+                <ui-select-choices  repeat="paymentType in paymentTypes">
+                    <div ng-bind-html="paymentType"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+</div>
+    <div class="form-group pull-in clearfix">
+        <div class="col-lg-3">
+            <label>收款账户</label>
+            <ui-select ng-model="decompress.receiptAccount" theme="bootstrap">
+                <ui-select-match placeholder="请选择收款账户" >{{$select.selected.accountNumber}}</ui-select-match>
+                <ui-select-choices  repeat="receiptAccount in receiptAccounts">
+                    <div ng-bind-html="receiptAccount.accountNumber"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-lg-3">
+            <label>付款账户</label>
+            <input type="text" class="form-control" placeholder="请选择付款账户"
+                   ng-model="decompress.paymentAccount" name="paymentAccount">
+        </div>
+    </div>
+</div>
+</div>

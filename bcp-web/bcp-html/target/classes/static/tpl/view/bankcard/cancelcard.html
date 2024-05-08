@@ -1,0 +1,48 @@
+<!--<div class="panel panel-default m-b-none" dw-loading="signInfo" dw-loading-options="{text: ''}">
+    <div class="panel-heading">
+        <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+        <span class="h4">{{modalTitle}}</span>
+    </div>
+    <form name="userForm">
+        <div class="panel-body">
+            <div class="form-group">
+                <label>重新制卡原因 </label>
+                <textarea class="form-control" rows="6" data-ng-model="bankcard.comment" placeholder="请输入重新制卡的原因！" name="comment"></textarea>
+            </div>
+        </div>
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success"  ng-click="sure(bankcard)" >确认重新制卡</button>
+            <button class="btn btn-warning"  ng-click="close()">取消重新制卡</button>
+        </footer>
+    </form>
+</div>-->
+
+<div class="panel panel-default m-b-none">
+    <div class="panel-heading">
+        <span class="h4">{{modalTitle}}</span>
+    </div>
+    <form name="userForm" class="form-validation">
+        <div class="panel-body">
+            <div class="col-lg-12">
+                <div class="form-group pull-in clearfix">
+                    <label>销卡原因</label>
+                    <ui-select ng-model="bankcard.comment" theme="bootstrap">
+                        <ui-select-match placeholder="请选择销卡的原因！" >{{$select.selected.comment}}</ui-select-match>
+                        <ui-select-choices  repeat="reason.comment as reason in reasonList | filter: $select.search">
+                            <div ng-bind-html="reason.comment | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+            </div>
+
+        </div>
+
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn btn-success" ng-disabled="userForm.$pristine"  ng-click="sure(bankcard)" >确认销卡</button>
+            <button class="btn btn-warning"  ng-click="close()">取消销卡</button>
+        </footer>
+    </form>
+</div>
+
+

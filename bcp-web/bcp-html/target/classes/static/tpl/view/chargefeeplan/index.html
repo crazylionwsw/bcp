@@ -1,0 +1,405 @@
+<div class="hbox hbox-auto-xs bg-light   lt">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell" style="overflow-x: hidden;overflow-y: auto">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt" ng-hide="isReferenceDialog">
+                            <div class="col-sm-4 m-b-xs ">
+                                <select class="form-control" ng-model="searchFilter.statusValue" ng-change="search()">
+                                    <option value="-1">全部</option>
+                                    <option value="0">未计算</option>
+                                    <option value="1">计算正确</option>
+                                    <option value="2">核对通过</option>
+                                    <option value="3">核对错误</option>
+                                    <option value="9">计算错误</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1 text-left">
+                                <select class="form-control" ng-model="pageSize" ng-change="changePageSize()">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="1000">1000</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary" ng-click="account()" ng-show="true">计算</a>
+                                <a role="button" class="btn btn-sm btn-primary" ng-click="toCheck(null,$index)" ng-show="true">核对</a>
+                                <a role="button" class="btn btn-sm btn-primary" ng-click="unCheck(null,$index)" ng-show="true">取消核对</a>
+                                <a role="button" ladda="exporting" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="openExport('')" ng-show="!isReferenceDialog"> 错误导出 </a>
+                                <a role="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="showQuery('')" ng-show="!isReferenceDialog"> 查询 </a>
+                            </div>
+                            <div class="col-sm-1 m-b-xs text-right "></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr style="height: 42px;">
+                                            <th class="text-center">
+                                                <label class="i-checks">
+                                                    <input type="checkbox" ng-model="master" ng-click="all(master)" ><i></i>
+                                                </label>
+                                            </th>
+                                            <th  class="text-center">
+                                                序号
+                                            </th>
+                                            <th  class="text-center">
+                                                报单支行
+                                            </th>
+                                            <th class="text-center">
+                                                渠道名称
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height: 42px" ng-repeat="chargefeeplan in chargefeeplans " ng-class="{2:'success',3:'warning',9:'danger'}[chargefeeplan.status]">
+                                            <td class="text-center"><label class="i-checks"><input type="checkbox" ng-model="x" ng-checked="master" ng-click="chk(chargefeeplan,x)"><i></i></label></td>
+                                            <td class="text-center">{{$index+1}}</td>
+                                            <td class="text-center"><transaction-cashsource-info ng-if="chargefeeplan.transaction !== undefined" transaction="chargefeeplan.transaction"></transaction-cashsource-info></td>
+                                            <td class="text-center"><cardealer-name id="chargefeeplan.cardealerId"></cardealer-name></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-7" style="margin-left:-20px;overflow: scroll;overflow-y: hidden">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <tr style="height: 42px">
+                                            <th  class="text-center">
+                                                渠道支行
+                                            </th>
+                                            <th  class="text-center">
+                                                业务类型
+                                            </th>
+                                            <th class="text-center">
+                                                客户姓名【身份证号码】
+                                            </th>
+                                            <th  class="text-center">
+                                                贷款金额
+                                            </th>
+                                            <th  class="text-center">
+                                                贷款期数（月）
+                                            </th>
+                                            <th  class="text-center">
+                                                手续费率
+                                            </th>
+                                            <th  class="text-center">
+                                                手续费
+                                            </th>
+                                            <th  class="text-center">
+                                                返佣比例
+                                            </th>
+                                            <th  class="text-center">
+                                                手续费缴纳方式
+                                            </th>
+                                            <th  class="text-center">
+                                                刷卡日期
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height: 42px" ng-repeat="chargefeeplan in chargefeeplans " ng-class="{2:'success',3:'warning',9:'danger'}[chargefeeplan.status]">
+                                            <td class="text-center"><transaction-cardealer-cooperationcashsource-info ng-if="chargefeeplan.transaction !== undefined" transaction="chargefeeplan.transaction"></transaction-cardealer-cooperationcashsource-info></td>
+                                            <td>{{chargefeeplan.transaction.businessTypeCode | BusinessTypeFilter}}</td>
+                                            <td class="text-center"><customer-info id="chargefeeplan.customerId"></customer-info></td>
+                                            <td class="text-right">{{chargefeeplan.limitAmount | currency:'￥'}}</td>
+                                            <td class="text-center">{{chargefeeplan.creditMonths}}</td>
+                                            <td class="text-right">{{chargefeeplan.bankChargeRatio * 100| number:1}}%</td>
+                                            <td class="text-right">{{chargefeeplan.chargeAmount | currency:'￥'}}</td>
+                                            <td class="text-center">{{chargefeeplan.chargeCheckRatio * 100| number:1}}%</td>
+                                            <td class="text-center">{{chargefeeplan.chargePaymentWay | chargePaymentWayFilter }}</td>
+                                            <td>{{chargefeeplan.swingCardDate |momentDate:'YYYY-MM-DD HH:mm:ss'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-1" style="margin-left:-30px;">
+                                <table class="table table-striped" data-filter="#filter">
+                                    <thead>
+                                        <tr class="bg-white" style="height: 42px">
+                                            <th class="text-center">
+                                                数据状态
+                                            </th>
+                                            <th ng-show="!isReferenceDialog" class="text-center">
+                                                操作
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="height: 42px;" ng-repeat="chargefeeplan in chargefeeplans " ng-class="{2:'success',3:'warning',9:'danger'}[chargefeeplan.status]">
+                                            <td>
+                                                <button popover-placement="top" popover-title="错误提示" popover="{{chargefeeplan.comment}}" class="btn btn-xs btn-danger"  ng-show="chargefeeplan.status =='9'">{{chargefeeplan.status | RepaymentPlanFilter}}</button>
+                                                <span ng-show="chargefeeplan.status != '9'">{{chargefeeplan.status | RepaymentPlanFilter}}</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="btn-group dropdown" dropdown>
+                                                    <button class="btn btn-xs btn-success" dropdown-toggle>操作<span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="blue" ng-click="view(chargefeeplan,chargefeeplan.transaction.businessTypeCode)" ng-show="true" href>浏览</a></li>
+                                                        <li><a class="blue" ng-click="refresh(chargefeeplan,$index)" ng-show="true">重算</a></li>
+                                                        <li><a class="blue" ng-click="toOrder(chargefeeplan,$index)" ng-show="true">查看订单</a></li>
+                                                        <li><a class="blue" ng-click="toCard(chargefeeplan,$index)" ng-show="true">查看卡业务处理</a></li>
+                                                        <li><a class="blue" ng-click="toCheck(chargefeeplan,$index)" ng-show="true">核对</a></li>
+                                                        <li><a class="blue" ng-click="unCheck(chargefeeplan,$index)" ng-show="true">取消核对</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-n b-t b-light lt">
+                <div class="col-sm-2 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-9 text-right">
+                    <pagination max-size="10" more="true" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+                <div class="col-sm-1 text-right"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<pageslide ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="wrapper row m-n">
+                                <div class="wrapper-sm b-t b-light text-left text-info">
+                                    <span class="m-n font-thin h3">收款计划--{{chargefeeplan.businessTypeCode | BusinessTypeFilter}}</span>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">来源渠道</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <cardealer-block ng-if="chargefeeplan.cardealerId != undefined" id="chargefeeplan.cardealerId"></cardealer-block>
+                                        </div>
+                                    </div>
+                                    <!--客户信息-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">客户信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <customer-block id="chargefeeplan.customerId"></customer-block>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">贷款信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group pull-in clearfix">
+                                                            <div class="col-lg-3">
+                                                                <label>贷款金额（元）</label>
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.limitAmount | currency:'￥'}}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <label>贷款期数（月）</label>
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.creditMonths}}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <label>刷卡日期</label>
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.swingCardDate | date:'yyyy-MM-dd'}}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <label>还款日</label>
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.defaultReimbursement}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group pull-in clearfix">
+                                                            <div class="col-lg-3">
+                                                                <label>手续费</label>
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.chargeAmount | currency:'￥'}}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <label>手续费率%</label>
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.bankChargeRatio*100}}%
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <label>返佣比例</label>
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.chargeCheckRatio*100 }}%
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <label>状态</label>
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.status | RepaymentPlanFilter}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group pull-in clearfix">
+                                                            <div class="col-lg-3">
+                                                                <label>手续费缴纳方式</label>
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.chargePaymentWay | chargePaymentWayFilter}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default" ng-disabled="chargefeeplan.status!=9">
+                                        <div class="panel-heading">
+                                            <span class="h4">备注信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group pull-in clearfix">
+                                                            <div class="col-lg-12">
+                                                                <p class="form-control-static b-b">
+                                                                    {{chargefeeplan.comment}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--购买车辆信息-->
+                                    <div class="panel panel-default" >
+                                        <div class="panel-heading">
+                                            <span class="h4">收款手续费基数明细</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <table class="table table-striped b-t b-light">
+                                                    <thead>
+                                                    <th>
+                                                        次数
+                                                    </th>
+                                                    <th>
+                                                        收款月份
+                                                    </th>
+                                                    <th>
+                                                        手续费
+                                                    </th>
+                                                    </thead>
+                                                    <tbody >
+                                                    <tr ng-repeat="detail in list">
+                                                        <td>{{detail.index}}</td>
+                                                        <td>{{detail.year}}年{{detail.month}}月</td>
+                                                        <td>{{detail.chargeAmount | currency:'￥'}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="panel b-success b-light clearfix">
+                                        <div class="panel-body">
+                                            <a href="" class="thumb avatar pull-left m-r">
+                                                <employee-avatar ng-if="chargefeeplan.employeeId !== undefined" id="chargefeeplan.employeeId"></employee-avatar>
+                                                <i class="on b-white bottom"></i>
+                                            </a>
+                                            <div class="clear">
+                                                <employee-info ng-if="chargefeeplan.employeeId !== undefined" id="chargefeeplan.employeeId"></employee-info>
+                                                <br/><br/>
+                                                <small class="block text-muted text-xs"><i class="icon-action-redo"></i>当前业务分期经理</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--显示订单的签批信息-->
+                                    <div class="m-b-md clearfix" ng-show="chargefeeplan.signInfos !== null">
+                                        <chargeplan-signinfo-list ng-if="chargefeeplan.signInfos !== undefined" signinfos="chargefeeplan.signInfos"></chargeplan-signinfo-list>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!--弹出层页面foot-->
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-primary" type="button" ng-click="close()">返回</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+<script type="text/ng-template" id="query.html">
+    <chargefeeplan-query-form search="searchFilter" query="queryBill(searchFilter)" clear="clearQuery()"></chargefeeplan-query-form>
+</script>
+
+<script type="text/ng-template" id="export.html">
+    <div class="panel panel-default m-b-none">
+        <div class="panel-heading">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+            <span class="h4">{{modalTitle}}</span>
+        </div>
+        <form name="userForm" class="form-validation">
+            <div class="panel-body">
+                <div class="col-lg-12">
+                    <div class="form-group pull-in clearfix">
+                        <label>错误导出日期：</label>
+                        <div class="input-group" moment-picker="beforeDate" format="YYYY-MM-DD"
+                             locale="zh-cn" selectable="true">
+                            <input type="text" class="form-control"
+                                   placeholder="请输入截止的刷卡日期【若不选时间，则导出全部错误数据】"
+                                   ng-model="beforeDate"
+                                   ng-model-options="{ updateOn: 'blur' }"/>
+                            <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="panel-footer text-right bg-light lter">
+                <button class="btn btn-success" ladda="exporting"   data-spinner-color="#999999" type="submit" ng-disabled="userForm.$invalid" ng-click="doExport(beforeDate)">导出</button>
+                <button class="btn btn-warning" type="button" ng-click="cancel()">关  闭</button>
+            </footer>
+        </form>
+
+    </div>
+
+
+
+</script>
+
+<script type="text/ng-template" id="audit.html">
+    <signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>

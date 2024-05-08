@@ -1,0 +1,30 @@
+package com.fuze.bcp.api.creditcar.service.ISwipingCardService;
+
+import com.fuze.bcp.api.drools.bean.DroolsBaseBean;
+import com.fuze.bcp.api.creditcar.bean.swipingcard.SwipingCardSubmissionBean
+
+rule "actSaveSwipingcard"
+    dialect  "java"
+    lock-on-active true
+when
+    $droolsBeans : DroolsBaseBean(apiBaseBean != null, message:message);
+    $swipingCardSubmissionBean : SwipingCardSubmissionBean() from $droolsBeans.apiBaseBean;
+then
+    //刷卡时间
+    if($swipingCardSubmissionBean.getPayTime() == null || "".equals($swipingCardSubmissionBean.getPayTime())){
+        System.out.println("MSG_NO_PAYTIME");
+        message.add("MSG_NO_PAYTIME");
+    }
+    //首期还款日期firstRepaymentDate
+    if($swipingCardSubmissionBean.getFirstRepaymentDate() == null || "".equals($swipingCardSubmissionBean.getFirstRepaymentDate())){
+        System.out.println("MSG_NO_FIRST_REPAYMENTDATE");
+        message.add("MSG_NO_FIRST_REPAYMENTDATE");
+    }
+    //还款日repayment
+    if($swipingCardSubmissionBean.getRepayment() == null || "".equals($swipingCardSubmissionBean.getRepayment())){
+        System.out.println("MSG_NO_REPAYMENT");
+        message.add("MSG_NO_REPAYMENT");
+    }
+
+update($droolsBeans);
+end

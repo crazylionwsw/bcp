@@ -1,0 +1,76 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">{{title}}</h1>
+</div>
+<div class="wrapper-md">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {{tableTitle}}
+        </div>
+        <div class="row wrapper">
+            <div class="col-sm-4 m-b-xs">
+                <input type="text" class="input-sm form-control" placeholder="输入过滤关键字" ng-model="keywords">
+            </div>
+            <div class="col-sm-8 m-b-xs text-right ">
+                <a role="button" class="btn btn-sm btn-primary"  ng-click="openQueryDialog()">查询</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped b-t b-light m-b-none">
+                <thead>
+                <tr>
+                    <th>
+                        姓名（性别）
+                    </th>
+                    <th>
+                        身份证号码
+                    </th>
+                    <th >
+                        身份证地址
+                    </th>
+                    <th >
+                        客户状态
+                    </th>
+                    <th >
+                        联系电话
+                    </th>
+                    <th>
+                        数据状态
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+                </thead>
+                <tbody >
+                <tr ng-repeat="customer in customers|filter:keywords">
+                    <td>{{customer.name}}({{customer.gender | gender}})</td>
+                    <td>{{customer.identifyNo}}</td>
+                    <td>{{customer.address}}</td>
+                    <td>{{customer.status | customerStatus}}</td>
+                    <td>{{customer.cells | strList}}</td>
+                    <td>{{customer.dataStatus | dataStatusFilter}}</td>
+                    <td>
+                        <div class="hidden-sm hidden-xs action-buttons">
+                            <a class="green" role="button" ng-click="print(customer)" tooltip="打印资料">
+                                <i class="ace-icon fa fa-print bigger-130"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <footer class="panel-footer">
+            <div class="row">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+

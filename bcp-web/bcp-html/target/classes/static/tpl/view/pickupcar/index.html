@@ -1,0 +1,194 @@
+<div class="hbox hbox-auto-xs bg-light ">
+    <div class="col lter b-l">
+        <div class="vbox">
+            <div class="wrapper b-b b-light">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="row padder-v m-n lt">
+                            <div class="col-sm-4 m-b-xs">
+                                <input type="text" class="input-sm form-control" placeholder="过滤" ng-model="query">
+                            </div>
+
+                            <div class="col-sm-8 m-b-xs text-right ">
+                                <a role="button" class="btn btn-sm btn-primary"  ng-click="showQuery()">查询</a>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped b-t b-light m-b-none" data-filter="#filter" >
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            报单支行
+                                        </th>
+                                        <th>
+                                            渠道支行
+                                        </th>
+                                        <th>
+                                            业务类型
+                                        </th>
+                                        <th>
+                                            客户姓名【身份证】
+                                        </th>
+                                        <th>
+                                            分期经理【手机号】
+                                        </th>
+                                        <th>
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="pickupcar in pickupcars|filter:query" ng-class="{2: 'success', 8: 'warning', 9: 'danger'}[pickupcar.approveStatus]">
+                                        <td><transaction-cashsource-info ng-if="pickupcar.customerTransactionId !== undefined" id="pickupcar.customerTransactionId"></transaction-cashsource-info></td>
+                                        <td><transaction-cardealer-cooperationcashsource-info ng-if="pickupcar.customerTransactionId !== undefined" id="pickupcar.customerTransactionId"></transaction-cardealer-cooperationcashsource-info></td>
+                                        <td>{{pickupcar.businessTypeCode | BusinessTypeFilter}}</td>
+                                        <td><customer-info ng-if="pickupcar.customerId !== undefined" id="pickupcar.customerId"></customer-info></td>
+                                        <td><employee-info ng-if="pickupcar.employeeId !== undefined" id="pickupcar.employeeId"></employee-info></td>
+                                        <td>
+                                            <div class="hidden-sm hidden-xs action-buttons">
+                                                <a class="green" role="button" data-toggle="modal" ng-click="edit(pickupcar,$index)">
+                                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row b-t b-light m-n lt">
+                <div class="col-sm-4 text-left">
+                    <ul class="pagination ng-isolate-scope ng-valid">当前页：{{currentPage}}，总计{{totalPages}}页</ul>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <pagination max-size="10" more="true" total-items="totalItems" boundary-links="true" first-text="首页" last-text="尾页"   ng-change="changePage()"  ng-model="currentPage" items-per-page="pageSize" total-items="totalItems"  previous-text="上一页" next-text="下一页"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<pageslide  ps-open="checked" ps-zindex="1035" ps-size="1500px" ps-body-class="true" ps-auto-close="false" ps-click-outside="false" onopen="onOpenSidePanel" onclose="onCloseSidePanel">
+    <div class="hbox hbox-auto-xs bg-light ">
+        <div class="col lter b-l">
+            <div class="vbox">
+                <div class="wrapper-sm b-t b-light text-left text-info">
+                    <div class="col-sm-6">
+                        <h1 class="m-n font-thin h3">提车记录--{{pickupcar.businessTypeCode |BusinessTypeFilter}}</h1>
+                    </div>
+                </div>
+                <div class="row-row">
+                    <div class="cell">
+                        <div class="cell-inner">
+                            <div class="wrapper row m-n">
+                                <div class="col-lg-9">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">客户来源</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <cardealer-block ng-if="pickupcar.customerTransactionId != undefined" id="pickupcar.customerTransactionId"></cardealer-block>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <span class="h4">客户基本信息</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <customer-block ng-if="pickupcar.customerId !== undefined" id="pickupcar.customerId"></customer-block>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">提车信息</span></div>
+                                        <div class="panel-body">
+                                            <!--TODO:   确定 提车记录中的字段-->
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-3">
+                                                    <label>提车经销商名称</label>
+                                                    <p class="form-control-static b-b">{{pickupcar.pickCarDealer}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group pull-in clearfix">
+                                                <div class="col-sm-3">
+                                                    <label>提车时间</label>
+                                                    <p class="form-control-static b-b">{{pickupcar.pickDate|date: 'yyyy-MM-dd HH:mm'}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>支付时间</label>
+                                                    <p class="form-control-static b-b">{{pickupcar.payTime|date: 'yyyy-MM-dd HH:mm'}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>垫资金额（元）</label>
+                                                    <p class="form-control-static b-b">{{pickupcar.loanAmount|currency:'￥'}}</p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>上牌日期</label>
+                                                    <p class="form-control-static b-b">{{pickupcar.registryDate|date: 'yyyy-MM-dd HH:mm'}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><span class="h4">档案资料</span></div>
+                                        <div class="panel-body">
+                                            <customerimage-block ng-if="pickupcar !== null" bill="pickupcar"  save="save(bill)"></customerimage-block>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--右边栏-->
+                                <div class="col-lg-3">
+
+                                    <!--当前业务分期经理 -->
+                                    <div class="panel b-success b-light clearfix">
+                                        <div class="panel-body">
+                                            <a href="" class="thumb avatar pull-left m-r">
+                                                <employee-avatar ng-if="pickupcar.employeeId !== undefined" id="pickupcar.employeeId"></employee-avatar>
+                                                <i class="on b-white bottom"></i>
+                                            </a>
+                                            <div class="clear">
+                                                <employee-info ng-if="pickupcar.employeeId !== undefined" id="pickupcar.employeeId"></employee-info>
+                                                <br/><br/>
+                                                <small class="block text-muted text-xs"><i class="icon-action-redo"></i>当前业务分期经理</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--显示订单的签批信息-->
+                                    <div class="m-b-md clearfix" ng-show="pickupcar.id != null">
+                                        <signinfo-list ng-if="pickupcar.id !== undefined" id="pickupcar.id"></signinfo-list>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-sm b-t b-light text-right">
+                    <button class="btn btn-primary" type="button" ng-click="close()">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>
+
+<!--             模糊查询模态框           -->
+<script type="text/ng-template" id="query.html">
+    <query-form customer="customerFilter" query="queryBill(customer)" clear="clearQuery()"></query-form>
+</script>
+<!--             审查、审核页面   -->
+<script type="text/ng-template" id="audit.html">
+    <signinfo-block sign="sign(signinfo)"></signinfo-block>
+</script>

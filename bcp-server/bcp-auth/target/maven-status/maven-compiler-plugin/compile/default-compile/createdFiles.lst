@@ -1,0 +1,17 @@
+com\fuze\bcp\auth\service\ISysResourceService.class
+com\fuze\bcp\auth\repository\SysResourceRepository.class
+com\fuze\bcp\auth\service\ILoginUserService.class
+com\fuze\bcp\auth\repository\LoginUserRepository.class
+com\fuze\bcp\auth\service\impl\SysRoleServiceImpl.class
+com\fuze\bcp\auth\service\impl\LoginUserServiceImpl.class
+com\fuze\bcp\auth\business\BizLoginTokenService.class
+com\fuze\bcp\auth\service\ISysRoleService.class
+com\fuze\bcp\auth\repository\SysRoleRepository.class
+com\fuze\bcp\auth\business\BizAuthenticationService.class
+com\fuze\bcp\auth\service\impl\SysResourceServiceImpl.class
+com\fuze\bcp\auth\domain\SysRole.class
+com\fuze\bcp\auth\starter\AuthBootStarter.class
+com\fuze\bcp\auth\starter\config\RedisConfig.class
+com\fuze\bcp\auth\domain\SysResource.class
+com\fuze\bcp\auth\domain\LoginUser.class
+com\fuze\bcp\auth\starter\config\DubboConfig.class

@@ -1,0 +1,123 @@
+
+<div class="hbox hbox-auto-xs bg-light">
+    <!-- column -->
+    <div class="col w-lg lter b-r">
+        <div class="vbox">
+            <div class="wrapper b-b">
+                <div class="font-thin h4">{{title}}</div>
+            </div>
+            <div class="wrapper-xs b-b">
+                <div class="input-group m-b-xxs">
+                            <span class="input-group-addon input-sm no-border no-bg"><i
+                                    class="icon-magnifier text-md m-t-xxs"></i></span>
+                    <input type="text" class="form-control input-sm no-border no-bg text-md"
+                           placeholder="检索：参数名称" ng-model="key">
+                </div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="m-t-n-xxs">
+                            <div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+                                <a ng-repeat="item in sysparams |  filter:{name:key} | orderBy:'first'"
+                                   class="list-group-item m-l" ng-class="{'select m-l-none': item.selected }"
+                                   ng-click="selectSysParam(item)">
+                                        <span class="block text-ellipsis m-l-n" ng-class="{'m-l-none': item.selected, 'text-danger': item.dataStatus == 9 }">
+                                            {{ item.name }}
+                                        </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="text-center pos-abt w-full" style="top:50%;"
+                             ng-hide="(sysparams | filter:key).length">没有检索到</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-sm b-t b-light text-center">
+                <a role="button" class="btn btn-sm btn-default" data-toggle="modal"
+                   ng-click="add('')">添加参数类型</a>
+            </div>
+        </div>
+    </div>
+    <!-- /column -->
+
+    <div class="col">
+        <div class="vbox">
+            <div class="wrapper b-b">
+                <div class="font-thin h4">{{modalTitle}}</div>
+            </div>
+
+            <div class="row-row">
+                <div class="cell">
+                    <div class="cell-inner">
+                        <div class="wrapper-md">
+                            <form name="userForm" class="form-validation"  >
+                                <!--作废后表单禁用-->
+                                <fieldset ng-disabled="disForm">
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-6">
+                                        <label>编码</label>
+                                        <input class="form-control" placeholder="请输入编码" name="code"
+                                               ui-validate-async="{notUnique: 'checkUnique(\'code\', $value)'}"
+                                               ng-model="sysparam.code" ng-model-options="{updateOn: 'blur'}"
+                                               ng-pattern="/^[A-Z_]+$/"
+                                               required type="text">
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.required" class="help-block text-danger">参数编码是必须的!</span>
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.notUnique" class="help-block text-danger">参数编码不能重复！</span>
+                                        <span ng-show="userForm.code.$dirty && userForm.code.$error.pattern" class="help-block text-danger">参数编码为大写字母或下划线，如：OC_BANK_CHARGE_RATE(二手车银行手续费率)！</span>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>参数名称</label>
+                                        <input class="form-control" placeholder="请输入参数名称" name="name" required
+                                               ui-validate-async="{notUnique: 'checkUnique(\'name\', $value)'}"
+                                               ng-model="sysparam.name" ng-model-options="{updateOn: 'blur'}"
+                                               type="text">
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.required" class="help-block text-danger">参数名称是必须的!</span>
+                                        <span ng-show="userForm.name.$dirty && userForm.name.$error.notUnique" class="help-block text-danger">参数名称不能重复！</span>
+                                    </div>
+
+                                </div>
+                                <div class="form-group pull-in clearfix">
+                                    <div class="col-sm-6">
+                                        <label>系统参数值</label>
+                                    <textarea class="form-control" rows="6"
+                                              placeholder="请输入系统参数值"
+                                              name="parameterValue" ng-model="sysparam.parameterValue" required></textarea>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="i-checks">
+                                            <input ng-model="sysparam.canExtends"  ng-checked="sysparam.canExtends"
+                                                   type="checkbox"><i></i> 是否允许下级继承
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="i-checks" ng-show="sysparam.dataStatus == 9">
+                                            <input ng-model="sysparam.dataStatus"  ng-checked="sysparam.dataStatus == 9"
+                                                   type="checkbox"><i></i> 数据已作废
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>系统参数说明</label>
+                                    <textarea class="form-control " rows="6" placeholder="请输入系统参数填写要求"
+                                          ng-model="sysparam.comment"></textarea>
+                                </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wrapper-sm b-t text-right lt">
+                <button class="btn btn-success" type="button" ng-click="save()" ng-disabled="userForm.$invalid" ng-show="sysparam.id != null && sysparam.dataStatus != 9">保 存</button>
+                <button class="btn btn-info" type="button" ng-click="save()" ng-disabled="userForm.$invalid" ng-show="sysparam.id == null">添 加</button>
+                <button class="btn btn-primary" type="button" ng-click="discard()" ng-show="sysparam.dataStatus != 9 && sysparam.id != null ">作 废</button>
+                <button class="btn btn-danger" type="button" ng-click="discard()" ng-show="sysparam.dataStatus == 9 && sysparam.id != null ">删 除</button>
+                <button class="btn btn-success" type="button" ng-click="renew()" ng-show="sysparam.dataStatus == 9 && sysparam.id != null ">恢 复</button>
+            </div>
+        </div>
+    </div>
+</div>
